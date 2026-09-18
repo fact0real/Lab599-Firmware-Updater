@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="1024"
+   height="1024"
+   viewBox="0 0 1024 1024"
+   version="1.1"
+   id="svg19"
+   sodipodi:docname="AppIcon.svg"
+   inkscape:version="1.4.3 (0d15f75, 2025-12-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview19"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.55764447"
+     inkscape:cx="664.40182"
+     inkscape:cy="431.27837"
+     inkscape:window-width="1728"
+     inkscape:window-height="1056"
+     inkscape:window-x="0"
+     inkscape:window-y="33"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg19" />
+  <title
+     id="title1">TX-500 Firmware Updater</title>
+  <desc
+     id="desc1">Graphite macOS icon with the user-supplied red and white Lab599 logo, a firmware chip, and an update arrow. Unofficial utility.</desc>
+  <defs
+     id="defs8">
+    <linearGradient
+       id="case"
+       x1="0"
+       y1="0"
+       x2="0.85"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#343943"
+         id="stop1" />
+      <stop
+         offset="0.52"
+         stop-color="#1C2028"
+         id="stop2" />
+      <stop
+         offset="1"
+         stop-color="#101319"
+         id="stop3" />
+    </linearGradient>
+    <linearGradient
+       id="edge"
+       x1="0"
+       y1="0"
+       x2="0.8"
+       y2="1">
+      <stop
+         offset="0"
+         stop-color="#707581"
+         id="stop4" />
+      <stop
+         offset="0.5"
+         stop-color="#303641"
+         id="stop5" />
+      <stop
+         offset="1"
+         stop-color="#444A54"
+         id="stop6" />
+    </linearGradient>
+    <radialGradient
+       id="glow">
+      <stop
+         offset="0"
+         stop-color="#DC2F47"
+         stop-opacity="0.13"
+         id="stop7" />
+      <stop
+         offset="1"
+         stop-color="#DC2F47"
+         stop-opacity="0"
+         id="stop8" />
+    </radialGradient>
+  </defs>
+  <!-- A transparent margin preserves the macOS rounded-square silhouette. -->
+  <rect
+     x="64"
+     y="78"
+     width="896"
+     height="896"
+     rx="200"
+     fill="#000000"
+     opacity="0.14"
+     id="rect8" />
+  <rect
+     x="64"
+     y="64"
+     width="896"
+     height="896"
+     rx="200"
+     fill="url(#case)"
+     stroke="url(#edge)"
+     stroke-width="3"
+     id="rect9" />
+  <rect
+     x="78"
+     y="78"
+     width="868"
+     height="868"
+     rx="188"
+     fill="none"
+     stroke="#FFFFFF"
+     stroke-opacity="0.035"
+     stroke-width="2"
+     id="rect10" />
+  <ellipse
+     cx="512"
+     cy="677"
+     rx="330"
+     ry="278"
+     fill="url(#glow)"
+     id="ellipse10" />
+  <!-- Original logo paths; geometry and brand colors are preserved. -->
+  <g
+     transform="translate(197 224) scale(6)"
+     id="g16">
+    <g
+       fill="#DC2F47"
+       id="g12">
+      <path
+         d="M37.2,3.4L36,7.8c-0.7,2.5,0.8,4.5,3.3,4.5h19.4L58,14.9c-0.2,1-1.3,1.8-2.3,1.8h-12l-0.9,3.4h18.9 c2.1,0,4-1.6,4.6-3.4l3.1-11.4C70.2,2.4,68.5,0,65.5,0H41.7C39.7,0,37.7,1.6,37.2,3.4z M45.2,6.6L45.2,6.6l0.3-1.3 c0.2-1,1.3-1.8,2.3-1.8h11.1c1.1,0,1.9,1,1.6,2.3l-0.8,3H46.8C45.5,8.7,44.9,7.8,45.2,6.6z"
+         id="path10" />
+      <path
+         d="M34.5,3.4l1-3.4H5.4L2.6,10.5h18.9c1.3,0,2.1,1,1.7,2.3l-0.6,2.2c-0.3,1-1.4,1.8-2.3,1.8H0.9L0,20.1h26.5 c1.9,0,4-1.6,4.6-3.4l1.1-4.3c0.8-2.9-0.9-5.3-3.9-5.3H12.4l0.9-3.5L34.5,3.4L34.5,3.4z"
+         id="path11" />
+      <path
+         d="M72.5,3.4l-1.3,4.4c-0.6,2.5,0.9,4.5,3.3,4.5h19.4l-0.7,2.5c-0.2,1-1.2,1.8-2.2,1.8H79.2l-1,3.4h19.1 c1.9,0,4-1.6,4.4-3.4l3.2-11.4c0.8-2.9-1-5.3-4-5.3H77.1C75,0,73.1,1.6,72.5,3.4L72.5,3.4z M80.6,6.6L80.6,6.6l0.3-1.4 c0.3-1,1.3-1.8,2.3-1.8h11.1c1.3,0,1.9,1,1.6,2.3l-0.8,3H82.1C80.9,8.7,80.2,7.8,80.6,6.6L80.6,6.6z"
+         id="path12" />
+    </g>
+    <g
+       fill="#FFFFFF"
+       id="g15">
+      <path
+         d="M35.7,35h-3.4c-2.1,0-3.3-1.6-2.7-3.5L34,14.9h7.1L35.7,35z"
+         id="path13" />
+      <path
+         d="M42.2,22.8l-0.8,2.5h14.3c0.7,0,1.1,0.6,0.9,1.4l-0.1,0.4H43.3c-1.5,0-3.1,1.1-3.4,2.5l-0.5,1.8 c-0.6,1.9,0.6,3.4,2.6,3.4h16.7c1.5,0,3.1-1.1,3.4-2.5l1.5-5.3c0.7-2.5-0.8-4.3-3.3-4.3C60.3,22.8,42.2,22.8,42.2,22.8z M46.5,31.1L46.5,31.1l0.1-0.5c0.2-0.5,0.7-0.9,1.1-0.9h8l-0.5,1.8c-0.1,0.5-0.7,0.9-1.1,0.9h-6.6C46.8,32.5,46.3,31.9,46.5,31.1z"
+         id="path14" />
+      <path
+         d="M74.3,22.8l1.7-6.2h-7l-4.1,14.9c-0.6,1.9,0.6,3.4,2.6,3.4h18.6c1.5,0,3.1-1.1,3.4-2.5l1.5-5.3 c0.6-2.5-0.8-4.3-3.3-4.3C87.7,22.8,74.3,22.8,74.3,22.8z M72.2,31.1L72.2,31.1l1.5-5.7h9.2c0.8,0,1.3,0.6,1,1.4l-1.4,4.8 c-0.1,0.5-0.6,0.9-1,0.9H73C72.4,32.5,72,31.9,72.2,31.1z"
+         id="path15" />
+    </g>
+  </g>
+  <!-- A clockwise update arrow around a compact firmware chip. -->
+  <path
+     d="M625 574 A147 147 0 1 0 658 708"
+     fill="none"
+     stroke="#DC2F47"
+     stroke-width="32"
+     stroke-linecap="round"
+     id="path16" />
+  <path
+     d="m 661.28958,552.13323 12.20667,81.95119 -75.58252,-34.65952 z"
+     fill="#dc2f47"
+     stroke="#dc2f47"
+     stroke-width="10"
+     stroke-linejoin="round"
+     id="path17" />
+  <g
+     fill="none"
+     stroke="#f7f8fa"
+     stroke-width="13"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     id="g19"
+     transform="translate(8,-14)">
+    <rect
+       x="458"
+       y="628"
+       width="108"
+       height="108"
+       rx="19"
+       id="rect17" />
+    <path
+       d="m 486,610 v 18 m 26,-18 v 18 m 26,-18 v 18 m -52,108 v 18 m 26,-18 v 18 m 26,-18 v 18 m -98,-98 h 18 m -18,26 h 18 m -18,26 h 18 m 108,-52 h 18 m -18,26 h 18 m -18,26 h 18"
+       id="path18" />
+    <path
+       d="m 512,707 v -50 m -21,21 21,-21 21,21"
+       stroke-width="12"
+       id="path19" />
+  </g>
+</svg>

@@ -1,0 +1,717 @@
+#import <Cocoa/Cocoa.h>
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#import "TX500Transfer.h"
+#import "Lab599FirmwareCatalog.h"
+
+@interface AppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate>
+@property(nonatomic, strong) NSWindow *window;
+@property(nonatomic, strong) NSPopUpButton *portMenu;
+@property(nonatomic, strong) NSTextField *firmwareName;
+@property(nonatomic, strong) NSTextField *statusLabel;
+@property(nonatomic, strong) NSProgressIndicator *progressBar;
+@property(nonatomic, strong) NSButton *updateButton;
+@property(nonatomic, strong) NSButton *refreshButton;
+@property(nonatomic, strong) NSButton *chooseButton;
+@property(nonatomic, strong) NSButton *onlineButton;
+@property(nonatomic, strong) NSButton *aboutButton;
+@property(nonatomic, strong) NSTextView *logView;
+@property(nonatomic, strong) NSURL *firmwareURL;
+@property(nonatomic, strong) id activity;
+@property(nonatomic) BOOL busy;
+@property(nonatomic) BOOL hasPorts;
+
+// Online Firmware Sheet components
+@property(nonatomic, strong) NSWindow *catalogSheet;
+@property(nonatomic, strong) NSPopUpButton *modelFilterPopup;
+@property(nonatomic, strong) NSPopUpButton *catalogPopup;
+@property(nonatomic, strong) NSTextView *changelogView;
+@property(nonatomic, strong) NSProgressIndicator *downloadProgress;
+@property(nonatomic, strong) NSTextField *downloadStatusLabel;
+@property(nonatomic, strong) NSButton *downloadActionBtn;
+@property(nonatomic, strong) NSButton *refreshCatalogBtn;
+@property(nonatomic, strong) NSArray<Lab599FirmwareItem *> *catalogItems;
+@property(nonatomic, strong) NSArray<Lab599FirmwareItem *> *filteredItems;
+@property(nonatomic, strong) NSURLSessionDownloadTask *activeDownloadTask;
+
+// About Window
+@property(nonatomic, strong) NSWindow *aboutWindow;
+@end
+
+@implementation AppDelegate
+
+- (NSTextField *)label:(NSString *)text {
+    NSTextField *field = [NSTextField labelWithString:text];
+    field.translatesAutoresizingMaskIntoConstraints = NO;
+    return field;
+}
+
+- (void)appendLog:(NSString *)message {
+    NSAssert([NSThread isMainThread], @"UI logging must run on the main thread.");
+    NSDateFormatter *df = [NSDateFormatter new];
+    df.dateFormat = @"HH:mm:ss";
+    NSString *entry = [NSString stringWithFormat:@"[%@] %@\n", [df stringFromDate:[NSDate date]], message];
+    NSDictionary *attributes = @{
+        NSFontAttributeName: [NSFont monospacedSystemFontOfSize:11 weight:NSFontWeightRegular],
+        NSForegroundColorAttributeName: NSColor.labelColor
+    };
+    [self.logView.textStorage appendAttributedString:[[NSAttributedString alloc] initWithString:entry attributes:attributes]];
+    [self.logView scrollRangeToVisible:NSMakeRange(self.logView.string.length, 0)];
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)notification {
+    (void)notification;
+    self.window = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 780, 680)
+        styleMask:(NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable)
+        backing:NSBackingStoreBuffered defer:NO];
+    self.window.title = @"Lab599 Firmware Updater 1.2";
+    self.window.delegate = self;
+    [self.window center];
+
+    // Menus
+    NSMenu *menu = [NSMenu new];
+    NSMenuItem *appItem = [NSMenuItem new];
+    [menu addItem:appItem];
+    NSMenu *appMenu = [NSMenu new];
+    [appMenu addItemWithTitle:@"About Lab599 Firmware Updater" action:@selector(showAboutWindow:) keyEquivalent:@"i"];
+    [appMenu addItem:[NSMenuItem separatorItem]];
+    [appMenu addItemWithTitle:@"Quit Lab599 Firmware Updater" action:@selector(terminate:) keyEquivalent:@"q"];
+    appItem.submenu = appMenu;
+
+    NSMenuItem *editItem = [[NSMenuItem alloc] initWithTitle:@"Edit" action:NULL keyEquivalent:@""];
+    [menu addItem:editItem];
+    NSMenu *editMenu = [[NSMenu alloc] initWithTitle:@"Edit"];
+    [editMenu addItemWithTitle:@"Copy" action:@selector(copy:) keyEquivalent:@"c"];
+    [editMenu addItemWithTitle:@"Select All" action:@selector(selectAll:) keyEquivalent:@"a"];
+    editItem.submenu = editMenu;
+
+    NSMenuItem *helpItem = [[NSMenuItem alloc] initWithTitle:@"Help" action:NULL keyEquivalent:@""];
+    [menu addItem:helpItem];
+    NSMenu *helpMenu = [[NSMenu alloc] initWithTitle:@"Help"];
+    [helpMenu addItemWithTitle:@"Official Lab599 Downloads Website" action:@selector(openLab599Website:) keyEquivalent:@""];
+    [helpMenu addItemWithTitle:@"GitHub Project (EP2AES)" action:@selector(openGitHubRepo:) keyEquivalent:@""];
+    helpItem.submenu = helpMenu;
+
+    NSApp.mainMenu = menu;
+
+    // Header & Info
+    NSTextField *heading = [self label:@"Lab599 Firmware Updater"];
+    heading.font = [NSFont systemFontOfSize:22 weight:NSFontWeightSemibold];
+    NSTextField *subtitle = [self label:@"Version 1.2  |  Universal utility for Lab599 transceivers (TX-500 Discovery, TX-500MP)"];
+    subtitle.textColor = NSColor.secondaryLabelColor;
+
+    NSTextField *instructions = [NSTextField wrappingLabelWithString:
+        @"Connect the CAT-USB cable and stable external power. Close other radio applications. On your transceiver (TX-500 Discovery / TX-500MP), hold the third top function key while pressing POWER. Start only when the screen displays \"The loader is waiting...\". Keep power and cable connected until completion."];
+    instructions.textColor = NSColor.secondaryLabelColor;
+
+    // Serial Port Selection Row
+    self.portMenu = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
+    self.portMenu.translatesAutoresizingMaskIntoConstraints = NO;
+    self.refreshButton = [NSButton buttonWithTitle:@"Refresh" target:self action:@selector(refreshPorts:)];
+    NSStackView *portRow = [NSStackView stackViewWithViews:@[[self label:@"Serial port:"], self.portMenu, self.refreshButton]];
+    portRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+    portRow.alignment = NSLayoutAttributeCenterY;
+    portRow.spacing = 10;
+    [self.portMenu.widthAnchor constraintEqualToConstant:390].active = YES;
+
+    // Firmware Selection Row
+    self.firmwareName = [self label:@"No firmware selected"];
+    self.firmwareName.lineBreakMode = NSLineBreakByTruncatingMiddle;
+    [self.firmwareName.widthAnchor constraintEqualToConstant:310].active = YES;
+    self.chooseButton = [NSButton buttonWithTitle:@"Choose .fw..." target:self action:@selector(chooseFirmware:)];
+    self.onlineButton = [NSButton buttonWithTitle:@"Download from Lab599..." target:self action:@selector(openCatalogSheet:)];
+    NSStackView *fileRow = [NSStackView stackViewWithViews:@[[self label:@"Firmware:"], self.firmwareName, self.chooseButton, self.onlineButton]];
+    fileRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+    fileRow.alignment = NSLayoutAttributeCenterY;
+    fileRow.spacing = 8;
+
+    // Progress and Status
+    self.progressBar = [[NSProgressIndicator alloc] initWithFrame:NSZeroRect];
+    self.progressBar.minValue = 0;
+    self.progressBar.maxValue = 1;
+    self.progressBar.indeterminate = NO;
+    self.statusLabel = [NSTextField wrappingLabelWithString:@"Select the transceiver's serial port and choose or download the firmware file."];
+    self.statusLabel.textColor = NSColor.secondaryLabelColor;
+    [self.statusLabel.heightAnchor constraintGreaterThanOrEqualToConstant:38].active = YES;
+
+    // Action Buttons Row
+    self.updateButton = [NSButton buttonWithTitle:@"Update Firmware" target:self action:@selector(startUpdate:)];
+    self.updateButton.bezelStyle = NSBezelStyleRounded;
+    self.updateButton.keyEquivalent = @"\r";
+    NSButton *saveButton = [NSButton buttonWithTitle:@"Save Diagnostic Log..." target:self action:@selector(saveLog:)];
+    self.aboutButton = [NSButton buttonWithTitle:@"About..." target:self action:@selector(showAboutWindow:)];
+    NSStackView *buttonRow = [NSStackView stackViewWithViews:@[self.updateButton, saveButton, self.aboutButton]];
+    buttonRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+    buttonRow.spacing = 12;
+
+    // Log Scroll View
+    NSScrollView *scroll = [[NSScrollView alloc] initWithFrame:NSZeroRect];
+    scroll.hasVerticalScroller = YES;
+    scroll.borderType = NSBezelBorder;
+    self.logView = [[NSTextView alloc] initWithFrame:NSMakeRect(0, 0, 720, 200)];
+    self.logView.editable = NO;
+    self.logView.selectable = YES;
+    self.logView.richText = NO;
+    self.logView.verticallyResizable = YES;
+    self.logView.horizontallyResizable = NO;
+    self.logView.autoresizingMask = NSViewWidthSizable;
+    self.logView.textContainer.widthTracksTextView = YES;
+    self.logView.textContainerInset = NSMakeSize(8, 8);
+    scroll.documentView = self.logView;
+    [scroll.heightAnchor constraintEqualToConstant:200].active = YES;
+
+    // Main Layout Stack
+    NSStackView *stack = [NSStackView stackViewWithViews:@[
+        heading, subtitle, instructions,
+        portRow, fileRow,
+        self.progressBar, self.statusLabel,
+        buttonRow,
+        [self label:@"Diagnostic log:"], scroll
+    ]];
+    stack.translatesAutoresizingMaskIntoConstraints = NO;
+    stack.orientation = NSUserInterfaceLayoutOrientationVertical;
+    stack.alignment = NSLayoutAttributeLeading;
+    stack.spacing = 13;
+    [self.window.contentView addSubview:stack];
+
+    [NSLayoutConstraint activateConstraints:@[
+        [stack.leadingAnchor constraintEqualToAnchor:self.window.contentView.leadingAnchor constant:24],
+        [stack.trailingAnchor constraintEqualToAnchor:self.window.contentView.trailingAnchor constant:-24],
+        [stack.topAnchor constraintEqualToAnchor:self.window.contentView.topAnchor constant:24],
+        [stack.bottomAnchor constraintLessThanOrEqualToAnchor:self.window.contentView.bottomAnchor constant:-24],
+        [instructions.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
+        [self.progressBar.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
+        [self.statusLabel.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
+        [scroll.widthAnchor constraintEqualToAnchor:stack.widthAnchor]
+    ]];
+
+    [self appendLog:@"Lab599 Firmware Updater 1.2 initialized."];
+    [self appendLog:@"BL20 protocol engine ready: 57600 baud, 8N1, two-ACK header+payload cycle."];
+    [self refreshPorts:nil];
+    [self.window makeKeyAndOrderFront:nil];
+    [NSApp activateIgnoringOtherApps:YES];
+}
+
+#pragma mark - Serial Ports
+
+- (void)refreshPorts:(id)sender {
+    if (self.busy) return;
+    NSString *previous = self.portMenu.selectedItem.title;
+    NSArray<NSString *> *names = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:@"/dev" error:NULL] ?: @[];
+    NSPredicate *match = [NSPredicate predicateWithBlock:^BOOL(NSString *name, NSDictionary *bindings) {
+        (void)bindings;
+        return [name hasPrefix:@"cu."] &&
+               ![name.lowercaseString containsString:@"bluetooth"] &&
+               ![name.lowercaseString containsString:@"debug"] &&
+               ![name.lowercaseString containsString:@"wlan"];
+    }];
+    NSArray *ports = [[names filteredArrayUsingPredicate:match] sortedArrayUsingSelector:@selector(localizedStandardCompare:)];
+    [self.portMenu removeAllItems];
+    self.hasPorts = ports.count > 0;
+    if (!self.hasPorts) {
+        [self.portMenu addItemWithTitle:@"No serial ports found"];
+    }
+    for (NSString *name in ports) {
+        [self.portMenu addItemWithTitle:[@"/dev/" stringByAppendingString:name]];
+    }
+    if (previous && [self.portMenu itemWithTitle:previous]) {
+        [self.portMenu selectItemWithTitle:previous];
+    }
+    self.portMenu.enabled = self.hasPorts;
+    self.updateButton.enabled = self.hasPorts && self.firmwareURL != nil;
+    if (sender) {
+        self.statusLabel.stringValue = self.hasPorts ?
+            @"Select the serial port connected to your Lab599 transceiver." :
+            @"Connect the CAT-USB adapter and click Refresh. A working serial driver (FTDI/Prolific) is required.";
+    }
+}
+
+#pragma mark - Local Firmware Loading
+
+- (void)chooseFirmware:(id)sender {
+    (void)sender;
+    if (self.busy) return;
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    panel.allowedContentTypes = @[[UTType typeWithFilenameExtension:@"fw" conformingToType:UTTypeData]];
+    panel.allowsMultipleSelection = NO;
+    panel.canChooseDirectories = NO;
+    panel.title = @"Select Lab599 Firmware File";
+    [panel beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse result) {
+        if (result != NSModalResponseOK || !panel.URL) return;
+        NSError *readError = nil;
+        NSData *data = [NSData dataWithContentsOfURL:panel.URL options:0 error:&readError];
+        NSString *problem = data ? TXFirmwareValidationError(data) : readError.localizedDescription;
+        if (problem) {
+            [self showAlert:@"Firmware could not be loaded" message:problem warning:YES];
+            return;
+        }
+        [self setLoadedFirmwareURL:panel.URL firmwareData:data isOnlineDownload:NO];
+    }];
+}
+
+- (void)setLoadedFirmwareURL:(NSURL *)url firmwareData:(NSData *)data isOnlineDownload:(BOOL)isOnline {
+    self.firmwareURL = url;
+    self.firmwareName.stringValue = url.lastPathComponent;
+    self.firmwareName.toolTip = url.path;
+    NSString *hash = TXFirmwareSHA256(data);
+    NSString *source = isOnline ? @"Online Download" : @"Local File";
+    [self appendLog:[NSString stringWithFormat:@"Loaded %@ (%lu bytes, %@). SHA-256: %@",
+        url.lastPathComponent, (unsigned long)data.length, source, hash]];
+
+    if ([hash isEqualToString:@"2162fed7d27987507c8b412f3d38478c0a670a906a0c747578d7c975ad5a04ea"]) {
+        [self appendLog:@"Matches verified official TX-500 Discovery v1.30.00 release."];
+    }
+    self.statusLabel.stringValue = [NSString stringWithFormat:@"Firmware ready: %@. Check that transceiver displays \"The loader is waiting...\".", url.lastPathComponent];
+    self.updateButton.enabled = self.hasPorts;
+}
+
+#pragma mark - Online Firmware Catalog Sheet
+
+- (void)openCatalogSheet:(id)sender {
+    (void)sender;
+    if (self.busy) return;
+
+    if (!self.catalogSheet) {
+        [self buildCatalogSheet];
+    }
+
+    [self.window beginSheet:self.catalogSheet completionHandler:nil];
+    [self fetchCatalogList];
+}
+
+- (void)buildCatalogSheet {
+    self.catalogSheet = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 620, 480)
+        styleMask:(NSWindowStyleMaskTitled)
+        backing:NSBackingStoreBuffered defer:NO];
+    self.catalogSheet.title = @"Official Lab599 Firmware Catalog";
+
+    NSTextField *title = [self label:@"Download Official Firmware from lab599.com"];
+    title.font = [NSFont systemFontOfSize:16 weight:NSFontWeightSemibold];
+
+    NSTextField *desc = [NSTextField wrappingLabelWithString:
+        @"Firmware releases retrieved directly from https://lab599.com/downloads. Select your transceiver model, pick the version, and click Download & Select."];
+    desc.textColor = NSColor.secondaryLabelColor;
+
+    // Filter by model
+    NSTextField *modelLabel = [self label:@"Radio model:"];
+    self.modelFilterPopup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
+    [self.modelFilterPopup addItemWithTitle:@"All Models"];
+    [self.modelFilterPopup addItemWithTitle:@"TX-500 Discovery"];
+    [self.modelFilterPopup addItemWithTitle:@"TX-500MP"];
+    self.modelFilterPopup.target = self;
+    self.modelFilterPopup.action = @selector(filterChanged:);
+    NSStackView *modelRow = [NSStackView stackViewWithViews:@[modelLabel, self.modelFilterPopup]];
+    modelRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+    modelRow.spacing = 10;
+
+    // Firmware version selection
+    NSTextField *verLabel = [self label:@"Available release:"];
+    self.catalogPopup = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
+    self.catalogPopup.target = self;
+    self.catalogPopup.action = @selector(catalogSelectionChanged:);
+    [self.catalogPopup.widthAnchor constraintEqualToConstant:360].active = YES;
+    self.refreshCatalogBtn = [NSButton buttonWithTitle:@"Check for Updates" target:self action:@selector(fetchCatalogList)];
+    NSStackView *catalogRow = [NSStackView stackViewWithViews:@[verLabel, self.catalogPopup, self.refreshCatalogBtn]];
+    catalogRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+    catalogRow.spacing = 8;
+
+    // Changelog preview
+    NSTextField *clLabel = [self label:@"Release notes / Changelog:"];
+    NSScrollView *clScroll = [[NSScrollView alloc] initWithFrame:NSZeroRect];
+    clScroll.hasVerticalScroller = YES;
+    clScroll.borderType = NSBezelBorder;
+    self.changelogView = [[NSTextView alloc] initWithFrame:NSMakeRect(0, 0, 560, 110)];
+    self.changelogView.editable = NO;
+    self.changelogView.richText = NO;
+    self.changelogView.verticallyResizable = YES;
+    self.changelogView.textContainer.widthTracksTextView = YES;
+    self.changelogView.textContainerInset = NSMakeSize(6, 6);
+    self.changelogView.font = [NSFont systemFontOfSize:12];
+    clScroll.documentView = self.changelogView;
+    [clScroll.heightAnchor constraintEqualToConstant:110].active = YES;
+
+    // Progress & Status
+    self.downloadProgress = [[NSProgressIndicator alloc] initWithFrame:NSZeroRect];
+    self.downloadProgress.minValue = 0.0;
+    self.downloadProgress.maxValue = 1.0;
+    self.downloadProgress.indeterminate = NO;
+    self.downloadProgress.displayedWhenStopped = YES;
+    self.downloadStatusLabel = [self label:@"Connecting to lab599.com..."];
+    self.downloadStatusLabel.textColor = NSColor.secondaryLabelColor;
+
+    // Buttons
+    self.downloadActionBtn = [NSButton buttonWithTitle:@"Download & Select" target:self action:@selector(startDownloadSelectedFirmware:)];
+    self.downloadActionBtn.bezelStyle = NSBezelStyleRounded;
+    self.downloadActionBtn.keyEquivalent = @"\r";
+    NSButton *closeBtn = [NSButton buttonWithTitle:@"Cancel" target:self action:@selector(closeCatalogSheet:)];
+    NSStackView *actionRow = [NSStackView stackViewWithViews:@[self.downloadActionBtn, closeBtn]];
+    actionRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+    actionRow.spacing = 10;
+
+    NSStackView *sheetStack = [NSStackView stackViewWithViews:@[
+        title, desc,
+        modelRow, catalogRow,
+        clLabel, clScroll,
+        self.downloadProgress, self.downloadStatusLabel,
+        actionRow
+    ]];
+    sheetStack.translatesAutoresizingMaskIntoConstraints = NO;
+    sheetStack.orientation = NSUserInterfaceLayoutOrientationVertical;
+    sheetStack.alignment = NSLayoutAttributeLeading;
+    sheetStack.spacing = 11;
+    [self.catalogSheet.contentView addSubview:sheetStack];
+
+    [NSLayoutConstraint activateConstraints:@[
+        [sheetStack.leadingAnchor constraintEqualToAnchor:self.catalogSheet.contentView.leadingAnchor constant:20],
+        [sheetStack.trailingAnchor constraintEqualToAnchor:self.catalogSheet.contentView.trailingAnchor constant:-20],
+        [sheetStack.topAnchor constraintEqualToAnchor:self.catalogSheet.contentView.topAnchor constant:20],
+        [sheetStack.bottomAnchor constraintLessThanOrEqualToAnchor:self.catalogSheet.contentView.bottomAnchor constant:-20],
+        [desc.widthAnchor constraintEqualToAnchor:sheetStack.widthAnchor],
+        [clScroll.widthAnchor constraintEqualToAnchor:sheetStack.widthAnchor],
+        [self.downloadProgress.widthAnchor constraintEqualToAnchor:sheetStack.widthAnchor],
+        [self.downloadStatusLabel.widthAnchor constraintEqualToAnchor:sheetStack.widthAnchor]
+    ]];
+}
+
+- (void)fetchCatalogList {
+    self.downloadStatusLabel.stringValue = @"Checking https://lab599.com/downloads for latest firmwares...";
+    self.refreshCatalogBtn.enabled = NO;
+    self.downloadActionBtn.enabled = NO;
+    self.downloadProgress.indeterminate = YES;
+    [self.downloadProgress startAnimation:nil];
+
+    [[Lab599FirmwareCatalog sharedCatalog] fetchAvailableFirmwaresWithCompletion:^(NSArray<Lab599FirmwareItem *> *items, NSError *error) {
+        self.downloadProgress.indeterminate = NO;
+        [self.downloadProgress stopAnimation:nil];
+        self.refreshCatalogBtn.enabled = YES;
+        self.catalogItems = items;
+        if (error) {
+            self.downloadStatusLabel.stringValue = [NSString stringWithFormat:@"Notice: using fallback catalog (%@)", error.localizedDescription];
+        } else {
+            self.downloadStatusLabel.stringValue = [NSString stringWithFormat:@"Found %lu firmware releases on lab599.com.", (unsigned long)items.count];
+        }
+        [self updateCatalogPopupForFilter];
+    }];
+}
+
+- (void)filterChanged:(id)sender {
+    (void)sender;
+    [self updateCatalogPopupForFilter];
+}
+
+- (void)updateCatalogPopupForFilter {
+    NSString *filter = self.modelFilterPopup.selectedItem.title;
+    NSMutableArray<Lab599FirmwareItem *> *filtered = [NSMutableArray array];
+    for (Lab599FirmwareItem *item in self.catalogItems) {
+        if ([filter isEqualToString:@"All Models"] ||
+            [item.model rangeOfString:filter options:NSCaseInsensitiveSearch].location != NSNotFound) {
+            [filtered addObject:item];
+        }
+    }
+    self.filteredItems = filtered;
+    [self.catalogPopup removeAllItems];
+    for (Lab599FirmwareItem *item in filtered) {
+        [self.catalogPopup addItemWithTitle:item.displayTitle];
+    }
+    self.downloadActionBtn.enabled = filtered.count > 0;
+    [self catalogSelectionChanged:nil];
+}
+
+- (void)catalogSelectionChanged:(id)sender {
+    (void)sender;
+    NSInteger index = self.catalogPopup.indexOfSelectedItem;
+    if (index >= 0 && index < (NSInteger)self.filteredItems.count) {
+        Lab599FirmwareItem *item = self.filteredItems[index];
+        NSString *cl = item.changelog ?: @"No specific changelog published for this release.";
+        NSString *info = [NSString stringWithFormat:@"Model: %@\nVersion: %@\nDownload: %@\n\n%@",
+                          item.model, item.version, item.downloadURL.absoluteString, cl];
+        self.changelogView.string = info;
+    } else {
+        self.changelogView.string = @"";
+    }
+}
+
+- (void)startDownloadSelectedFirmware:(id)sender {
+    (void)sender;
+    NSInteger index = self.catalogPopup.indexOfSelectedItem;
+    if (index < 0 || index >= (NSInteger)self.filteredItems.count) return;
+    Lab599FirmwareItem *selectedItem = self.filteredItems[index];
+
+    self.downloadActionBtn.enabled = NO;
+    self.modelFilterPopup.enabled = NO;
+    self.catalogPopup.enabled = NO;
+    self.refreshCatalogBtn.enabled = NO;
+    self.downloadProgress.indeterminate = NO;
+    self.downloadProgress.doubleValue = 0.0;
+    self.downloadStatusLabel.stringValue = [NSString stringWithFormat:@"Downloading %@...", selectedItem.title];
+
+    self.activeDownloadTask = [[Lab599FirmwareCatalog sharedCatalog] downloadFirmware:selectedItem
+        progress:^(double progress, int64_t bytesWritten, int64_t totalExpected) {
+            self.downloadProgress.doubleValue = progress;
+            self.downloadStatusLabel.stringValue = [NSString stringWithFormat:@"Downloading: %.1f%% (%lld KB / %lld KB)",
+                progress * 100.0, bytesWritten / 1024, totalExpected / 1024];
+        }
+        completion:^(NSURL * _Nullable localFileURL, NSString * _Nullable sha256, NSError * _Nullable error) {
+            self.modelFilterPopup.enabled = YES;
+            self.catalogPopup.enabled = YES;
+            self.refreshCatalogBtn.enabled = YES;
+            self.downloadActionBtn.enabled = YES;
+
+            if (error || !localFileURL) {
+                self.downloadStatusLabel.stringValue = [NSString stringWithFormat:@"Download failed: %@", error.localizedDescription];
+                [self showAlert:@"Download Error" message:error.localizedDescription warning:YES];
+                return;
+            }
+
+            self.downloadProgress.doubleValue = 1.0;
+            self.downloadStatusLabel.stringValue = @"Download complete and verified!";
+            [self appendLog:[NSString stringWithFormat:@"Successfully downloaded official %@ (SHA-256: %@) from %@", selectedItem.title, sha256 ?: @"", selectedItem.downloadURL]];
+
+            NSData *data = [NSData dataWithContentsOfURL:localFileURL];
+            [self setLoadedFirmwareURL:localFileURL firmwareData:data isOnlineDownload:YES];
+            [self.window endSheet:self.catalogSheet];
+        }];
+}
+
+- (void)closeCatalogSheet:(id)sender {
+    (void)sender;
+    if (self.activeDownloadTask && self.activeDownloadTask.state == NSURLSessionTaskStateRunning) {
+        [self.activeDownloadTask cancel];
+        self.activeDownloadTask = nil;
+    }
+    [self.window endSheet:self.catalogSheet];
+}
+
+#pragma mark - About Window
+
+- (void)showAboutWindow:(id)sender {
+    (void)sender;
+    if (!self.aboutWindow) {
+        self.aboutWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 520, 390)
+            styleMask:(NSWindowStyleMaskTitled | NSWindowStyleMaskClosable)
+            backing:NSBackingStoreBuffered defer:NO];
+        self.aboutWindow.title = @"About Lab599 Firmware Updater";
+        [self.aboutWindow center];
+
+        // Icon
+        NSImage *icon = [NSImage imageNamed:@"AppIcon"];
+        if (!icon) {
+            NSString *iconPath = [[NSBundle mainBundle] pathForResource:@"AppIcon" ofType:@"icns"];
+            if (iconPath) icon = [[NSImage alloc] initWithContentsOfFile:iconPath];
+        }
+        if (!icon) {
+            icon = [[NSWorkspace sharedWorkspace] iconForFile:[[NSBundle mainBundle] bundlePath]];
+        }
+        NSImageView *iconView = [NSImageView imageViewWithImage:icon];
+        iconView.imageScaling = NSImageScaleProportionallyUpOrDown;
+        [iconView.widthAnchor constraintEqualToConstant:96].active = YES;
+        [iconView.heightAnchor constraintEqualToConstant:96].active = YES;
+
+        // Information text
+        NSTextField *appName = [self label:@"Lab599 Firmware Updater"];
+        appName.font = [NSFont systemFontOfSize:18 weight:NSFontWeightBold];
+
+        NSTextField *appVer = [self label:@"Version 1.2 (Universal macOS Build)"];
+        appVer.textColor = NSColor.secondaryLabelColor;
+
+        NSTextField *authorLabel = [self label:@"Developed by EP2AES (factoreal)"];
+        authorLabel.font = [NSFont systemFontOfSize:14 weight:NSFontWeightSemibold];
+
+        NSTextField *callsignLabel = [self label:@"Ham Radio Callsign: EP2AES  |  Email: EP2AES@asis.sh"];
+        callsignLabel.textColor = NSColor.secondaryLabelColor;
+
+        NSTextField *compat = [NSTextField wrappingLabelWithString:
+            @"Universal firmware flasher for Lab599 transceivers, including TX-500 Discovery and TX-500MP. Implements the high-speed BL20 bootloader protocol (57600 baud, 8N1, full payload transfer) recovered from official utilities."];
+        compat.textColor = NSColor.labelColor;
+        compat.font = [NSFont systemFontOfSize:12];
+
+        // GitHub button
+        NSButton *gitBtn = [NSButton buttonWithTitle:@"View on GitHub: https://github.com/fact0real/Lab599-Firmware-Updater"
+                                              target:self
+                                              action:@selector(openGitHubRepo:)];
+        gitBtn.bezelStyle = NSBezelStyleInline;
+
+        NSButton *webBtn = [NSButton buttonWithTitle:@"Official Lab599 Website: https://lab599.com"
+                                              target:self
+                                              action:@selector(openLab599Website:)];
+        webBtn.bezelStyle = NSBezelStyleInline;
+
+        NSButton *closeBtn = [NSButton buttonWithTitle:@"Close" target:self action:@selector(closeAboutWindow:)];
+        closeBtn.bezelStyle = NSBezelStyleRounded;
+        closeBtn.keyEquivalent = @"\r";
+
+        NSStackView *aboutStack = [NSStackView stackViewWithViews:@[
+            iconView, appName, appVer, authorLabel, callsignLabel, compat, gitBtn, webBtn, closeBtn
+        ]];
+        aboutStack.translatesAutoresizingMaskIntoConstraints = NO;
+        aboutStack.orientation = NSUserInterfaceLayoutOrientationVertical;
+        aboutStack.alignment = NSLayoutAttributeCenterX;
+        aboutStack.spacing = 10;
+        [self.aboutWindow.contentView addSubview:aboutStack];
+
+        [NSLayoutConstraint activateConstraints:@[
+            [aboutStack.leadingAnchor constraintEqualToAnchor:self.aboutWindow.contentView.leadingAnchor constant:24],
+            [aboutStack.trailingAnchor constraintEqualToAnchor:self.aboutWindow.contentView.trailingAnchor constant:-24],
+            [aboutStack.topAnchor constraintEqualToAnchor:self.aboutWindow.contentView.topAnchor constant:20],
+            [aboutStack.bottomAnchor constraintLessThanOrEqualToAnchor:self.aboutWindow.contentView.bottomAnchor constant:-20],
+            [compat.widthAnchor constraintEqualToAnchor:aboutStack.widthAnchor]
+        ]];
+    }
+    [self.aboutWindow makeKeyAndOrderFront:nil];
+}
+
+- (void)closeAboutWindow:(id)sender {
+    (void)sender;
+    [self.aboutWindow orderOut:nil];
+}
+
+- (void)openGitHubRepo:(id)sender {
+    (void)sender;
+    NSURL *url = [NSURL URLWithString:@"https://github.com/fact0real/Lab599-Firmware-Updater"];
+    [[NSWorkspace sharedWorkspace] openURL:url];
+}
+
+- (void)openLab599Website:(id)sender {
+    (void)sender;
+    NSURL *url = [NSURL URLWithString:@"https://lab599.com/downloads"];
+    [[NSWorkspace sharedWorkspace] openURL:url];
+}
+
+#pragma mark - Diagnostic Logs & Alerts
+
+- (void)saveLog:(id)sender {
+    (void)sender;
+    NSSavePanel *panel = [NSSavePanel savePanel];
+    panel.allowedContentTypes = @[UTTypePlainText];
+    panel.nameFieldStringValue = @"Lab599-updater-log.txt";
+    [panel beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse response) {
+        if (response != NSModalResponseOK) return;
+        NSError *error = nil;
+        if (![self.logView.string writeToURL:panel.URL atomically:YES encoding:NSUTF8StringEncoding error:&error]) {
+            [self showAlert:@"Log could not be saved" message:error.localizedDescription warning:YES];
+        }
+    }];
+}
+
+- (void)showAlert:(NSString *)title message:(NSString *)message warning:(BOOL)warning {
+    NSAlert *alert = [NSAlert new];
+    alert.alertStyle = warning ? NSAlertStyleWarning : NSAlertStyleInformational;
+    alert.messageText = title;
+    alert.informativeText = message;
+    [alert addButtonWithTitle:@"OK"];
+    [alert beginSheetModalForWindow:self.window completionHandler:nil];
+}
+
+#pragma mark - Firmware Update Process
+
+- (void)startUpdate:(id)sender {
+    (void)sender;
+    if (self.busy) return;
+    NSString *port = self.portMenu.selectedItem.title;
+    if (!self.hasPorts || ![port hasPrefix:@"/dev/cu."] || !self.firmwareURL) return;
+
+    NSError *error = nil;
+    NSData *firmware = [NSData dataWithContentsOfURL:self.firmwareURL options:0 error:&error];
+    NSString *problem = firmware ? TXFirmwareValidationError(firmware) : error.localizedDescription;
+    if (problem) {
+        [self showAlert:@"Firmware could not be loaded" message:problem warning:YES];
+        return;
+    }
+
+    NSAlert *confirmation = [NSAlert new];
+    confirmation.alertStyle = NSAlertStyleWarning;
+    confirmation.messageText = @"Start the firmware update?";
+    confirmation.informativeText = [NSString stringWithFormat:
+        @"Firmware: %@\nPort: %@\n\nThe transceiver must display \"The loader is waiting...\" and have stable external power. Keep power and USB cable firmly connected throughout the update.",
+        self.firmwareURL.lastPathComponent, port];
+    [confirmation addButtonWithTitle:@"Start Update"];
+    [confirmation addButtonWithTitle:@"Cancel"];
+    if ([confirmation runModal] != NSAlertFirstButtonReturn) return;
+
+    self.busy = YES;
+    self.updateButton.enabled = NO;
+    self.portMenu.enabled = NO;
+    self.chooseButton.enabled = NO;
+    self.onlineButton.enabled = NO;
+    self.refreshButton.enabled = NO;
+    self.progressBar.doubleValue = 0;
+    self.statusLabel.stringValue = @"Starting the update...";
+    [self appendLog:[NSString stringWithFormat:@"Starting transfer of %@ on %@.", self.firmwareURL.lastPathComponent, port]];
+
+    self.activity = [[NSProcessInfo processInfo] beginActivityWithOptions:(NSActivityUserInitiated | NSActivityIdleSystemSleepDisabled)
+        reason:@"Transferring Lab599 firmware"];
+
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        TXTransferResult *result = TXFlashFirmware(firmware, port, TXDefaultTransferOptions(),
+            ^(NSUInteger sent, NSUInteger total) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.progressBar.doubleValue = (double)sent / total;
+                    self.statusLabel.stringValue = sent == total ?
+                        @"File sent. Waiting for transceiver's final confirmation..." :
+                        [NSString stringWithFormat:@"Sending firmware: %lu / %lu bytes (%.1f%%)",
+                            (unsigned long)sent, (unsigned long)total, 100.0 * sent / total];
+                });
+            },
+            ^(NSString *message) {
+                dispatch_async(dispatch_get_main_queue(), ^{ [self appendLog:message]; });
+            });
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.busy = NO;
+            [[NSProcessInfo processInfo] endActivity:self.activity];
+            self.activity = nil;
+            self.chooseButton.enabled = YES;
+            self.onlineButton.enabled = YES;
+            self.refreshButton.enabled = YES;
+            [self refreshPorts:nil];
+
+            if (result.success) {
+                self.progressBar.doubleValue = 1;
+                self.statusLabel.stringValue = @"Update acknowledged by the transceiver. Restart the radio and check firmware version.";
+                [self showAlert:@"Firmware transfer complete"
+                        message:@"The radio returned its final OK confirmation. Check its display, then power-cycle the transceiver and verify the firmware version."
+                        warning:NO];
+            } else {
+                self.statusLabel.stringValue = [NSString stringWithFormat:@"Stopped during %@. Check diagnostic log.", result.phase];
+                [self showAlert:@"Firmware update was not confirmed"
+                        message:[NSString stringWithFormat:@"%@\n\nIf the radio reports \"The firmware is not sent\", power-cycle into Loader mode again before retrying. Save the diagnostic log for troubleshooting.", result.failure]
+                        warning:YES];
+            }
+        });
+    });
+}
+
+#pragma mark - Window and App Lifecycle
+
+- (BOOL)windowShouldClose:(NSWindow *)sender {
+    (void)sender;
+    if (!self.busy) return YES;
+    NSBeep();
+    return NO;
+}
+
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
+    (void)sender;
+    if (!self.busy) return NSTerminateNow;
+    NSBeep();
+    return NSTerminateCancel;
+}
+
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
+    (void)sender;
+    return YES;
+}
+
+@end
+
+int main(int argc, const char *argv[]) {
+    (void)argc;
+    (void)argv;
+    @autoreleasepool {
+        NSApplication *app = [NSApplication sharedApplication];
+        AppDelegate *delegate = [AppDelegate new];
+        app.delegate = delegate;
+        app.activationPolicy = NSApplicationActivationPolicyRegular;
+        [app run];
+    }
+    return 0;
+}
