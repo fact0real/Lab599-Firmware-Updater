@@ -5,9 +5,9 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleDisplayName</key>
-    <string>Lab599 Firmware Updater</string>
+    <string>Lab599 Utility</string>
     <key>CFBundleExecutable</key>
-    <string>Lab599-Firmware-Updater</string>
+    <string>Lab599 Utility</string>
     <key>CFBundleIconFile</key>
     <string>AppIcon</string>
     <key>CFBundleIdentifier</key>
@@ -15,13 +15,13 @@
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>Lab599-Firmware-Updater</string>
+    <string>Lab599 Utility</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.2</string>
+    <string>2.2</string>
     <key>CFBundleVersion</key>
-    <string>4</string>
+    <string>8</string>
     <key>LSMinimumSystemVersion</key>
     <string>12.0</string>
     <key>NSHighResolutionCapable</key>

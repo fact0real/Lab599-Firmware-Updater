@@ -1,0 +1,5 @@
+Compiling universal binary for Lab599 Utility (arm64 & x86_64)...
+Lab599 Utility.app: replacing existing signature
+Lab599 Utility.app/Contents/Info.plist: OK
+Built Lab599 Utility.app successfully with architectures:
+x86_64 arm64

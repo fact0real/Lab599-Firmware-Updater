@@ -1,0 +1,2 @@
+823e83f3801c95257cfc87f119a325048da6e341c3a4ce0dcebca3d569ecac37  Lab599-TRXSettings-v1.0(x64).exe
+9f074434cfd9cf67f57b55577df921da15a23c1a1b5137b0dff46e83cb2e3d5c  Lab599-TRXSettings-v1.0(x86).exe

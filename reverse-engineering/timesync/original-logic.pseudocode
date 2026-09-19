@@ -1,0 +1,68 @@
+FUNCTIONAL RECONSTRUCTION — NOT THE AUTHOR'S ORIGINAL SOURCE
+Both supplied binaries implement the following application-specific behavior.
+Runtime/GUI wrapper names below are descriptive names assigned during analysis.
+
+startup:
+    initialize GUI, string, date, memory and serial runtimes
+    tx_buffer = allocate_zeroed(17)
+    rx_buffer = allocate_zeroed(17)
+    prefix = Linux ? "/dev/ttyUSB" : "COM"
+    window = create_window(title="TimeSync", width=300, height=60)
+    ports = create_combo(x=20, y=20, width=90, height=20)
+    synchronize = create_button(x=140, y=10, width=140, height=40,
+                                title="Synchronize")
+
+    for suffix from 0 through 99 inclusive:
+        candidate = prefix + decimal(suffix)
+        if open_serial(id=0, candidate, baud=9600, parity=NONE,
+                       data_bits=8, stop_bits=1.0, handshake=NONE,
+                       input_buffer=16, output_buffer=16):
+            append_combo_item(ports, candidate)
+            close_serial(0)
+
+    repeat:
+        event = wait_for_window_event()
+        if event is CLOSE_WINDOW:
+            free runtime resources and terminate
+        if event is not the SYNCHRONIZE button click:
+            continue
+
+        disable(ports)
+        disable(synchronize)
+        selected_port = combo_text(ports)
+        if not open_serial(0, selected_port, 9600, NONE, 8, 1.0, NONE, 16, 16):
+            show_error("ERROR!", "Can't open the serial port: " + selected_port)
+            enable(ports)
+            enable(synchronize)
+            continue
+
+        time_text = format_date("%hh:%ii:%ss", LOCAL_COMPUTER_DATE())
+        command = "TM" + time_text + ";"
+        for index from 1 through string_length(command):
+            tx_buffer[index - 1] = low_byte(character_code(command[index]))
+        write_serial(0, tx_buffer, string_length(command))  # 11 bytes; return ignored
+        delay_ms(100)
+
+        command = "TM;"
+        for index from 1 through string_length(command):
+            tx_buffer[index - 1] = low_byte(character_code(command[index]))
+        write_serial(0, tx_buffer, string_length(command))  # 3 bytes; return ignored
+        delay_ms(100)
+
+        if serial_input_available(0) == 11:
+            read_serial(0, rx_buffer, 11)  # returned byte count ignored
+            reply_prefix = character(rx_buffer[0]) + character(rx_buffer[1])
+            if reply_prefix == "TM":
+                show_info("Info", "Synchronization completed!")
+            else:
+                show_error("ERROR!", "Can't read TRX!: " + selected_port)
+        else:
+            show_error("ERROR!", "Can't read TRX!: " + selected_port)
+
+        close_serial(0)
+        enable(ports)
+        enable(synchronize)
+
+The program never validates the reply's hh:mm:ss fields or ';' terminator.
+It never compares requested and returned times. It sends no date or timezone.
+It does not send a firmware packet or expect "OK" during clock synchronization.

@@ -1,63 +1,62 @@
-# Lab599 Firmware Updater 1.2 for macOS
+# Lab599 Utility 2.0 — build and package guide
 
-Developed by **EP2AES (factoreal)**  
-GitHub: [https://github.com/fact0real/Lab599-Firmware-Updater](https://github.com/fact0real/Lab599-Firmware-Updater)  
-Contact: `EP2AES@asis.sh`
+The app combines Firmware Update, Time Sync, CAT Test, Settings and Memory. See [README](README.md) and [the Persian guide](QUICKSTART-FA.md) for operation.
 
-A native macOS utility for updating Lab599 transceivers (**TX-500 Discovery** and **TX-500MP**) via CAT-USB serial connection.
+## Standalone build
 
-## New in Version 1.2
+Requires macOS and Apple Command Line Tools (or Xcode). No third-party application libraries are needed.
 
-1. **Xcode Project (`Lab599-Updater.xcodeproj`)**:
-   - Full Xcode project ready to open and build in Xcode or via `xcodebuild`.
-   - Supports native Universal Binary compilation (`arm64` and `x86_64`) for macOS Monterey (12.0) and newer.
-2. **Branding & Identity**:
-   - Renamed from `TX500FirmwareUpdater` to `Lab599-Firmware-Updater`.
-   - Bundled with high-resolution macOS application icon (`AppIcon.icns`).
-   - About Window featuring author details (**EP2AES**), callsign, and GitHub repository link.
-3. **Multi-Radio Compatibility**:
-   - Universal support for all Lab599 transceivers using the official BL20 bootloader protocol (TX-500 Discovery, TX-500MP, and HAM-Bands patches).
-4. **Direct Online Firmware Check & Download**:
-   - "Download from Lab599..." button queries `https://lab599.com/downloads` directly.
-   - Categorizes releases by radio model (TX-500 Discovery, TX-500MP).
-   - Displays changelogs, version numbers, file sizes, and download links.
-   - Automatically downloads, verifies BL20 signatures and SHA-256 hashes, and selects the firmware for instant flashing.
-   - Includes an offline fallback catalog if internet connectivity is unavailable.
-
-## How to Build
-
-### Option A: Using Xcode
-Open `Lab599-Updater.xcodeproj` in Xcode, select the `Lab599-Firmware-Updater` scheme, and choose **Product > Build** (`Cmd+B`) or **Run** (`Cmd+R`).
-
-Or via command line:
-```sh
-DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild -project Lab599-Updater.xcodeproj -scheme Lab599-Firmware-Updater -configuration Release build
-```
-
-### Option B: Using the build script
 ```sh
 sh build-updater.sh
 ```
-This builds a Universal Binary `Lab599-Firmware-Updater.app` in the current folder.
 
-## How to Update Your Transceiver
+Output: `Lab599 Utility.app`, macOS 12+, universal Intel and Apple Silicon, ad-hoc signed. `assets/AppIcon.icns` is included; `build-icon.sh` can regenerate it. The historical script/project filenames are retained deliberately.
 
-1. **Enter Bootloader Mode**:
-   - Power off your Lab599 transceiver.
-   - While holding the **third top function key**, turn on the transceiver by pressing **POWER**.
-   - The screen will display: **"The loader is waiting..."**.
-2. **Connect**:
-   - Connect the CAT-USB cable to your Mac and the transceiver.
-   - Ensure the radio has stable external DC power connected.
-   - Close any other software using the CAT serial port (WSJT-X, flrig, MacLoggerDX, etc.).
-3. **Run Lab599 Firmware Updater**:
-   - Open `Lab599-Firmware-Updater.app`.
-   - Select your radio CAT serial port from the dropdown (e.g., `/dev/cu.usbserial-...`).
-   - Select your firmware:
-     - Click **Download from Lab599...** to fetch the latest official firmware directly from the official website.
-     - Or click **Choose .fw...** to manually select a local `.fw` file.
-4. **Flash**:
-   - Click **Update Firmware**, review the confirmation prompt, and click **Start Update**.
-   - Keep your Mac awake and do NOT disconnect power or cables during transmission.
-   - Wait for **"Firmware transfer complete"** and the final radio confirmation.
-   - Turn off the transceiver, power it back on, and verify the displayed firmware version.
+## Xcode
+
+Open `Lab599-Updater.xcodeproj`, select **Lab599 Utility**, and build. Command-line equivalent:
+
+```sh
+DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer \
+xcodebuild -project Lab599-Updater.xcodeproj -scheme 'Lab599 Utility' \
+  -configuration Release -derivedDataPath build/xcode-utility \
+  ARCHS='arm64 x86_64' ONLY_ACTIVE_ARCH=NO CODE_SIGN_IDENTITY=- build
+```
+
+Version 2.0, build 6. Product/executable: `Lab599 Utility`. Existing bundle ID: `local.lab599.firmware-updater`.
+
+## Test
+
+```sh
+sh build-updater.sh --test
+```
+
+This runs firmware, clock and new-module suites before building. Place the supplied `mtrx1.30.00.fw` in this folder or its parent for the complete firmware test. The suite transmits it only to an emulated radio through a pseudo-terminal.
+
+To test the new modules independently:
+
+```sh
+mkdir -p build
+clang -O2 -Wall -Wextra -Wno-unused-parameter -Werror -fobjc-arc \
+  -mmacosx-version-min=12.0 -framework Foundation \
+  tests/UtilityTests.m Lab599SerialPort.m TX500CATTest.m TX500Configuration.m \
+  -o build/UtilityTests
+./build/UtilityTests
+```
+
+PTYs exercise wire commands, complete banks, fragmented replies, invalid replies/files, timeouts, disconnection, cancellation and read-back mismatches. This host's PTY driver accepts `TIOCEXCL` without blocking a second open; the tests disclose this limitation. Physical-driver exclusivity and Memory DTR/RTS behavior require hardware testing.
+
+## Source organization
+
+- `Lab599Utility.m`: main window, shared operation lock, firmware/time flows and menus.
+- `Lab599ToolsController.m`: CAT/Settings/Memory views and file operations.
+- `Lab599SerialPort.m`: bounded serial I/O and cancellation for new modules.
+- `TX500CATTest.m`: original identification test and error classes.
+- `TX500Configuration.m`: Settings/Memory encoding, transfer and verification.
+- `TX500Transfer.m`, `TX500TimeSync.m`, `Lab599FirmwareCatalog.m`: existing functions.
+
+New features can add a controller panel and a separate protocol module while keeping the single-operation lock. No arbitrary CAT-command console is included in 2.0.
+
+## Distribution
+
+The release ZIP contains the app, build sources, Xcode project, assets, tests, guides, reverse-engineering evidence and validation logs. Original vendor executables/firmware, build intermediates and developer-specific Xcode state are excluded. The adjacent `.sha256` file checks the ZIP's integrity; it is not an Apple signature or notarization.

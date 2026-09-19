@@ -1,0 +1,20 @@
+PASS: Clock formatting, zones, midnight, strict parsing and verification fixtures
+PASS: Exact clock read-back
+PASS: Fragmented reply beyond original 100 ms window
+PASS: Unrelated CAT frame and line endings
+PASS: Radio retains a wrong time
+PASS: Invalid clock fields
+PASS: Query echo is not clock confirmation
+PASS: Radio rejects clock command
+PASS: No radio response
+PASS: Partial response times out
+PASS: Set echo alone does not confirm query
+PASS: Cable disconnect
+PASS: Unterminated oversized response
+PASS: Missing port and invalid timing options
+All time synchronization checks passed. No physical radio was accessed.
+Compiling universal binary for Lab599-Firmware-Updater (arm64 & x86_64)...
+Lab599-Firmware-Updater.app: replacing existing signature
+Lab599-Firmware-Updater.app/Contents/Info.plist: OK
+Built Lab599-Firmware-Updater.app successfully with architectures:
+x86_64 arm64

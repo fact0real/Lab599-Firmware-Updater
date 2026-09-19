@@ -1,0 +1,59 @@
+Running simulated transfer tests with ../mtrx1.30.00.fw...
+PASS: Complete real firmware with only two OK replies (submitted=246384, captured=246384, phase=Complete)
+PASS: Fragmented header and final OK (submitted=513, captured=513, phase=Complete)
+PASS: Smallest non-empty payload (submitted=17, captured=17, phase=Complete)
+PASS: Header timeout (submitted=16, captured=16, phase=Header acknowledgement)
+PASS: Header rejection (submitted=16, captured=16, phase=Header acknowledgement)
+PASS: Incomplete header reply (submitted=16, captured=16, phase=Header acknowledgement)
+PASS: Extra header bytes rejected (submitted=16, captured=16, phase=Header acknowledgement)
+PASS: Final timeout is not success (submitted=2048, captured=2048, phase=Final acknowledgement)
+PASS: Final rejection is not success (submitted=2048, captured=2048, phase=Final acknowledgement)
+PASS: Cable loss during header acknowledgement (submitted=16, captured=16, phase=Header acknowledgement)
+PASS: Output backpressure is bounded (submitted=17, captured=16, phase=Payload transmission)
+PASS: Invalid firmware rejected before serial access (three cases)
+PASS: Missing port fails before transmission
+All 15 transfer checks passed. No physical radio was accessed.
+PASS: Clock formatting, zones, midnight, strict parsing and verification fixtures
+PASS: Exact clock read-back
+PASS: Fragmented reply beyond original 100 ms window
+PASS: Unrelated CAT frame and line endings
+PASS: Radio retains a wrong time
+PASS: Invalid clock fields
+PASS: Query echo is not clock confirmation
+PASS: Radio rejects clock command
+PASS: No radio response
+PASS: Partial response times out
+PASS: Set echo alone does not confirm query
+PASS: Cable disconnect
+PASS: Unterminated oversized response
+PASS: Missing port and invalid timing options
+All time synchronization checks passed. No physical radio was accessed.
+PASS: Binary formats, command fixtures, input validation
+PASS: CAT response sequence (5 queries)
+PASS: CAT response sequence (5 queries)
+PASS: CAT cancel (1 queries)
+PASS: Settings read fragmented
+PASS: Settings write + verify 
+PASS: Settings write + verify mismatch
+PASS: Settings read malformed
+PASS: Settings read timeout
+PASS: Settings read disconnect
+PASS: Settings read cancel
+PASS: Settings write + verify cancel
+PASS: Memory read fragmented
+PASS: Memory write + verify 
+PASS: Memory write + verify mismatch
+PASS: Memory read malformed
+PASS: Memory read timeout
+PASS: Memory read disconnect
+PASS: Memory read cancel
+PASS: Memory write + verify cancel
+PASS: Settings write + verify shortack
+PASS: Settings read extra
+PASS: Memory read short
+All Utility tests passed. Only pseudo-terminals were used; no physical radio was accessed.
+Compiling universal binary for Lab599 Utility (arm64 & x86_64)...
+Lab599 Utility.app: replacing existing signature
+Lab599 Utility.app/Contents/Info.plist: OK
+Built Lab599 Utility.app successfully with architectures:
+x86_64 arm64

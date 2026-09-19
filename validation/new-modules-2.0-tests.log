@@ -1,0 +1,26 @@
+NOTE: Host PTY does not enforce TIOCEXCL; physical-driver exclusivity remains unverified.
+PASS: Serial configuration, bounded reads and release
+PASS: Binary formats, command fixtures, input validation
+PASS: CAT response sequence (5 queries)
+PASS: CAT response sequence (5 queries)
+PASS: CAT cancel (1 queries)
+PASS: Settings read fragmented
+PASS: Settings write + verify 
+PASS: Settings write + verify mismatch
+PASS: Settings read malformed
+PASS: Settings read timeout
+PASS: Settings read disconnect
+PASS: Settings read cancel
+PASS: Settings write + verify cancel
+PASS: Memory read fragmented
+PASS: Memory write + verify 
+PASS: Memory write + verify mismatch
+PASS: Memory read malformed
+PASS: Memory read timeout
+PASS: Memory read disconnect
+PASS: Memory read cancel
+PASS: Memory write + verify cancel
+PASS: Settings write + verify shortack
+PASS: Settings read extra
+PASS: Memory read short
+All Utility tests passed. Only pseudo-terminals were used; no physical radio was accessed.

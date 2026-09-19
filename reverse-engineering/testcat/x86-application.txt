@@ -1,0 +1,640 @@
+Disassembly of section .code:
+
+00436000 <.code>:
+  436000: 68 4c 00 00 00               	push	0x4c
+  436005: 68 00 00 00 00               	push	0x0
+  43600a: 68 34 4b 43 00               	push	0x434b34
+  43600f: e8 4c b0 fc ff               	call	0x401060 <.text+0x60>
+  436014: 83 c4 0c                     	add	esp, 0xc
+  436017: 68 00 00 00 00               	push	0x0
+  43601c: e8 ee 0b ff ff               	call	0x426c0f <.text+0x25c0f>
+  436021: a3 38 4b 43 00               	mov	dword ptr [0x434b38], eax
+  436026: 68 00 00 00 00               	push	0x0
+  43602b: 68 00 10 00 00               	push	0x1000
+  436030: 68 00 00 00 00               	push	0x0
+  436035: e8 db 0b ff ff               	call	0x426c15 <.text+0x25c15>
+  43603a: a3 34 4b 43 00               	mov	dword ptr [0x434b34], eax
+  43603f: e8 0d ef fc ff               	call	0x404f51 <.text+0x3f51>
+  436044: e8 77 ee fc ff               	call	0x404ec0 <.text+0x3ec0>
+  436049: e8 02 ec fc ff               	call	0x404c50 <.text+0x3c50>
+  43604e: e8 dd eb fc ff               	call	0x404c30 <.text+0x3c30>
+  436053: e8 98 eb fc ff               	call	0x404bf0 <.text+0x3bf0>
+  436058: e8 5c e9 fc ff               	call	0x4049b9 <.text+0x39b9>
+  43605d: e8 b8 e7 fc ff               	call	0x40481a <.text+0x381a>
+  436062: e8 3e e7 fc ff               	call	0x4047a5 <.text+0x37a5>
+  436067: e8 94 e5 fc ff               	call	0x404600 <.text+0x3600>
+  43606c: e8 21 e2 fc ff               	call	0x404292 <.text+0x3292>
+  436071: e8 ca e1 fc ff               	call	0x404240 <.text+0x3240>
+  436076: e8 5b d8 fc ff               	call	0x4038d6 <.text+0x28d6>
+  43607b: e8 b0 d7 fc ff               	call	0x403830 <.text+0x2830>
+  436080: e8 c5 d6 fc ff               	call	0x40374a <.text+0x274a>
+  436085: e8 fe d3 fc ff               	call	0x403488 <.text+0x2488>
+  43608a: e8 b4 d3 fc ff               	call	0x403443 <.text+0x2443>
+  43608f: e8 57 d2 fc ff               	call	0x4032eb <.text+0x22eb>
+  436094: e8 e4 cc fc ff               	call	0x402d7d <.text+0x1d7d>
+  436099: e8 f8 cb fc ff               	call	0x402c96 <.text+0x1c96>
+  43609e: e8 1e c7 fc ff               	call	0x4027c1 <.text+0x17c1>
+  4360a3: e8 b0 b5 fc ff               	call	0x401658 <.text+0x658>
+  4360a8: e8 2f b3 fc ff               	call	0x4013dc <.text+0x3dc>
+  4360ad: e8 f7 b1 fc ff               	call	0x4012a9 <.text+0x2a9>
+  4360b2: 68 14 00 00 00               	push	0x14
+  4360b7: b8 1a 41 43 00               	mov	eax, 0x43411a
+  4360bc: 50                           	push	eax
+  4360bd: 68 00 00 00 00               	push	0x0
+  4360c2: e8 51 e8 fc ff               	call	0x404918 <.text+0x3918>
+  4360c7: ba 12 41 43 00               	mov	edx, 0x434112
+  4360cc: 8d 0d 48 4b 43 00            	lea	ecx, [0x434b48]
+  4360d2: e8 81 af fc ff               	call	0x401058 <.text+0x58>
+  4360d7: c7 05 64 4b 43 00 00 00 00 00	mov	dword ptr [0x434b64], 0x0
+  4360e1: 68 68 4b 43 00               	push	0x434b68
+  4360e6: 68 00 00 00 00               	push	0x0
+  4360eb: 68 18 00 00 00               	push	0x18
+  4360f0: 68 11 00 00 00               	push	0x11
+  4360f5: 68 01 00 00 00               	push	0x1
+  4360fa: e8 ad e9 fc ff               	call	0x404aac <.text+0x3aac>
+  4360ff: 68 70 4b 43 00               	push	0x434b70
+  436104: 68 00 00 00 00               	push	0x0
+  436109: 68 01 00 00 00               	push	0x1
+  43610e: 68 01 04 00 00               	push	0x401
+  436113: 68 01 00 00 00               	push	0x1
+  436118: e8 8f e9 fc ff               	call	0x404aac <.text+0x3aac>
+  43611d: 68 78 4b 43 00               	push	0x434b78
+  436122: 68 00 00 00 00               	push	0x0
+  436127: 68 18 00 00 00               	push	0x18
+  43612c: 68 11 00 00 00               	push	0x11
+  436131: 68 01 00 00 00               	push	0x1
+  436136: e8 71 e9 fc ff               	call	0x404aac <.text+0x3aac>
+  43613b: 68 78 00 00 00               	push	0x78
+  436140: 68 9a 01 00 00               	push	0x19a
+  436145: 68 00 00 00 00               	push	0x0
+  43614a: 68 00 00 00 00               	push	0x0
+  43614f: e8 9c 01 00 00               	call	0x4362f0 <.code+0x2f0>
+  436154: c7 05 4c 4b 43 00 00 00 00 00	mov	dword ptr [0x434b4c], 0x0
+  43615e: eb 00                        	jmp	0x436160 <.code+0x160>
+  436160: b8 63 00 00 00               	mov	eax, 0x63
+  436165: 3b 05 4c 4b 43 00            	cmp	eax, dword ptr [0x434b4c]
+  43616b: 0f 8c f1 00 00 00            	jl	0x436262 <.code+0x262>
+  436171: 52                           	push	edx
+  436172: e8 99 ed fc ff               	call	0x404f10 <.text+0x3f10>
+  436177: 5a                           	pop	edx
+  436178: 50                           	push	eax
+  436179: 68 10 00 00 00               	push	0x10
+  43617e: 68 10 00 00 00               	push	0x10
+  436183: 68 00 00 00 00               	push	0x0
+  436188: 68 00 00 80 3f               	push	0x3f800000
+  43618d: 68 08 00 00 00               	push	0x8
+  436192: 68 00 00 00 00               	push	0x0
+  436197: 68 80 25 00 00               	push	0x2580
+  43619c: 8b 15 48 4b 43 00            	mov	edx, dword ptr [0x434b48]
+  4361a2: 52                           	push	edx
+  4361a3: e8 68 ed fc ff               	call	0x404f10 <.text+0x3f10>
+  4361a8: 5a                           	pop	edx
+  4361a9: 50                           	push	eax
+  4361aa: 52                           	push	edx
+  4361ab: e8 c0 ec fc ff               	call	0x404e70 <.text+0x3e70>
+  4361b0: 52                           	push	edx
+  4361b1: e8 5a ed fc ff               	call	0x404f10 <.text+0x3f10>
+  4361b6: 5a                           	pop	edx
+  4361b7: 50                           	push	eax
+  4361b8: 52                           	push	edx
+  4361b9: e8 52 ed fc ff               	call	0x404f10 <.text+0x3f10>
+  4361be: 5a                           	pop	edx
+  4361bf: 50                           	push	eax
+  4361c0: a1 4c 4b 43 00               	mov	eax, dword ptr [0x434b4c]
+  4361c5: 99                           	cdq
+  4361c6: 52                           	push	edx
+  4361c7: 50                           	push	eax
+  4361c8: e8 83 e4 fc ff               	call	0x404650 <.text+0x3650>
+  4361cd: 58                           	pop	eax
+  4361ce: e8 6d ed fc ff               	call	0x404f40 <.text+0x3f40>
+  4361d3: 68 00 00 00 00               	push	0x0
+  4361d8: e8 35 ae fc ff               	call	0x401012 <.text+0x12>
+  4361dd: 01 54 24 04                  	add	dword ptr [esp + 0x4], edx
+  4361e1: e8 1c b2 fc ff               	call	0x401402 <.text+0x402>
+  4361e6: e8 55 ae fc ff               	call	0x401040 <.text+0x40>
+  4361eb: 21 c0                        	and	eax, eax
+  4361ed: 74 67                        	je	0x436256 <.code+0x256>
+  4361ef: 52                           	push	edx
+  4361f0: e8 1b ed fc ff               	call	0x404f10 <.text+0x3f10>
+  4361f5: 5a                           	pop	edx
+  4361f6: 50                           	push	eax
+  4361f7: 8b 15 48 4b 43 00            	mov	edx, dword ptr [0x434b48]
+  4361fd: 52                           	push	edx
+  4361fe: e8 0d ed fc ff               	call	0x404f10 <.text+0x3f10>
+  436203: 5a                           	pop	edx
+  436204: 50                           	push	eax
+  436205: 52                           	push	edx
+  436206: e8 65 ec fc ff               	call	0x404e70 <.text+0x3e70>
+  43620b: 52                           	push	edx
+  43620c: e8 ff ec fc ff               	call	0x404f10 <.text+0x3f10>
+  436211: 5a                           	pop	edx
+  436212: 50                           	push	eax
+  436213: 52                           	push	edx
+  436214: e8 f7 ec fc ff               	call	0x404f10 <.text+0x3f10>
+  436219: 5a                           	pop	edx
+  43621a: 50                           	push	eax
+  43621b: a1 4c 4b 43 00               	mov	eax, dword ptr [0x434b4c]
+  436220: 99                           	cdq
+  436221: 52                           	push	edx
+  436222: 50                           	push	eax
+  436223: e8 28 e4 fc ff               	call	0x404650 <.text+0x3650>
+  436228: 58                           	pop	eax
+  436229: e8 12 ed fc ff               	call	0x404f40 <.text+0x3f40>
+  43622e: 68 ff ff ff ff               	push	0xffffffff
+  436233: ff 35 50 4b 43 00            	push	dword ptr [0x434b50]
+  436239: e8 d4 ad fc ff               	call	0x401012 <.text+0x12>
+  43623e: 01 54 24 08                  	add	dword ptr [esp + 0x8], edx
+  436242: e8 e9 b4 fc ff               	call	0x401730 <.text+0x730>
+  436247: e8 f4 ad fc ff               	call	0x401040 <.text+0x40>
+  43624c: 68 00 00 00 00               	push	0x0
+  436251: e8 39 b1 fc ff               	call	0x40138f <.text+0x38f>
+  436256: ff 05 4c 4b 43 00            	inc	dword ptr [0x434b4c]
+  43625c: 0f 81 fe fe ff ff            	jno	0x436160 <.code+0x160>
+  436262: e8 7c d0 fc ff               	call	0x4032e3 <.text+0x22e3>
+  436267: a3 58 4b 43 00               	mov	dword ptr [0x434b58], eax
+  43626c: ff 35 58 4b 43 00            	push	dword ptr [0x434b58]
+  436272: e8 45 06 00 00               	call	0x4368bc <.code+0x8bc>
+  436277: 8b 1d 58 4b 43 00            	mov	ebx, dword ptr [0x434b58]
+  43627d: 81 fb 3c 33 00 00            	cmp	ebx, 0x333c
+  436283: 75 dd                        	jne	0x436262 <.code+0x262>
+  436285: 68 00 00 00 00               	push	0x0
+  43628a: e8 15 00 00 00               	call	0x4362a4 <.code+0x2a4>
+  43628f: e8 5c ec fc ff               	call	0x404ef0 <.text+0x3ef0>
+  436294: ff 35 34 4b 43 00            	push	dword ptr [0x434b34]
+  43629a: e8 7c 09 ff ff               	call	0x426c1b <.text+0x25c1b>
+  43629f: e8 65 09 ff ff               	call	0x426c09 <.text+0x25c09>
+  4362a4: e8 0c b0 fc ff               	call	0x4012b5 <.text+0x2b5>
+  4362a9: e8 22 b1 fc ff               	call	0x4013d0 <.text+0x3d0>
+  4362ae: e8 b2 c5 fc ff               	call	0x402865 <.text+0x1865>
+  4362b3: e8 e7 c9 fc ff               	call	0x402c9f <.text+0x1c9f>
+  4362b8: e8 e8 c9 fc ff               	call	0x402ca5 <.text+0x1ca5>
+  4362bd: e8 98 ca fc ff               	call	0x402d5a <.text+0x1d5a>
+  4362c2: e8 94 d0 fc ff               	call	0x40335b <.text+0x235b>
+  4362c7: e8 e3 d1 fc ff               	call	0x4034af <.text+0x24af>
+  4362cc: e8 9f d4 fc ff               	call	0x403770 <.text+0x2770>
+  4362d1: e8 4e d5 fc ff               	call	0x403824 <.text+0x2824>
+  4362d6: e8 45 e3 fc ff               	call	0x404620 <.text+0x3620>
+  4362db: e8 2e e5 fc ff               	call	0x40480e <.text+0x380e>
+  4362e0: e8 a9 e7 fc ff               	call	0x404a8e <.text+0x3a8e>
+  4362e5: e8 fc ea fc ff               	call	0x404de6 <.text+0x3de6>
+  4362ea: e8 31 e9 fc ff               	call	0x404c20 <.text+0x3c20>
+  4362ef: c3                           	ret
+  4362f0: 53                           	push	ebx
+  4362f1: 68 01 00 ca 00               	push	0xca0001
+  4362f6: b8 fa 40 43 00               	mov	eax, 0x4340fa
+  4362fb: 50                           	push	eax
+  4362fc: ff 74 24 1c                  	push	dword ptr [esp + 0x1c]
+  436300: ff 74 24 1c                  	push	dword ptr [esp + 0x1c]
+  436304: ff 74 24 1c                  	push	dword ptr [esp + 0x1c]
+  436308: ff 74 24 1c                  	push	dword ptr [esp + 0x1c]
+  43630c: 68 ff ff ff ff               	push	0xffffffff
+  436311: e8 7f ce fc ff               	call	0x403195 <.text+0x2195>
+  436316: a3 5c 4b 43 00               	mov	dword ptr [0x434b5c], eax
+  43631b: 68 14 00 00 00               	push	0x14
+  436320: 68 5a 00 00 00               	push	0x5a
+  436325: 68 14 00 00 00               	push	0x14
+  43632a: 68 0a 00 00 00               	push	0xa
+  43632f: 68 ff ff ff ff               	push	0xffffffff
+  436334: e8 07 c1 fc ff               	call	0x402440 <.text+0x1440>
+  436339: a3 50 4b 43 00               	mov	dword ptr [0x434b50], eax
+  43633e: b8 8c 40 43 00               	mov	eax, 0x43408c
+  436343: 50                           	push	eax
+  436344: 68 28 00 00 00               	push	0x28
+  436349: 68 78 00 00 00               	push	0x78
+  43634e: 68 0a 00 00 00               	push	0xa
+  436353: 68 18 01 00 00               	push	0x118
+  436358: 68 ff ff ff ff               	push	0xffffffff
+  43635d: e8 8c b6 fc ff               	call	0x4019ee <.text+0x9ee>
+  436362: a3 40 4b 43 00               	mov	dword ptr [0x434b40], eax
+  436367: b8 28 40 43 00               	mov	eax, 0x434028
+  43636c: 50                           	push	eax
+  43636d: 68 3c 00 00 00               	push	0x3c
+  436372: 68 86 01 00 00               	push	0x186
+  436377: 68 32 00 00 00               	push	0x32
+  43637c: 68 0a 00 00 00               	push	0xa
+  436381: 68 ff ff ff ff               	push	0xffffffff
+  436386: e8 fd c0 fc ff               	call	0x402488 <.text+0x1488>
+  43638b: a3 54 4b 43 00               	mov	dword ptr [0x434b54], eax
+  436390: 68 01 00 00 00               	push	0x1
+  436395: b8 28 40 43 00               	mov	eax, 0x434028
+  43639a: 50                           	push	eax
+  43639b: 68 1e 00 00 00               	push	0x1e
+  4363a0: 68 72 01 00 00               	push	0x172
+  4363a5: 68 46 00 00 00               	push	0x46
+  4363aa: 68 14 00 00 00               	push	0x14
+  4363af: 68 ff ff ff ff               	push	0xffffffff
+  4363b4: e8 3b c6 fc ff               	call	0x4029f4 <.text+0x19f4>
+  4363b9: a3 60 4b 43 00               	mov	dword ptr [0x434b60], eax
+  4363be: 68 00 00 00 00               	push	0x0
+  4363c3: e8 e9 e3 fc ff               	call	0x4047b1 <.text+0x37b1>
+  4363c8: 50                           	push	eax
+  4363c9: ff 35 60 4b 43 00            	push	dword ptr [0x434b60]
+  4363cf: e8 65 c5 fc ff               	call	0x402939 <.text+0x1939>
+  4363d4: 31 c0                        	xor	eax, eax
+  4363d6: 5b                           	pop	ebx
+  4363d7: c2 10 00                     	ret	0x10
+  4363da: 53                           	push	ebx
+  4363db: e8 50 ea fc ff               	call	0x404e30 <.text+0x3e30>
+  4363e0: 8b 1d 64 4b 43 00            	mov	ebx, dword ptr [0x434b64]
+  4363e6: 21 db                        	and	ebx, ebx
+  4363e8: 0f 85 07 01 00 00            	jne	0x4364f5 <.code+0x4f5>
+  4363ee: 52                           	push	edx
+  4363ef: e8 1c eb fc ff               	call	0x404f10 <.text+0x3f10>
+  4363f4: 5a                           	pop	edx
+  4363f5: 50                           	push	eax
+  4363f6: 68 00 04 00 00               	push	0x400
+  4363fb: 68 10 00 00 00               	push	0x10
+  436400: 68 00 00 00 00               	push	0x0
+  436405: 68 00 00 80 3f               	push	0x3f800000
+  43640a: 68 08 00 00 00               	push	0x8
+  43640f: 68 00 00 00 00               	push	0x0
+  436414: 68 80 25 00 00               	push	0x2580
+  436419: 52                           	push	edx
+  43641a: e8 f1 ea fc ff               	call	0x404f10 <.text+0x3f10>
+  43641f: 5a                           	pop	edx
+  436420: 50                           	push	eax
+  436421: 52                           	push	edx
+  436422: e8 e9 ea fc ff               	call	0x404f10 <.text+0x3f10>
+  436427: 5a                           	pop	edx
+  436428: 50                           	push	eax
+  436429: ff 35 50 4b 43 00            	push	dword ptr [0x434b50]
+  43642f: e8 9d c4 fc ff               	call	0x4028d1 <.text+0x18d1>
+  436434: e8 07 eb fc ff               	call	0x404f40 <.text+0x3f40>
+  436439: 68 00 00 00 00               	push	0x0
+  43643e: e8 cf ab fc ff               	call	0x401012 <.text+0x12>
+  436443: 01 54 24 04                  	add	dword ptr [esp + 0x4], edx
+  436447: e8 b6 af fc ff               	call	0x401402 <.text+0x402>
+  43644c: e8 ef ab fc ff               	call	0x401040 <.text+0x40>
+  436451: 89 c3                        	mov	ebx, eax
+  436453: 21 db                        	and	ebx, ebx
+  436455: 75 5a                        	jne	0x4364b1 <.code+0x4b1>
+  436457: 52                           	push	edx
+  436458: e8 b3 ea fc ff               	call	0x404f10 <.text+0x3f10>
+  43645d: 5a                           	pop	edx
+  43645e: 50                           	push	eax
+  43645f: 52                           	push	edx
+  436460: e8 ab ea fc ff               	call	0x404f10 <.text+0x3f10>
+  436465: 5a                           	pop	edx
+  436466: 50                           	push	eax
+  436467: ba 2c 41 43 00               	mov	edx, 0x43412c
+  43646c: 52                           	push	edx
+  43646d: e8 fe e9 fc ff               	call	0x404e70 <.text+0x3e70>
+  436472: 52                           	push	edx
+  436473: e8 98 ea fc ff               	call	0x404f10 <.text+0x3f10>
+  436478: 5a                           	pop	edx
+  436479: 50                           	push	eax
+  43647a: 52                           	push	edx
+  43647b: e8 90 ea fc ff               	call	0x404f10 <.text+0x3f10>
+  436480: 5a                           	pop	edx
+  436481: 50                           	push	eax
+  436482: ff 35 50 4b 43 00            	push	dword ptr [0x434b50]
+  436488: e8 44 c4 fc ff               	call	0x4028d1 <.text+0x18d1>
+  43648d: 58                           	pop	eax
+  43648e: e8 ad ea fc ff               	call	0x404f40 <.text+0x3f40>
+  436493: b8 ec 40 43 00               	mov	eax, 0x4340ec
+  436498: 50                           	push	eax
+  436499: e8 74 ab fc ff               	call	0x401012 <.text+0x12>
+  43649e: 01 54 24 04                  	add	dword ptr [esp + 0x4], edx
+  4364a2: e8 77 b2 fc ff               	call	0x40171e <.text+0x71e>
+  4364a7: e8 94 ab fc ff               	call	0x401040 <.text+0x40>
+  4364ac: e9 97 00 00 00               	jmp	0x436548 <.code+0x548>
+  4364b1: b8 2a 40 43 00               	mov	eax, 0x43402a
+  4364b6: 50                           	push	eax
+  4364b7: ff 35 40 4b 43 00            	push	dword ptr [0x434b40]
+  4364bd: e8 e7 c4 fc ff               	call	0x4029a9 <.text+0x19a9>
+  4364c2: 68 01 00 00 00               	push	0x1
+  4364c7: ff 35 50 4b 43 00            	push	dword ptr [0x434b50]
+  4364cd: e8 8b bf fc ff               	call	0x40245d <.text+0x145d>
+  4364d2: c7 05 64 4b 43 00 01 00 00 00	mov	dword ptr [0x434b64], 0x1
+  4364dc: e8 56 e4 fc ff               	call	0x404937 <.text+0x3937>
+  4364e1: 50                           	push	eax
+  4364e2: 8d 05 4c 65 43 00            	lea	eax, [0x43654c]
+  4364e8: 50                           	push	eax
+  4364e9: e8 cc ac fc ff               	call	0x4011ba <.text+0x1ba>
+  4364ee: a3 3c 4b 43 00               	mov	dword ptr [0x434b3c], eax
+  4364f3: eb 51                        	jmp	0x436546 <.code+0x546>
+  4364f5: ff 35 3c 4b 43 00            	push	dword ptr [0x434b3c]
+  4364fb: e8 f7 ad fc ff               	call	0x4012f7 <.text+0x2f7>
+  436500: 68 00 00 00 00               	push	0x0
+  436505: e8 85 ae fc ff               	call	0x40138f <.text+0x38f>
+  43650a: b8 8c 40 43 00               	mov	eax, 0x43408c
+  43650f: 50                           	push	eax
+  436510: ff 35 40 4b 43 00            	push	dword ptr [0x434b40]
+  436516: e8 8e c4 fc ff               	call	0x4029a9 <.text+0x19a9>
+  43651b: 68 00 00 00 00               	push	0x0
+  436520: ff 35 50 4b 43 00            	push	dword ptr [0x434b50]
+  436526: e8 32 bf fc ff               	call	0x40245d <.text+0x145d>
+  43652b: b8 28 40 43 00               	mov	eax, 0x434028
+  436530: 50                           	push	eax
+  436531: ff 35 60 4b 43 00            	push	dword ptr [0x434b60]
+  436537: e8 6d c4 fc ff               	call	0x4029a9 <.text+0x19a9>
+  43653c: c7 05 64 4b 43 00 00 00 00 00	mov	dword ptr [0x434b64], 0x0
+  436546: 31 c0                        	xor	eax, eax
+  436548: 5b                           	pop	ebx
+  436549: c2 04 00                     	ret	0x4
+  43654c: 55                           	push	ebp
+  43654d: 53                           	push	ebx
+  43654e: 31 c0                        	xor	eax, eax
+  436550: 50                           	push	eax
+  436551: 68 00 00 00 00               	push	0x0
+  436556: e8 95 ae fc ff               	call	0x4013f0 <.text+0x3f0>
+  43655b: 21 c0                        	and	eax, eax
+  43655d: 0f 84 2a 03 00 00            	je	0x43688d <.code+0x88d>
+  436563: c7 04 24 00 00 00 00         	mov	dword ptr [esp], 0x0
+  43656a: eb 00                        	jmp	0x43656c <.code+0x56c>
+  43656c: b8 0f 00 00 00               	mov	eax, 0xf
+  436571: 3b 04 24                     	cmp	eax, dword ptr [esp]
+  436574: 7c 20                        	jl	0x436596 <.code+0x596>
+  436576: b8 52 40 43 00               	mov	eax, 0x434052
+  43657b: 50                           	push	eax
+  43657c: e8 af e0 fc ff               	call	0x404630 <.text+0x3630>
+  436581: 50                           	push	eax
+  436582: 8b 5c 24 04                  	mov	ebx, dword ptr [esp + 0x4]
+  436586: 8b 2d 68 4b 43 00            	mov	ebp, dword ptr [0x434b68]
+  43658c: 58                           	pop	eax
+  43658d: 88 44 1d 00                  	mov	byte ptr [ebp + ebx], al
+  436591: ff 04 24                     	inc	dword ptr [esp]
+  436594: 71 d6                        	jno	0x43656c <.code+0x56c>
+  436596: b8 9c 40 43 00               	mov	eax, 0x43409c
+  43659b: 50                           	push	eax
+  43659c: e8 8f e0 fc ff               	call	0x404630 <.text+0x3630>
+  4365a1: 8b 2d 78 4b 43 00            	mov	ebp, dword ptr [0x434b78]
+  4365a7: 88 45 00                     	mov	byte ptr [ebp], al
+  4365aa: b8 98 40 43 00               	mov	eax, 0x434098
+  4365af: 50                           	push	eax
+  4365b0: e8 7b e0 fc ff               	call	0x404630 <.text+0x3630>
+  4365b5: 88 45 01                     	mov	byte ptr [ebp + 0x1], al
+  4365b8: b8 6a 40 43 00               	mov	eax, 0x43406a
+  4365bd: 50                           	push	eax
+  4365be: e8 6d e0 fc ff               	call	0x404630 <.text+0x3630>
+  4365c3: 88 45 02                     	mov	byte ptr [ebp + 0x2], al
+  4365c6: 68 03 00 00 00               	push	0x3
+  4365cb: ff 35 78 4b 43 00            	push	dword ptr [0x434b78]
+  4365d1: 68 00 00 00 00               	push	0x0
+  4365d6: e8 44 b0 fc ff               	call	0x40161f <.text+0x61f>
+  4365db: 68 64 00 00 00               	push	0x64
+  4365e0: e8 d0 c6 fc ff               	call	0x402cb5 <.text+0x1cb5>
+  4365e5: 68 00 00 00 00               	push	0x0
+  4365ea: e8 68 ad fc ff               	call	0x401357 <.text+0x357>
+  4365ef: 89 c3                        	mov	ebx, eax
+  4365f1: 83 fb 06                     	cmp	ebx, 0x6
+  4365f4: 0f 85 42 02 00 00            	jne	0x43683c <.code+0x83c>
+  4365fa: 68 06 00 00 00               	push	0x6
+  4365ff: ff 35 68 4b 43 00            	push	dword ptr [0x434b68]
+  436605: 68 00 00 00 00               	push	0x0
+  43660a: e8 d7 af fc ff               	call	0x4015e6 <.text+0x5e6>
+  43660f: 8b 2d 68 4b 43 00            	mov	ebp, dword ptr [0x434b68]
+  436615: 0f b6 5d 00                  	movzx	ebx, byte ptr [ebp]
+  436619: b8 9c 40 43 00               	mov	eax, 0x43409c
+  43661e: 50                           	push	eax
+  43661f: e8 0c e0 fc ff               	call	0x404630 <.text+0x3630>
+  436624: 39 c3                        	cmp	ebx, eax
+  436626: 75 1a                        	jne	0x436642 <.code+0x642>
+  436628: 0f b6 5d 01                  	movzx	ebx, byte ptr [ebp + 0x1]
+  43662c: b8 98 40 43 00               	mov	eax, 0x434098
+  436631: 50                           	push	eax
+  436632: e8 f9 df fc ff               	call	0x404630 <.text+0x3630>
+  436637: 39 c3                        	cmp	ebx, eax
+  436639: 75 07                        	jne	0x436642 <.code+0x642>
+  43663b: b8 01 00 00 00               	mov	eax, 0x1
+  436640: eb 02                        	jmp	0x436644 <.code+0x644>
+  436642: 31 c0                        	xor	eax, eax
+  436644: 21 c0                        	and	eax, eax
+  436646: 74 1a                        	je	0x436662 <.code+0x662>
+  436648: 0f b6 5d 02                  	movzx	ebx, byte ptr [ebp + 0x2]
+  43664c: b8 56 40 43 00               	mov	eax, 0x434056
+  436651: 50                           	push	eax
+  436652: e8 d9 df fc ff               	call	0x404630 <.text+0x3630>
+  436657: 39 c3                        	cmp	ebx, eax
+  436659: 75 07                        	jne	0x436662 <.code+0x662>
+  43665b: b8 01 00 00 00               	mov	eax, 0x1
+  436660: eb 02                        	jmp	0x436664 <.code+0x664>
+  436662: 31 c0                        	xor	eax, eax
+  436664: 21 c0                        	and	eax, eax
+  436666: 74 1a                        	je	0x436682 <.code+0x682>
+  436668: 0f b6 5d 03                  	movzx	ebx, byte ptr [ebp + 0x3]
+  43666c: b8 5a 40 43 00               	mov	eax, 0x43405a
+  436671: 50                           	push	eax
+  436672: e8 b9 df fc ff               	call	0x404630 <.text+0x3630>
+  436677: 39 c3                        	cmp	ebx, eax
+  436679: 75 07                        	jne	0x436682 <.code+0x682>
+  43667b: b8 01 00 00 00               	mov	eax, 0x1
+  436680: eb 02                        	jmp	0x436684 <.code+0x684>
+  436682: 31 c0                        	xor	eax, eax
+  436684: 21 c0                        	and	eax, eax
+  436686: 74 1a                        	je	0x4366a2 <.code+0x6a2>
+  436688: 0f b6 5d 04                  	movzx	ebx, byte ptr [ebp + 0x4]
+  43668c: b8 66 40 43 00               	mov	eax, 0x434066
+  436691: 50                           	push	eax
+  436692: e8 99 df fc ff               	call	0x404630 <.text+0x3630>
+  436697: 39 c3                        	cmp	ebx, eax
+  436699: 75 07                        	jne	0x4366a2 <.code+0x6a2>
+  43669b: b8 01 00 00 00               	mov	eax, 0x1
+  4366a0: eb 02                        	jmp	0x4366a4 <.code+0x6a4>
+  4366a2: 31 c0                        	xor	eax, eax
+  4366a4: 21 c0                        	and	eax, eax
+  4366a6: 74 1a                        	je	0x4366c2 <.code+0x6c2>
+  4366a8: 0f b6 5d 05                  	movzx	ebx, byte ptr [ebp + 0x5]
+  4366ac: b8 6a 40 43 00               	mov	eax, 0x43406a
+  4366b1: 50                           	push	eax
+  4366b2: e8 79 df fc ff               	call	0x404630 <.text+0x3630>
+  4366b7: 39 c3                        	cmp	ebx, eax
+  4366b9: 75 07                        	jne	0x4366c2 <.code+0x6c2>
+  4366bb: b8 01 00 00 00               	mov	eax, 0x1
+  4366c0: eb 02                        	jmp	0x4366c4 <.code+0x6c4>
+  4366c2: 31 c0                        	xor	eax, eax
+  4366c4: 21 c0                        	and	eax, eax
+  4366c6: 0f 85 3d 01 00 00            	jne	0x436809 <.code+0x809>
+  4366cc: 8b 2d 68 4b 43 00            	mov	ebp, dword ptr [0x434b68]
+  4366d2: 0f b6 5d 00                  	movzx	ebx, byte ptr [ebp]
+  4366d6: b8 9c 40 43 00               	mov	eax, 0x43409c
+  4366db: 50                           	push	eax
+  4366dc: e8 4f df fc ff               	call	0x404630 <.text+0x3630>
+  4366e1: 39 c3                        	cmp	ebx, eax
+  4366e3: 75 1a                        	jne	0x4366ff <.code+0x6ff>
+  4366e5: 0f b6 5d 01                  	movzx	ebx, byte ptr [ebp + 0x1]
+  4366e9: b8 98 40 43 00               	mov	eax, 0x434098
+  4366ee: 50                           	push	eax
+  4366ef: e8 3c df fc ff               	call	0x404630 <.text+0x3630>
+  4366f4: 39 c3                        	cmp	ebx, eax
+  4366f6: 75 07                        	jne	0x4366ff <.code+0x6ff>
+  4366f8: b8 01 00 00 00               	mov	eax, 0x1
+  4366fd: eb 02                        	jmp	0x436701 <.code+0x701>
+  4366ff: 31 c0                        	xor	eax, eax
+  436701: 21 c0                        	and	eax, eax
+  436703: 74 1a                        	je	0x43671f <.code+0x71f>
+  436705: 0f b6 5d 02                  	movzx	ebx, byte ptr [ebp + 0x2]
+  436709: b8 62 40 43 00               	mov	eax, 0x434062
+  43670e: 50                           	push	eax
+  43670f: e8 1c df fc ff               	call	0x404630 <.text+0x3630>
+  436714: 39 c3                        	cmp	ebx, eax
+  436716: 75 07                        	jne	0x43671f <.code+0x71f>
+  436718: b8 01 00 00 00               	mov	eax, 0x1
+  43671d: eb 02                        	jmp	0x436721 <.code+0x721>
+  43671f: 31 c0                        	xor	eax, eax
+  436721: 21 c0                        	and	eax, eax
+  436723: 74 1a                        	je	0x43673f <.code+0x73f>
+  436725: 0f b6 5d 03                  	movzx	ebx, byte ptr [ebp + 0x3]
+  436729: b8 56 40 43 00               	mov	eax, 0x434056
+  43672e: 50                           	push	eax
+  43672f: e8 fc de fc ff               	call	0x404630 <.text+0x3630>
+  436734: 39 c3                        	cmp	ebx, eax
+  436736: 75 07                        	jne	0x43673f <.code+0x73f>
+  436738: b8 01 00 00 00               	mov	eax, 0x1
+  43673d: eb 02                        	jmp	0x436741 <.code+0x741>
+  43673f: 31 c0                        	xor	eax, eax
+  436741: 21 c0                        	and	eax, eax
+  436743: 0f 84 b8 00 00 00            	je	0x436801 <.code+0x801>
+  436749: 0f b6 5d 04                  	movzx	ebx, byte ptr [ebp + 0x4]
+  43674d: b8 56 40 43 00               	mov	eax, 0x434056
+  436752: 50                           	push	eax
+  436753: e8 d8 de fc ff               	call	0x404630 <.text+0x3630>
+  436758: 39 c3                        	cmp	ebx, eax
+  43675a: 74 1b                        	je	0x436777 <.code+0x777>
+  43675c: 8b 2d 68 4b 43 00            	mov	ebp, dword ptr [0x434b68]
+  436762: 0f b6 5d 04                  	movzx	ebx, byte ptr [ebp + 0x4]
+  436766: b8 62 40 43 00               	mov	eax, 0x434062
+  43676b: 50                           	push	eax
+  43676c: e8 bf de fc ff               	call	0x404630 <.text+0x3630>
+  436771: 39 c3                        	cmp	ebx, eax
+  436773: 74 02                        	je	0x436777 <.code+0x777>
+  436775: eb 07                        	jmp	0x43677e <.code+0x77e>
+  436777: b8 01 00 00 00               	mov	eax, 0x1
+  43677c: eb 02                        	jmp	0x436780 <.code+0x780>
+  43677e: 31 c0                        	xor	eax, eax
+  436780: 21 c0                        	and	eax, eax
+  436782: 75 1b                        	jne	0x43679f <.code+0x79f>
+  436784: 8b 2d 68 4b 43 00            	mov	ebp, dword ptr [0x434b68]
+  43678a: 0f b6 5d 04                  	movzx	ebx, byte ptr [ebp + 0x4]
+  43678e: b8 5a 40 43 00               	mov	eax, 0x43405a
+  436793: 50                           	push	eax
+  436794: e8 97 de fc ff               	call	0x404630 <.text+0x3630>
+  436799: 39 c3                        	cmp	ebx, eax
+  43679b: 74 02                        	je	0x43679f <.code+0x79f>
+  43679d: eb 07                        	jmp	0x4367a6 <.code+0x7a6>
+  43679f: b8 01 00 00 00               	mov	eax, 0x1
+  4367a4: eb 02                        	jmp	0x4367a8 <.code+0x7a8>
+  4367a6: 31 c0                        	xor	eax, eax
+  4367a8: 21 c0                        	and	eax, eax
+  4367aa: 75 1b                        	jne	0x4367c7 <.code+0x7c7>
+  4367ac: 8b 2d 68 4b 43 00            	mov	ebp, dword ptr [0x434b68]
+  4367b2: 0f b6 5d 04                  	movzx	ebx, byte ptr [ebp + 0x4]
+  4367b6: b8 5e 40 43 00               	mov	eax, 0x43405e
+  4367bb: 50                           	push	eax
+  4367bc: e8 6f de fc ff               	call	0x404630 <.text+0x3630>
+  4367c1: 39 c3                        	cmp	ebx, eax
+  4367c3: 74 02                        	je	0x4367c7 <.code+0x7c7>
+  4367c5: eb 07                        	jmp	0x4367ce <.code+0x7ce>
+  4367c7: b8 01 00 00 00               	mov	eax, 0x1
+  4367cc: eb 02                        	jmp	0x4367d0 <.code+0x7d0>
+  4367ce: 31 c0                        	xor	eax, eax
+  4367d0: 21 c0                        	and	eax, eax
+  4367d2: 74 20                        	je	0x4367f4 <.code+0x7f4>
+  4367d4: 8b 2d 68 4b 43 00            	mov	ebp, dword ptr [0x434b68]
+  4367da: 0f b6 5d 05                  	movzx	ebx, byte ptr [ebp + 0x5]
+  4367de: b8 6a 40 43 00               	mov	eax, 0x43406a
+  4367e3: 50                           	push	eax
+  4367e4: e8 47 de fc ff               	call	0x404630 <.text+0x3630>
+  4367e9: 39 c3                        	cmp	ebx, eax
+  4367eb: 75 07                        	jne	0x4367f4 <.code+0x7f4>
+  4367ed: b8 01 00 00 00               	mov	eax, 0x1
+  4367f2: eb 02                        	jmp	0x4367f6 <.code+0x7f6>
+  4367f4: 31 c0                        	xor	eax, eax
+  4367f6: 21 c0                        	and	eax, eax
+  4367f8: 74 07                        	je	0x436801 <.code+0x801>
+  4367fa: b8 01 00 00 00               	mov	eax, 0x1
+  4367ff: eb 02                        	jmp	0x436803 <.code+0x803>
+  436801: 31 c0                        	xor	eax, eax
+  436803: 21 c0                        	and	eax, eax
+  436805: 75 02                        	jne	0x436809 <.code+0x809>
+  436807: eb 07                        	jmp	0x436810 <.code+0x810>
+  436809: b8 01 00 00 00               	mov	eax, 0x1
+  43680e: eb 02                        	jmp	0x436812 <.code+0x812>
+  436810: 31 c0                        	xor	eax, eax
+  436812: 21 c0                        	and	eax, eax
+  436814: 74 13                        	je	0x436829 <.code+0x829>
+  436816: b8 a0 40 43 00               	mov	eax, 0x4340a0
+  43681b: 50                           	push	eax
+  43681c: ff 35 60 4b 43 00            	push	dword ptr [0x434b60]
+  436822: e8 82 c1 fc ff               	call	0x4029a9 <.text+0x19a9>
+  436827: eb 11                        	jmp	0x43683a <.code+0x83a>
+  436829: b8 ce 40 43 00               	mov	eax, 0x4340ce
+  43682e: 50                           	push	eax
+  43682f: ff 35 60 4b 43 00            	push	dword ptr [0x434b60]
+  436835: e8 6f c1 fc ff               	call	0x4029a9 <.text+0x19a9>
+  43683a: eb 4f                        	jmp	0x43688b <.code+0x88b>
+  43683c: 68 00 00 00 00               	push	0x0
+  436841: e8 11 ab fc ff               	call	0x401357 <.text+0x357>
+  436846: 89 c3                        	mov	ebx, eax
+  436848: 21 db                        	and	ebx, ebx
+  43684a: 75 13                        	jne	0x43685f <.code+0x85f>
+  43684c: b8 6e 40 43 00               	mov	eax, 0x43406e
+  436851: 50                           	push	eax
+  436852: ff 35 60 4b 43 00            	push	dword ptr [0x434b60]
+  436858: e8 4c c1 fc ff               	call	0x4029a9 <.text+0x19a9>
+  43685d: eb 2c                        	jmp	0x43688b <.code+0x88b>
+  43685f: 68 00 00 00 00               	push	0x0
+  436864: e8 ee aa fc ff               	call	0x401357 <.text+0x357>
+  436869: 50                           	push	eax
+  43686a: ff 35 70 4b 43 00            	push	dword ptr [0x434b70]
+  436870: 68 00 00 00 00               	push	0x0
+  436875: e8 6c ad fc ff               	call	0x4015e6 <.text+0x5e6>
+  43687a: b8 b0 40 43 00               	mov	eax, 0x4340b0
+  43687f: 50                           	push	eax
+  436880: ff 35 60 4b 43 00            	push	dword ptr [0x434b60]
+  436886: e8 1e c1 fc ff               	call	0x4029a9 <.text+0x19a9>
+  43688b: eb 1b                        	jmp	0x4368a8 <.code+0x8a8>
+  43688d: b8 34 40 43 00               	mov	eax, 0x434034
+  436892: 50                           	push	eax
+  436893: ff 35 60 4b 43 00            	push	dword ptr [0x434b60]
+  436899: e8 0b c1 fc ff               	call	0x4029a9 <.text+0x19a9>
+  43689e: 68 64 00 00 00               	push	0x64
+  4368a3: e8 0d c4 fc ff               	call	0x402cb5 <.text+0x1cb5>
+  4368a8: e9 a4 fc ff ff               	jmp	0x436551 <.code+0x551>
+  4368ad: 31 c0                        	xor	eax, eax
+  4368af: 83 c4 04                     	add	esp, 0x4
+  4368b2: 5b                           	pop	ebx
+  4368b3: 5d                           	pop	ebp
+  4368b4: c2 04 00                     	ret	0x4
+  4368b7: 31 c0                        	xor	eax, eax
+  4368b9: c2 04 00                     	ret	0x4
+  4368bc: 53                           	push	ebx
+  4368bd: e8 6e e5 fc ff               	call	0x404e30 <.text+0x3e30>
+  4368c2: ff 74 24 08                  	push	dword ptr [esp + 0x8]
+  4368c6: bb 3c 33 00 00               	mov	ebx, 0x333c
+  4368cb: 3b 1c 24                     	cmp	ebx, dword ptr [esp]
+  4368ce: 75 09                        	jne	0x4368d9 <.code+0x8d9>
+  4368d0: 31 c0                        	xor	eax, eax
+  4368d2: 83 c4 04                     	add	esp, 0x4
+  4368d5: eb 5c                        	jmp	0x436933 <.code+0x933>
+  4368d7: eb 50                        	jmp	0x436929 <.code+0x929>
+  4368d9: bb 2d 33 00 00               	mov	ebx, 0x332d
+  4368de: 3b 1c 24                     	cmp	ebx, dword ptr [esp]
+  4368e1: 75 07                        	jne	0x4368ea <.code+0x8ea>
+  4368e3: e8 46 e0 fc ff               	call	0x40492e <.text+0x392e>
+  4368e8: eb 3f                        	jmp	0x436929 <.code+0x929>
+  4368ea: bb 2c 33 00 00               	mov	ebx, 0x332c
+  4368ef: 3b 1c 24                     	cmp	ebx, dword ptr [esp]
+  4368f2: 75 35                        	jne	0x436929 <.code+0x929>
+  4368f4: e8 35 e0 fc ff               	call	0x40492e <.text+0x392e>
+  4368f9: 50                           	push	eax
+  4368fa: 8b 1d 50 4b 43 00            	mov	ebx, dword ptr [0x434b50]
+  436900: 3b 1c 24                     	cmp	ebx, dword ptr [esp]
+  436903: 75 0d                        	jne	0x436912 <.code+0x912>
+  436905: e8 2d e0 fc ff               	call	0x404937 <.text+0x3937>
+  43690a: 50                           	push	eax
+  43690b: e8 a7 ff ff ff               	call	0x4368b7 <.code+0x8b7>
+  436910: eb 16                        	jmp	0x436928 <.code+0x928>
+  436912: 8b 1d 40 4b 43 00            	mov	ebx, dword ptr [0x434b40]
+  436918: 3b 1c 24                     	cmp	ebx, dword ptr [esp]
+  43691b: 75 0b                        	jne	0x436928 <.code+0x928>
+  43691d: e8 15 e0 fc ff               	call	0x404937 <.text+0x3937>
+  436922: 50                           	push	eax
+  436923: e8 b2 fa ff ff               	call	0x4363da <.code+0x3da>
+  436928: 58                           	pop	eax
+  436929: 58                           	pop	eax
+  43692a: b8 01 00 00 00               	mov	eax, 0x1
+  43692f: eb 02                        	jmp	0x436933 <.code+0x933>
+  436931: 31 c0                        	xor	eax, eax
+  436933: 5b                           	pop	ebx
+  436934: c2 04 00                     	ret	0x4

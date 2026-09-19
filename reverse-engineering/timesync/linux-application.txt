@@ -1,0 +1,386 @@
+  406d30: f3 0f 1e fa                  	endbr64
+  406d34: 41 55                        	push	r13
+  406d36: 41 54                        	push	r12
+  406d38: 55                           	push	rbp
+  406d39: 53                           	push	rbx
+  406d3a: 48 83 ec 08                  	sub	rsp, 0x8
+  406d3e: 89 3d f4 4b 01 00            	mov	dword ptr [rip + 0x14bf4], edi # 0x41b938
+  406d44: 48 89 35 e5 4b 01 00         	mov	qword ptr [rip + 0x14be5], rsi # 0x41b930
+  406d4b: 31 c0                        	xor	eax, eax
+  406d4d: e8 6e c7 00 00               	call	0x4134c0 <.text+0xc7a0>
+  406d52: e8 49 d6 00 00               	call	0x4143a0 <.text+0xd680>
+  406d57: 31 c0                        	xor	eax, eax
+  406d59: e8 42 bd 00 00               	call	0x412aa0 <.text+0xbd80>
+  406d5e: 31 c0                        	xor	eax, eax
+  406d60: e8 1b a8 00 00               	call	0x411580 <.text+0xa860>
+  406d65: 31 c0                        	xor	eax, eax
+  406d67: e8 44 a6 00 00               	call	0x4113b0 <.text+0xa690>
+  406d6c: 31 c0                        	xor	eax, eax
+  406d6e: e8 ad a3 00 00               	call	0x411120 <.text+0xa400>
+  406d73: 31 c0                        	xor	eax, eax
+  406d75: e8 56 83 00 00               	call	0x40f0d0 <.text+0x83b0>
+  406d7a: 31 c0                        	xor	eax, eax
+  406d7c: e8 af 7c 00 00               	call	0x40ea30 <.text+0x7d10>
+  406d81: 31 c0                        	xor	eax, eax
+  406d83: e8 18 6c 00 00               	call	0x40d9a0 <.text+0x6c80>
+  406d88: 31 c0                        	xor	eax, eax
+  406d8a: e8 21 6a 00 00               	call	0x40d7b0 <.text+0x6a90>
+  406d8f: 31 c0                        	xor	eax, eax
+  406d91: e8 1a 68 00 00               	call	0x40d5b0 <.text+0x6890>
+  406d96: 31 c0                        	xor	eax, eax
+  406d98: e8 f3 63 00 00               	call	0x40d190 <.text+0x6470>
+  406d9d: 31 c0                        	xor	eax, eax
+  406d9f: e8 0c 2f 00 00               	call	0x409cb0 <.text+0x2f90>
+  406da4: 31 c0                        	xor	eax, eax
+  406da6: e8 05 25 00 00               	call	0x4092b0 <.text+0x2590>
+  406dab: 31 c0                        	xor	eax, eax
+  406dad: e8 fe 10 00 00               	call	0x407eb0 <.text+0x1190>
+  406db2: 31 c0                        	xor	eax, eax
+  406db4: e8 47 0f 00 00               	call	0x407d00 <.text+0xfe0>
+  406db9: 31 c0                        	xor	eax, eax
+  406dbb: e8 20 0d 00 00               	call	0x407ae0 <.text+0xdc0>
+  406dc0: 48 8d 35 19 4a 01 00         	lea	rsi, [rip + 0x14a19]    # 0x41b7e0
+  406dc7: 48 8d 3d b2 4b 01 00         	lea	rdi, [rip + 0x14bb2]    # 0x41b980
+  406dce: e8 fd d3 00 00               	call	0x4141d0 <.text+0xd4b0>
+  406dd3: 4c 8d 05 c6 4b 01 00         	lea	r8, [rip + 0x14bc6]     # 0x41b9a0
+  406dda: 31 c9                        	xor	ecx, ecx
+  406ddc: ba 01 00 00 00               	mov	edx, 0x1
+  406de1: be 11 00 00 00               	mov	esi, 0x11
+  406de6: bf 01 00 00 00               	mov	edi, 0x1
+  406deb: e8 20 0f 00 00               	call	0x407d10 <.text+0xff0>
+  406df0: 4c 8d 05 a1 4b 01 00         	lea	r8, [rip + 0x14ba1]     # 0x41b998
+  406df7: 31 c9                        	xor	ecx, ecx
+  406df9: ba 01 00 00 00               	mov	edx, 0x1
+  406dfe: be 11 00 00 00               	mov	esi, 0x11
+  406e03: bf 01 00 00 00               	mov	edi, 0x1
+  406e08: e8 03 0f 00 00               	call	0x407d10 <.text+0xff0>
+  406e0d: 48 83 ec 08                  	sub	rsp, 0x8
+  406e11: 6a 64                        	push	0x64
+  406e13: 4c 8d 0d 66 4a 01 00         	lea	r9, [rip + 0x14a66]     # 0x41b880
+  406e1a: 41 b8 3c 00 00 00            	mov	r8d, 0x3c
+  406e20: b9 2c 01 00 00               	mov	ecx, 0x12c
+  406e25: 31 d2                        	xor	edx, edx
+  406e27: 31 f6                        	xor	esi, esi
+  406e29: 48 c7 c7 ff ff ff ff         	mov	rdi, -0x1
+  406e30: e8 eb 21 00 00               	call	0x409020 <.text+0x2300>
+  406e35: 41 b8 14 00 00 00            	mov	r8d, 0x14
+  406e3b: b9 5a 00 00 00               	mov	ecx, 0x5a
+  406e40: ba 14 00 00 00               	mov	edx, 0x14
+  406e45: be 14 00 00 00               	mov	esi, 0x14
+  406e4a: 48 c7 c7 ff ff ff ff         	mov	rdi, -0x1
+  406e51: e8 7a 41 00 00               	call	0x40afd0 <.text+0x42b0>
+  406e56: 48 89 05 13 4b 01 00         	mov	qword ptr [rip + 0x14b13], rax # 0x41b970
+  406e5d: 4c 8d 0d fc 49 01 00         	lea	r9, [rip + 0x149fc]     # 0x41b860
+  406e64: 41 b8 28 00 00 00            	mov	r8d, 0x28
+  406e6a: b9 8c 00 00 00               	mov	ecx, 0x8c
+  406e6f: ba 0a 00 00 00               	mov	edx, 0xa
+  406e74: be 8c 00 00 00               	mov	esi, 0x8c
+  406e79: 48 c7 c7 ff ff ff ff         	mov	rdi, -0x1
+  406e80: e8 2b 33 00 00               	call	0x40a1b0 <.text+0x3490>
+  406e85: 48 89 05 04 4b 01 00         	mov	qword ptr [rip + 0x14b04], rax # 0x41b990
+  406e8c: 48 c7 05 e1 4a 01 00 00 00 00 00     	mov	qword ptr [rip + 0x14ae1], 0x0 # 0x41b978
+  406e97: 5f                           	pop	rdi
+  406e98: 41 58                        	pop	r8
+  406e9a: eb 20                        	jmp	0x406ebc <.text+0x19c>
+  406e9c: 0f 1f 40 00                  	nop	dword ptr [rax]
+  406ea0: 48 8b 05 d1 4a 01 00         	mov	rax, qword ptr [rip + 0x14ad1] # 0x41b978
+  406ea7: 48 83 c0 01                  	add	rax, 0x1
+  406eab: 48 89 05 c6 4a 01 00         	mov	qword ptr [rip + 0x14ac6], rax # 0x41b978
+  406eb2: 48 83 f8 63                  	cmp	rax, 0x63
+  406eb6: 0f 8f f4 00 00 00            	jg	0x406fb0 <.text+0x290>
+  406ebc: e8 cf d5 00 00               	call	0x414490 <.text+0xd770>
+  406ec1: e8 ca d5 00 00               	call	0x414490 <.text+0xd770>
+  406ec6: 48 8b 3d b3 4a 01 00         	mov	rdi, qword ptr [rip + 0x14ab3] # 0x41b980
+  406ecd: e8 3e d2 00 00               	call	0x414110 <.text+0xd3f0>
+  406ed2: e8 b9 d5 00 00               	call	0x414490 <.text+0xd770>
+  406ed7: e8 b4 d5 00 00               	call	0x414490 <.text+0xd770>
+  406edc: e8 df d5 00 00               	call	0x4144c0 <.text+0xd7a0>
+  406ee1: 48 89 c6                     	mov	rsi, rax
+  406ee4: 48 8b 3d 8d 4a 01 00         	mov	rdi, qword ptr [rip + 0x14a8d] # 0x41b978
+  406eeb: e8 f0 a3 00 00               	call	0x4112e0 <.text+0xa5c0>
+  406ef0: e8 cb d5 00 00               	call	0x4144c0 <.text+0xd7a0>
+  406ef5: 48 83 05 db 54 01 00 02      	add	qword ptr [rip + 0x154db], 0x2 # 0x41c3d8
+  406efd: e8 5e d6 00 00               	call	0x414560 <.text+0xd840>
+  406f02: 48 89 c6                     	mov	rsi, rax
+  406f05: 6a 10                        	push	0x10
+  406f07: 6a 10                        	push	0x10
+  406f09: 45 31 c9                     	xor	r9d, r9d
+  406f0c: f3 0f 10 05 f0 e0 00 00      	movss	xmm0, dword ptr [rip + 0xe0f0] # 0x415004
+  406f14: 41 b8 08 00 00 00            	mov	r8d, 0x8
+  406f1a: 31 c9                        	xor	ecx, ecx
+  406f1c: ba 80 25 00 00               	mov	edx, 0x2580
+  406f21: 31 ff                        	xor	edi, edi
+  406f23: e8 a8 06 00 00               	call	0x4075d0 <.text+0x8b0>
+  406f28: 48 89 c3                     	mov	rbx, rax
+  406f2b: e8 c0 d5 00 00               	call	0x4144f0 <.text+0xd7d0>
+  406f30: 59                           	pop	rcx
+  406f31: 5e                           	pop	rsi
+  406f32: 48 85 db                     	test	rbx, rbx
+  406f35: 0f 84 65 ff ff ff            	je	0x406ea0 <.text+0x180>
+  406f3b: e8 50 d5 00 00               	call	0x414490 <.text+0xd770>
+  406f40: e8 4b d5 00 00               	call	0x414490 <.text+0xd770>
+  406f45: 48 8b 3d 34 4a 01 00         	mov	rdi, qword ptr [rip + 0x14a34] # 0x41b980
+  406f4c: e8 bf d1 00 00               	call	0x414110 <.text+0xd3f0>
+  406f51: e8 3a d5 00 00               	call	0x414490 <.text+0xd770>
+  406f56: e8 35 d5 00 00               	call	0x414490 <.text+0xd770>
+  406f5b: e8 60 d5 00 00               	call	0x4144c0 <.text+0xd7a0>
+  406f60: 48 89 c6                     	mov	rsi, rax
+  406f63: 48 8b 3d 0e 4a 01 00         	mov	rdi, qword ptr [rip + 0x14a0e] # 0x41b978
+  406f6a: e8 71 a3 00 00               	call	0x4112e0 <.text+0xa5c0>
+  406f6f: e8 4c d5 00 00               	call	0x4144c0 <.text+0xd7a0>
+  406f74: 48 83 05 5c 54 01 00 02      	add	qword ptr [rip + 0x1545c], 0x2 # 0x41c3d8
+  406f7c: 48 8b 1d ed 49 01 00         	mov	rbx, qword ptr [rip + 0x149ed] # 0x41b970
+  406f83: e8 d8 d5 00 00               	call	0x414560 <.text+0xd840>
+  406f88: 48 89 c2                     	mov	rdx, rax
+  406f8b: 48 c7 c6 ff ff ff ff         	mov	rsi, -0x1
+  406f92: 48 89 df                     	mov	rdi, rbx
+  406f95: e8 16 27 00 00               	call	0x4096b0 <.text+0x2990>
+  406f9a: e8 51 d5 00 00               	call	0x4144f0 <.text+0xd7d0>
+  406f9f: 31 ff                        	xor	edi, edi
+  406fa1: e8 ba 0a 00 00               	call	0x407a60 <.text+0xd40>
+  406fa6: e9 f5 fe ff ff               	jmp	0x406ea0 <.text+0x180>
+  406fab: 0f 1f 44 00 00               	nop	dword ptr [rax + rax]
+  406fb0: 31 c0                        	xor	eax, eax
+  406fb2: e8 d9 21 00 00               	call	0x409190 <.text+0x2470>
+  406fb7: 48 89 05 a2 49 01 00         	mov	qword ptr [rip + 0x149a2], rax # 0x41b960
+  406fbe: 48 83 f8 02                  	cmp	rax, 0x2
+  406fc2: 74 2c                        	je	0x406ff0 <.text+0x2d0>
+  406fc4: 48 83 f8 01                  	cmp	rax, 0x1
+  406fc8: 74 36                        	je	0x407000 <.text+0x2e0>
+  406fca: 48 83 f8 03                  	cmp	rax, 0x3
+  406fce: 75 e0                        	jne	0x406fb0 <.text+0x290>
+  406fd0: 31 c0                        	xor	eax, eax
+  406fd2: e8 89 61 00 00               	call	0x40d160 <.text+0x6440>
+  406fd7: 48 3b 05 b2 49 01 00         	cmp	rax, qword ptr [rip + 0x149b2] # 0x41b990
+  406fde: 74 30                        	je	0x407010 <.text+0x2f0>
+  406fe0: 48 8b 05 79 49 01 00         	mov	rax, qword ptr [rip + 0x14979] # 0x41b960
+  406fe7: 48 83 f8 02                  	cmp	rax, 0x2
+  406feb: 75 c3                        	jne	0x406fb0 <.text+0x290>
+  406fed: 0f 1f 00                     	nop	dword ptr [rax]
+  406ff0: 31 c0                        	xor	eax, eax
+  406ff2: e8 69 05 00 00               	call	0x407560 <.text+0x840>
+  406ff7: 66 0f 1f 84 00 00 00 00 00   	nop	word ptr [rax + rax]
+  407000: 31 c0                        	xor	eax, eax
+  407002: e8 69 61 00 00               	call	0x40d170 <.text+0x6450>
+  407007: 48 8b 05 52 49 01 00         	mov	rax, qword ptr [rip + 0x14952] # 0x41b960
+  40700e: eb d7                        	jmp	0x406fe7 <.text+0x2c7>
+  407010: 31 c0                        	xor	eax, eax
+  407012: e8 69 61 00 00               	call	0x40d180 <.text+0x6460>
+  407017: be 01 00 00 00               	mov	esi, 0x1
+  40701c: 48 8b 3d 4d 49 01 00         	mov	rdi, qword ptr [rip + 0x1494d] # 0x41b970
+  407023: e8 a8 26 00 00               	call	0x4096d0 <.text+0x29b0>
+  407028: be 01 00 00 00               	mov	esi, 0x1
+  40702d: 48 8b 3d 5c 49 01 00         	mov	rdi, qword ptr [rip + 0x1495c] # 0x41b990
+  407034: e8 97 26 00 00               	call	0x4096d0 <.text+0x29b0>
+  407039: e8 52 d4 00 00               	call	0x414490 <.text+0xd770>
+  40703e: e8 4d d4 00 00               	call	0x414490 <.text+0xd770>
+  407043: e8 48 d4 00 00               	call	0x414490 <.text+0xd770>
+  407048: 48 8b 1d 21 49 01 00         	mov	rbx, qword ptr [rip + 0x14921] # 0x41b970
+  40704f: e8 6c d4 00 00               	call	0x4144c0 <.text+0xd7a0>
+  407054: 48 89 c6                     	mov	rsi, rax
+  407057: 48 89 df                     	mov	rdi, rbx
+  40705a: e8 01 27 00 00               	call	0x409760 <.text+0x2a40>
+  40705f: 48 83 05 71 53 01 00 02      	add	qword ptr [rip + 0x15371], 0x2 # 0x41c3d8
+  407067: e8 f4 d4 00 00               	call	0x414560 <.text+0xd840>
+  40706c: 48 89 c6                     	mov	rsi, rax
+  40706f: 6a 10                        	push	0x10
+  407071: 6a 10                        	push	0x10
+  407073: 45 31 c9                     	xor	r9d, r9d
+  407076: f3 0f 10 05 86 df 00 00      	movss	xmm0, dword ptr [rip + 0xdf86] # 0x415004
+  40707e: 41 b8 08 00 00 00            	mov	r8d, 0x8
+  407084: 31 c9                        	xor	ecx, ecx
+  407086: ba 80 25 00 00               	mov	edx, 0x2580
+  40708b: 31 ff                        	xor	edi, edi
+  40708d: e8 3e 05 00 00               	call	0x4075d0 <.text+0x8b0>
+  407092: 48 89 c3                     	mov	rbx, rax
+  407095: e8 56 d4 00 00               	call	0x4144f0 <.text+0xd7d0>
+  40709a: 58                           	pop	rax
+  40709b: 5a                           	pop	rdx
+  40709c: 48 85 db                     	test	rbx, rbx
+  40709f: 0f 84 8c 00 00 00            	je	0x407131 <.text+0x411>
+  4070a5: e8 e6 d3 00 00               	call	0x414490 <.text+0xd770>
+  4070aa: e8 e1 d3 00 00               	call	0x414490 <.text+0xd770>
+  4070af: 31 c0                        	xor	eax, eax
+  4070b1: e8 6a 58 00 00               	call	0x40c920 <.text+0x5c00>
+  4070b6: 48 89 c3                     	mov	rbx, rax
+  4070b9: e8 02 d4 00 00               	call	0x4144c0 <.text+0xd7a0>
+  4070be: 48 89 c2                     	mov	rdx, rax
+  4070c1: 48 89 de                     	mov	rsi, rbx
+  4070c4: 48 8d 3d f5 46 01 00         	lea	rdi, [rip + 0x146f5]    # 0x41b7c0
+  4070cb: e8 00 57 00 00               	call	0x40c7d0 <.text+0x5ab0>
+  4070d0: e8 eb d3 00 00               	call	0x4144c0 <.text+0xd7a0>
+  4070d5: 48 89 c6                     	mov	rsi, rax
+  4070d8: 48 8d 3d 79 48 01 00         	lea	rdi, [rip + 0x14879]    # 0x41b958
+  4070df: e8 ac cf 00 00               	call	0x414090 <.text+0xd370>
+  4070e4: e8 a7 d3 00 00               	call	0x414490 <.text+0xd770>
+  4070e9: 4c 8d 25 ba 47 01 00         	lea	r12, [rip + 0x147ba]    # 0x41b8aa
+  4070f0: 4c 89 e7                     	mov	rdi, r12
+  4070f3: e8 18 d0 00 00               	call	0x414110 <.text+0xd3f0>
+  4070f8: 48 8b 3d 59 48 01 00         	mov	rdi, qword ptr [rip + 0x14859] # 0x41b958
+  4070ff: e8 0c d0 00 00               	call	0x414110 <.text+0xd3f0>
+  407104: 48 8d 3d a5 47 01 00         	lea	rdi, [rip + 0x147a5]    # 0x41b8b0
+  40710b: e8 00 d0 00 00               	call	0x414110 <.text+0xd3f0>
+  407110: e8 ab d3 00 00               	call	0x4144c0 <.text+0xd7a0>
+  407115: 48 89 c6                     	mov	rsi, rax
+  407118: 4c 8d 2d 49 48 01 00         	lea	r13, [rip + 0x14849]    # 0x41b968
+  40711f: 4c 89 ef                     	mov	rdi, r13
+  407122: e8 69 cf 00 00               	call	0x414090 <.text+0xd370>
+  407127: bb 01 00 00 00               	mov	ebx, 0x1
+  40712c: e9 da 00 00 00               	jmp	0x40720b <.text+0x4eb>
+  407131: e8 5a d3 00 00               	call	0x414490 <.text+0xd770>
+  407136: e8 55 d3 00 00               	call	0x414490 <.text+0xd770>
+  40713b: 48 8d 3d 3e 46 01 00         	lea	rdi, [rip + 0x1463e]    # 0x41b780
+  407142: e8 c9 cf 00 00               	call	0x414110 <.text+0xd3f0>
+  407147: e8 44 d3 00 00               	call	0x414490 <.text+0xd770>
+  40714c: e8 3f d3 00 00               	call	0x414490 <.text+0xd770>
+  407151: 48 8b 1d 18 48 01 00         	mov	rbx, qword ptr [rip + 0x14818] # 0x41b970
+  407158: e8 63 d3 00 00               	call	0x4144c0 <.text+0xd7a0>
+  40715d: 48 89 c6                     	mov	rsi, rax
+  407160: 48 89 df                     	mov	rdi, rbx
+  407163: e8 f8 25 00 00               	call	0x409760 <.text+0x2a40>
+  407168: e8 53 d3 00 00               	call	0x4144c0 <.text+0xd7a0>
+  40716d: 48 83 05 63 52 01 00 02      	add	qword ptr [rip + 0x15263], 0x2 # 0x41c3d8
+  407175: e8 e6 d3 00 00               	call	0x414560 <.text+0xd840>
+  40717a: 48 89 c6                     	mov	rsi, rax
+  40717d: ba 08 00 00 00               	mov	edx, 0x8
+  407182: 48 8d 3d 6f 46 01 00         	lea	rdi, [rip + 0x1466f]    # 0x41b7f8
+  407189: e8 32 0b 00 00               	call	0x407cc0 <.text+0xfa0>
+  40718e: e8 5d d3 00 00               	call	0x4144f0 <.text+0xd7d0>
+  407193: 31 f6                        	xor	esi, esi
+  407195: 48 8b 3d d4 47 01 00         	mov	rdi, qword ptr [rip + 0x147d4] # 0x41b970
+  40719c: e8 2f 25 00 00               	call	0x4096d0 <.text+0x29b0>
+  4071a1: 31 f6                        	xor	esi, esi
+  4071a3: 48 8b 3d e6 47 01 00         	mov	rdi, qword ptr [rip + 0x147e6] # 0x41b990
+  4071aa: e8 21 25 00 00               	call	0x4096d0 <.text+0x29b0>
+  4071af: e9 2c fe ff ff               	jmp	0x406fe0 <.text+0x2c0>
+  4071b4: 0f 1f 40 00                  	nop	dword ptr [rax]
+  4071b8: e8 d3 d2 00 00               	call	0x414490 <.text+0xd770>
+  4071bd: e8 ce d2 00 00               	call	0x414490 <.text+0xd770>
+  4071c2: e8 c9 d2 00 00               	call	0x414490 <.text+0xd770>
+  4071c7: 48 8b 2d 9a 47 01 00         	mov	rbp, qword ptr [rip + 0x1479a] # 0x41b968
+  4071ce: e8 ed d2 00 00               	call	0x4144c0 <.text+0xd7a0>
+  4071d3: 48 89 c1                     	mov	rcx, rax
+  4071d6: ba 01 00 00 00               	mov	edx, 0x1
+  4071db: 48 89 de                     	mov	rsi, rbx
+  4071de: 48 89 ef                     	mov	rdi, rbp
+  4071e1: e8 ca 9f 00 00               	call	0x4111b0 <.text+0xa490>
+  4071e6: e8 75 d3 00 00               	call	0x414560 <.text+0xd840>
+  4071eb: 48 89 c7                     	mov	rdi, rax
+  4071ee: e8 6d 9f 00 00               	call	0x411160 <.text+0xa440>
+  4071f3: 48 89 c5                     	mov	rbp, rax
+  4071f6: e8 f5 d2 00 00               	call	0x4144f0 <.text+0xd7d0>
+  4071fb: 48 8b 05 96 47 01 00         	mov	rax, qword ptr [rip + 0x14796] # 0x41b998
+  407202: 40 88 6c 18 ff               	mov	byte ptr [rax + rbx - 0x1], bpl
+  407207: 48 83 c3 01                  	add	rbx, 0x1
+  40720b: 48 8b 3d 56 47 01 00         	mov	rdi, qword ptr [rip + 0x14756] # 0x41b968
+  407212: e8 79 9f 00 00               	call	0x411190 <.text+0xa470>
+  407217: 48 39 d8                     	cmp	rax, rbx
+  40721a: 7d 9c                        	jge	0x4071b8 <.text+0x498>
+  40721c: 48 8b 3d 45 47 01 00         	mov	rdi, qword ptr [rip + 0x14745] # 0x41b968
+  407223: e8 68 9f 00 00               	call	0x411190 <.text+0xa470>
+  407228: 48 89 c2                     	mov	rdx, rax
+  40722b: 48 8b 35 66 47 01 00         	mov	rsi, qword ptr [rip + 0x14766] # 0x41b998
+  407232: 31 ff                        	xor	edi, edi
+  407234: e8 d7 08 00 00               	call	0x407b10 <.text+0xdf0>
+  407239: bf 64 00 00 00               	mov	edi, 0x64
+  40723e: e8 1d ba 00 00               	call	0x412c60 <.text+0xbf40>
+  407243: 48 8d 35 4e 46 01 00         	lea	rsi, [rip + 0x1464e]    # 0x41b898
+  40724a: 4c 89 ef                     	mov	rdi, r13
+  40724d: e8 7e cf 00 00               	call	0x4141d0 <.text+0xd4b0>
+  407252: bb 01 00 00 00               	mov	ebx, 0x1
+  407257: eb 5a                        	jmp	0x4072b3 <.text+0x593>
+  407259: 0f 1f 80 00 00 00 00         	nop	dword ptr [rax]
+  407260: e8 2b d2 00 00               	call	0x414490 <.text+0xd770>
+  407265: e8 26 d2 00 00               	call	0x414490 <.text+0xd770>
+  40726a: e8 21 d2 00 00               	call	0x414490 <.text+0xd770>
+  40726f: 48 8b 2d f2 46 01 00         	mov	rbp, qword ptr [rip + 0x146f2] # 0x41b968
+  407276: e8 45 d2 00 00               	call	0x4144c0 <.text+0xd7a0>
+  40727b: 48 89 c1                     	mov	rcx, rax
+  40727e: ba 01 00 00 00               	mov	edx, 0x1
+  407283: 48 89 de                     	mov	rsi, rbx
+  407286: 48 89 ef                     	mov	rdi, rbp
+  407289: e8 22 9f 00 00               	call	0x4111b0 <.text+0xa490>
+  40728e: e8 cd d2 00 00               	call	0x414560 <.text+0xd840>
+  407293: 48 89 c7                     	mov	rdi, rax
+  407296: e8 c5 9e 00 00               	call	0x411160 <.text+0xa440>
+  40729b: 48 89 c5                     	mov	rbp, rax
+  40729e: e8 4d d2 00 00               	call	0x4144f0 <.text+0xd7d0>
+  4072a3: 48 8b 05 ee 46 01 00         	mov	rax, qword ptr [rip + 0x146ee] # 0x41b998
+  4072aa: 40 88 6c 18 ff               	mov	byte ptr [rax + rbx - 0x1], bpl
+  4072af: 48 83 c3 01                  	add	rbx, 0x1
+  4072b3: 48 8b 3d ae 46 01 00         	mov	rdi, qword ptr [rip + 0x146ae] # 0x41b968
+  4072ba: e8 d1 9e 00 00               	call	0x411190 <.text+0xa470>
+  4072bf: 48 39 d8                     	cmp	rax, rbx
+  4072c2: 7d 9c                        	jge	0x407260 <.text+0x540>
+  4072c4: 48 8b 3d 9d 46 01 00         	mov	rdi, qword ptr [rip + 0x1469d] # 0x41b968
+  4072cb: e8 c0 9e 00 00               	call	0x411190 <.text+0xa470>
+  4072d0: 48 89 c2                     	mov	rdx, rax
+  4072d3: 48 8b 35 be 46 01 00         	mov	rsi, qword ptr [rip + 0x146be] # 0x41b998
+  4072da: 31 ff                        	xor	edi, edi
+  4072dc: e8 2f 08 00 00               	call	0x407b10 <.text+0xdf0>
+  4072e1: bf 64 00 00 00               	mov	edi, 0x64
+  4072e6: e8 75 b9 00 00               	call	0x412c60 <.text+0xbf40>
+  4072eb: 31 ff                        	xor	edi, edi
+  4072ed: e8 8e 02 00 00               	call	0x407580 <.text+0x860>
+  4072f2: 48 83 f8 0b                  	cmp	rax, 0xb
+  4072f6: 74 6e                        	je	0x407366 <.text+0x646>
+  4072f8: e8 93 d1 00 00               	call	0x414490 <.text+0xd770>
+  4072fd: e8 8e d1 00 00               	call	0x414490 <.text+0xd770>
+  407302: 48 8d 3d b7 45 01 00         	lea	rdi, [rip + 0x145b7]    # 0x41b8c0
+  407309: e8 02 ce 00 00               	call	0x414110 <.text+0xd3f0>
+  40730e: e8 7d d1 00 00               	call	0x414490 <.text+0xd770>
+  407313: e8 78 d1 00 00               	call	0x414490 <.text+0xd770>
+  407318: 48 8b 1d 51 46 01 00         	mov	rbx, qword ptr [rip + 0x14651] # 0x41b970
+  40731f: e8 9c d1 00 00               	call	0x4144c0 <.text+0xd7a0>
+  407324: 48 89 c6                     	mov	rsi, rax
+  407327: 48 89 df                     	mov	rdi, rbx
+  40732a: e8 31 24 00 00               	call	0x409760 <.text+0x2a40>
+  40732f: e8 8c d1 00 00               	call	0x4144c0 <.text+0xd7a0>
+  407334: 48 83 05 9c 50 01 00 02      	add	qword ptr [rip + 0x1509c], 0x2 # 0x41c3d8
+  40733c: e8 1f d2 00 00               	call	0x414560 <.text+0xd840>
+  407341: 48 89 c6                     	mov	rsi, rax
+  407344: ba 08 00 00 00               	mov	edx, 0x8
+  407349: 48 8d 3d a8 44 01 00         	lea	rdi, [rip + 0x144a8]    # 0x41b7f8
+  407350: e8 6b 09 00 00               	call	0x407cc0 <.text+0xfa0>
+  407355: e8 96 d1 00 00               	call	0x4144f0 <.text+0xd7d0>
+  40735a: 31 ff                        	xor	edi, edi
+  40735c: e8 ff 06 00 00               	call	0x407a60 <.text+0xd40>
+  407361: e9 2d fe ff ff               	jmp	0x407193 <.text+0x473>
+  407366: ba 0b 00 00 00               	mov	edx, 0xb
+  40736b: 48 8b 35 2e 46 01 00         	mov	rsi, qword ptr [rip + 0x1462e] # 0x41b9a0
+  407372: 31 ff                        	xor	edi, edi
+  407374: e8 97 06 00 00               	call	0x407a10 <.text+0xcf0>
+  407379: 48 8d 35 28 46 01 00         	lea	rsi, [rip + 0x14628]    # 0x41b9a8
+  407380: 48 8d 2d 01 46 01 00         	lea	rbp, [rip + 0x14601]    # 0x41b988
+  407387: 48 89 ef                     	mov	rdi, rbp
+  40738a: e8 41 ce 00 00               	call	0x4141d0 <.text+0xd4b0>
+  40738f: 31 db                        	xor	ebx, ebx
+  407391: e8 fa d0 00 00               	call	0x414490 <.text+0xd770>
+  407396: 48 8b 3d eb 45 01 00         	mov	rdi, qword ptr [rip + 0x145eb] # 0x41b988
+  40739d: e8 6e cd 00 00               	call	0x414110 <.text+0xd3f0>
+  4073a2: e8 e9 d0 00 00               	call	0x414490 <.text+0xd770>
+  4073a7: e8 e4 d0 00 00               	call	0x414490 <.text+0xd770>
+  4073ac: 48 8b 05 ed 45 01 00         	mov	rax, qword ptr [rip + 0x145ed] # 0x41b9a0
+  4073b3: 4c 0f be 2c 18               	movsx	r13, byte ptr [rax + rbx]
+  4073b8: e8 03 d1 00 00               	call	0x4144c0 <.text+0xd7a0>
+  4073bd: 48 89 c6                     	mov	rsi, rax
+  4073c0: 4c 89 ef                     	mov	rdi, r13
+  4073c3: e8 a8 9d 00 00               	call	0x411170 <.text+0xa450>
+  4073c8: e8 f3 d0 00 00               	call	0x4144c0 <.text+0xd7a0>
+  4073cd: e8 ee d0 00 00               	call	0x4144c0 <.text+0xd7a0>
+  4073d2: 48 89 c6                     	mov	rsi, rax
+  4073d5: 48 89 ef                     	mov	rdi, rbp
+  4073d8: e8 b3 cc 00 00               	call	0x414090 <.text+0xd370>
+  4073dd: 48 83 c3 01                  	add	rbx, 0x1
+  4073e1: 48 83 fb 02                  	cmp	rbx, 0x2
+  4073e5: 75 aa                        	jne	0x407391 <.text+0x671>
+  4073e7: 48 8b 35 9a 45 01 00         	mov	rsi, qword ptr [rip + 0x1459a] # 0x41b988
+  4073ee: 4c 89 e7                     	mov	rdi, r12
+  4073f1: e8 6a d0 00 00               	call	0x414460 <.text+0xd740>
+  4073f6: 85 c0                        	test	eax, eax
+  4073f8: 0f 84 fa fe ff ff            	je	0x4072f8 <.text+0x5d8>
+  4073fe: ba 04 00 00 00               	mov	edx, 0x4
+  407403: 48 8d 35 16 44 01 00         	lea	rsi, [rip + 0x14416]    # 0x41b820
+  40740a: 48 8d 3d 8f 44 01 00         	lea	rdi, [rip + 0x1448f]    # 0x41b8a0
+  407411: e8 aa 08 00 00               	call	0x407cc0 <.text+0xfa0>
+  407416: e9 3f ff ff ff               	jmp	0x40735a <.text+0x63a>

@@ -1,0 +1,822 @@
+Disassembly of section .code:
+
+0000000140043000 <.code>:
+140043000: 48 83 ec 28                 	sub	rsp, 0x28
+140043004: 49 c7 c0 a0 00 00 00        	mov	r8, 0xa0
+14004300b: 48 31 d2                    	xor	rdx, rdx
+14004300e: 48 b9 f8 dc 03 40 01 00 00 00       	movabs	rcx, 0x14003dcf8
+140043018: e8 13 e0 fb ff              	call	0x140001030 <.text+0x30>
+14004301d: 48 31 c9                    	xor	rcx, rcx
+140043020: e8 4b 8d fe ff              	call	0x14002bd70 <.text+0x2ad70>
+140043025: 48 89 05 d4 ac ff ff        	mov	qword ptr [rip - 0x532c], rax # 0x14003dd00
+14004302c: 4d 31 c0                    	xor	r8, r8
+14004302f: 48 c7 c2 00 10 00 00        	mov	rdx, 0x1000
+140043036: 48 31 c9                    	xor	rcx, rcx
+140043039: e8 42 8d fe ff              	call	0x14002bd80 <.text+0x2ad80>
+14004303e: 48 89 05 b3 ac ff ff        	mov	qword ptr [rip - 0x534d], rax # 0x14003dcf8
+140043045: e8 a2 30 fc ff              	call	0x1400060ec <.text+0x50ec>
+14004304a: e8 c1 2f fc ff              	call	0x140006010 <.text+0x5010>
+14004304f: e8 bc 2b fc ff              	call	0x140005c10 <.text+0x4c10>
+140043054: e8 97 2b fc ff              	call	0x140005bf0 <.text+0x4bf0>
+140043059: e8 3a 2b fc ff              	call	0x140005b98 <.text+0x4b98>
+14004305e: e8 19 28 fc ff              	call	0x14000587c <.text+0x487c>
+140043063: e8 a0 25 fc ff              	call	0x140005608 <.text+0x4608>
+140043068: e8 0b 25 fc ff              	call	0x140005578 <.text+0x4578>
+14004306d: e8 5e 24 fc ff              	call	0x1400054d0 <.text+0x44d0>
+140043072: e8 35 20 fc ff              	call	0x1400050ac <.text+0x40ac>
+140043077: e8 c4 1f fc ff              	call	0x140005040 <.text+0x4040>
+14004307c: e8 cb 15 fc ff              	call	0x14000464c <.text+0x364c>
+140043081: e8 c2 14 fc ff              	call	0x140004548 <.text+0x3548>
+140043086: e8 95 13 fc ff              	call	0x140004420 <.text+0x3420>
+14004308b: e8 e0 0f fc ff              	call	0x140004070 <.text+0x3070>
+140043090: e8 77 0f fc ff              	call	0x14000400c <.text+0x300c>
+140043095: e8 c6 0d fc ff              	call	0x140003e60 <.text+0x2e60>
+14004309a: e8 55 07 fc ff              	call	0x1400037f4 <.text+0x27f4>
+14004309f: e8 24 06 fc ff              	call	0x1400036c8 <.text+0x26c8>
+1400430a4: e8 a7 ff fb ff              	call	0x140003050 <.text+0x2050>
+1400430a9: e8 da e8 fb ff              	call	0x140001988 <.text+0x988>
+1400430ae: e8 c5 e5 fb ff              	call	0x140001678 <.text+0x678>
+1400430b3: e8 4c e4 fb ff              	call	0x140001504 <.text+0x504>
+1400430b8: 68 14 00 00 00              	push	0x14
+1400430bd: 48 b8 1a d1 03 40 01 00 00 00       	movabs	rax, 0x14003d11a
+1400430c7: 48 89 c2                    	mov	rdx, rax
+1400430ca: 48 b9 00 00 00 00 00 00 00 00       	movabs	rcx, 0x0
+1400430d4: 41 58                       	pop	r8
+1400430d6: e8 d1 26 fc ff              	call	0x1400057ac <.text+0x47ac>
+1400430db: 48 ba 12 d1 03 40 01 00 00 00       	movabs	rdx, 0x14003d112
+1400430e5: 48 8d 0d 3c ac ff ff        	lea	rcx, [rip - 0x53c4]     # 0x14003dd28
+1400430ec: e8 6f 2e fc ff              	call	0x140005f60 <.text+0x4f60>
+1400430f1: c7 05 65 ac ff ff 00 00 00 00       	mov	dword ptr [rip - 0x539b], 0x0 # 0x14003dd60
+1400430fb: 48 83 ec 18                 	sub	rsp, 0x18
+1400430ff: 48 c7 c2 11 00 00 00        	mov	rdx, 0x11
+140043106: 48 b8 68 dd 03 40 01 00 00 00       	movabs	rax, 0x14003dd68
+140043110: 50                          	push	rax
+140043111: 4d 31 c9                    	xor	r9, r9
+140043114: 49 c7 c0 18 00 00 00        	mov	r8, 0x18
+14004311b: 48 c7 c1 01 00 00 00        	mov	rcx, 0x1
+140043122: 48 83 ec 20                 	sub	rsp, 0x20
+140043126: e8 c1 28 fc ff              	call	0x1400059ec <.text+0x49ec>
+14004312b: 48 83 c4 40                 	add	rsp, 0x40
+14004312f: 48 89 05 32 ac ff ff        	mov	qword ptr [rip - 0x53ce], rax # 0x14003dd68
+140043136: 48 83 ec 18                 	sub	rsp, 0x18
+14004313a: 48 c7 c2 01 04 00 00        	mov	rdx, 0x401
+140043141: 48 b8 78 dd 03 40 01 00 00 00       	movabs	rax, 0x14003dd78
+14004314b: 50                          	push	rax
+14004314c: 4d 31 c9                    	xor	r9, r9
+14004314f: 49 c7 c0 01 00 00 00        	mov	r8, 0x1
+140043156: 48 c7 c1 01 00 00 00        	mov	rcx, 0x1
+14004315d: 48 83 ec 20                 	sub	rsp, 0x20
+140043161: e8 86 28 fc ff              	call	0x1400059ec <.text+0x49ec>
+140043166: 48 83 c4 40                 	add	rsp, 0x40
+14004316a: 48 89 05 07 ac ff ff        	mov	qword ptr [rip - 0x53f9], rax # 0x14003dd78
+140043171: 48 83 ec 18                 	sub	rsp, 0x18
+140043175: 48 c7 c2 11 00 00 00        	mov	rdx, 0x11
+14004317c: 48 b8 88 dd 03 40 01 00 00 00       	movabs	rax, 0x14003dd88
+140043186: 50                          	push	rax
+140043187: 4d 31 c9                    	xor	r9, r9
+14004318a: 49 c7 c0 18 00 00 00        	mov	r8, 0x18
+140043191: 48 c7 c1 01 00 00 00        	mov	rcx, 0x1
+140043198: 48 83 ec 20                 	sub	rsp, 0x20
+14004319c: e8 4b 28 fc ff              	call	0x1400059ec <.text+0x49ec>
+1400431a1: 48 83 c4 40                 	add	rsp, 0x40
+1400431a5: 48 89 05 dc ab ff ff        	mov	qword ptr [rip - 0x5424], rax # 0x14003dd88
+1400431ac: 49 b9 78 00 00 00 00 00 00 00       	movabs	r9, 0x78
+1400431b6: 49 b8 9a 01 00 00 00 00 00 00       	movabs	r8, 0x19a
+1400431c0: 48 ba 00 00 00 00 00 00 00 00       	movabs	rdx, 0x0
+1400431ca: 48 b9 00 00 00 00 00 00 00 00       	movabs	rcx, 0x0
+1400431d4: e8 65 02 00 00              	call	0x14004343e <.code+0x43e>
+1400431d9: 48 c7 05 4c ab ff ff 00 00 00 00    	mov	qword ptr [rip - 0x54b4], 0x0 # 0x14003dd30
+1400431e4: eb 00                       	jmp	0x1400431e6 <.code+0x1e6>
+1400431e6: 48 c7 c0 63 00 00 00        	mov	rax, 0x63
+1400431ed: 48 3b 05 3c ab ff ff        	cmp	rax, qword ptr [rip - 0x54c4] # 0x14003dd30
+1400431f4: 0f 8c a6 01 00 00           	jl	0x1400433a0 <.code+0x3a0>
+1400431fa: 51                          	push	rcx
+1400431fb: 48 83 ec 28                 	sub	rsp, 0x28
+1400431ff: e8 8c 2e fc ff              	call	0x140006090 <.text+0x5090>
+140043204: 48 83 c4 28                 	add	rsp, 0x28
+140043208: 59                          	pop	rcx
+140043209: 50                          	push	rax
+14004320a: 68 10 00 00 00              	push	0x10
+14004320f: 68 10 00 00 00              	push	0x10
+140043214: 68 00 00 00 00              	push	0x0
+140043219: d9 05 49 9f ff ff           	fld	dword ptr [rip - 0x60b7] # 0x14003d168
+14004321f: 48 83 ec 08                 	sub	rsp, 0x8
+140043223: d9 1c 24                    	fstp	dword ptr [rsp]
+140043226: 68 08 00 00 00              	push	0x8
+14004322b: 68 00 00 00 00              	push	0x0
+140043230: 68 80 25 00 00              	push	0x2580
+140043235: 48 8b 0d ec aa ff ff        	mov	rcx, qword ptr [rip - 0x5514] # 0x14003dd28
+14004323c: 51                          	push	rcx
+14004323d: 48 83 ec 28                 	sub	rsp, 0x28
+140043241: e8 4a 2e fc ff              	call	0x140006090 <.text+0x5090>
+140043246: 48 83 c4 28                 	add	rsp, 0x28
+14004324a: 59                          	pop	rcx
+14004324b: 50                          	push	rax
+14004324c: 48 83 ec 28                 	sub	rsp, 0x28
+140043250: e8 9b 2c fc ff              	call	0x140005ef0 <.text+0x4ef0>
+140043255: 48 83 c4 28                 	add	rsp, 0x28
+140043259: 51                          	push	rcx
+14004325a: 48 83 ec 20                 	sub	rsp, 0x20
+14004325e: e8 2d 2e fc ff              	call	0x140006090 <.text+0x5090>
+140043263: 48 83 c4 20                 	add	rsp, 0x20
+140043267: 59                          	pop	rcx
+140043268: 50                          	push	rax
+140043269: 51                          	push	rcx
+14004326a: 48 83 ec 28                 	sub	rsp, 0x28
+14004326e: e8 1d 2e fc ff              	call	0x140006090 <.text+0x5090>
+140043273: 48 83 c4 28                 	add	rsp, 0x28
+140043277: 59                          	pop	rcx
+140043278: 48 89 c2                    	mov	rdx, rax
+14004327b: 48 8b 0d ae aa ff ff        	mov	rcx, qword ptr [rip - 0x5552] # 0x14003dd30
+140043282: 48 83 ec 20                 	sub	rsp, 0x20
+140043286: e8 95 22 fc ff              	call	0x140005520 <.text+0x4520>
+14004328b: 48 83 c4 20                 	add	rsp, 0x20
+14004328f: 58                          	pop	rax
+140043290: e8 3b 2e fc ff              	call	0x1400060d0 <.text+0x50d0>
+140043295: 68 00 00 00 00              	push	0x0
+14004329a: 50                          	push	rax
+14004329b: e8 d0 2d fc ff              	call	0x140006070 <.text+0x5070>
+1400432a0: 48 89 c2                    	mov	rdx, rax
+1400432a3: 58                          	pop	rax
+1400432a4: 48 01 54 24 08              	add	qword ptr [rsp + 0x8], rdx
+1400432a9: 59                          	pop	rcx
+1400432aa: 5a                          	pop	rdx
+1400432ab: 41 58                       	pop	r8
+1400432ad: 41 59                       	pop	r9
+1400432af: 48 83 ec 20                 	sub	rsp, 0x20
+1400432b3: e8 f4 e3 fb ff              	call	0x1400016ac <.text+0x6ac>
+1400432b8: 48 83 c4 48                 	add	rsp, 0x48
+1400432bc: 59                          	pop	rcx
+1400432bd: 50                          	push	rax
+1400432be: 48 83 ec 28                 	sub	rsp, 0x28
+1400432c2: e8 5d 0b 00 00              	call	0x140043e24 <.code+0xe24>
+1400432c7: 48 83 c4 28                 	add	rsp, 0x28
+1400432cb: 58                          	pop	rax
+1400432cc: 48 21 c0                    	and	rax, rax
+1400432cf: 0f 84 be 00 00 00           	je	0x140043393 <.code+0x393>
+1400432d5: 51                          	push	rcx
+1400432d6: 48 83 ec 28                 	sub	rsp, 0x28
+1400432da: e8 b1 2d fc ff              	call	0x140006090 <.text+0x5090>
+1400432df: 48 83 c4 28                 	add	rsp, 0x28
+1400432e3: 59                          	pop	rcx
+1400432e4: 50                          	push	rax
+1400432e5: 48 83 ec 08                 	sub	rsp, 0x8
+1400432e9: 48 8b 0d 38 aa ff ff        	mov	rcx, qword ptr [rip - 0x55c8] # 0x14003dd28
+1400432f0: 51                          	push	rcx
+1400432f1: 48 83 ec 28                 	sub	rsp, 0x28
+1400432f5: e8 96 2d fc ff              	call	0x140006090 <.text+0x5090>
+1400432fa: 48 83 c4 28                 	add	rsp, 0x28
+1400432fe: 59                          	pop	rcx
+1400432ff: 50                          	push	rax
+140043300: 48 83 ec 28                 	sub	rsp, 0x28
+140043304: e8 e7 2b fc ff              	call	0x140005ef0 <.text+0x4ef0>
+140043309: 48 83 c4 28                 	add	rsp, 0x28
+14004330d: 51                          	push	rcx
+14004330e: 48 83 ec 20                 	sub	rsp, 0x20
+140043312: e8 79 2d fc ff              	call	0x140006090 <.text+0x5090>
+140043317: 48 83 c4 20                 	add	rsp, 0x20
+14004331b: 59                          	pop	rcx
+14004331c: 50                          	push	rax
+14004331d: 51                          	push	rcx
+14004331e: 48 83 ec 28                 	sub	rsp, 0x28
+140043322: e8 69 2d fc ff              	call	0x140006090 <.text+0x5090>
+140043327: 48 83 c4 28                 	add	rsp, 0x28
+14004332b: 59                          	pop	rcx
+14004332c: 48 89 c2                    	mov	rdx, rax
+14004332f: 48 8b 0d fa a9 ff ff        	mov	rcx, qword ptr [rip - 0x5606] # 0x14003dd30
+140043336: 48 83 ec 20                 	sub	rsp, 0x20
+14004333a: e8 e1 21 fc ff              	call	0x140005520 <.text+0x4520>
+14004333f: 48 83 c4 20                 	add	rsp, 0x20
+140043343: 58                          	pop	rax
+140043344: e8 87 2d fc ff              	call	0x1400060d0 <.text+0x50d0>
+140043349: 68 ff ff ff ff              	push	-0x1
+14004334e: ff 35 e4 a9 ff ff           	push	qword ptr [rip - 0x561c] # 0x14003dd38
+140043354: 50                          	push	rax
+140043355: e8 16 2d fc ff              	call	0x140006070 <.text+0x5070>
+14004335a: 48 89 c2                    	mov	rdx, rax
+14004335d: 58                          	pop	rax
+14004335e: 48 01 54 24 10              	add	qword ptr [rsp + 0x10], rdx
+140043363: 59                          	pop	rcx
+140043364: 5a                          	pop	rdx
+140043365: 41 58                       	pop	r8
+140043367: 48 83 ec 20                 	sub	rsp, 0x20
+14004336b: e8 1c e7 fb ff              	call	0x140001a8c <.text+0xa8c>
+140043370: 48 83 c4 28                 	add	rsp, 0x28
+140043374: 59                          	pop	rcx
+140043375: 50                          	push	rax
+140043376: 48 83 ec 28                 	sub	rsp, 0x28
+14004337a: e8 a5 0a 00 00              	call	0x140043e24 <.code+0xe24>
+14004337f: 48 83 c4 28                 	add	rsp, 0x28
+140043383: 58                          	pop	rax
+140043384: 48 b9 00 00 00 00 00 00 00 00       	movabs	rcx, 0x0
+14004338e: e8 8d e2 fb ff              	call	0x140001620 <.text+0x620>
+140043393: 48 ff 05 96 a9 ff ff        	inc	qword ptr [rip - 0x566a] # 0x14003dd30
+14004339a: 0f 81 46 fe ff ff           	jno	0x1400431e6 <.code+0x1e6>
+1400433a0: e8 b3 0a fc ff              	call	0x140003e58 <.text+0x2e58>
+1400433a5: 48 89 05 9c a9 ff ff        	mov	qword ptr [rip - 0x5664], rax # 0x14003dd48
+1400433ac: 48 8b 0d 95 a9 ff ff        	mov	rcx, qword ptr [rip - 0x566b] # 0x14003dd48
+1400433b3: e8 88 09 00 00              	call	0x140043d40 <.code+0xd40>
+1400433b8: 4c 8b 3d 89 a9 ff ff        	mov	r15, qword ptr [rip - 0x5677] # 0x14003dd48
+1400433bf: 49 81 ff 3c 33 00 00        	cmp	r15, 0x333c
+1400433c6: 75 d8                       	jne	0x1400433a0 <.code+0x3a0>
+1400433c8: e8 1d 00 00 00              	call	0x1400433ea <.code+0x3ea>
+1400433cd: e8 6e 2c fc ff              	call	0x140006040 <.text+0x5040>
+1400433d2: 48 8b 0d 1f a9 ff ff        	mov	rcx, qword ptr [rip - 0x56e1] # 0x14003dcf8
+1400433d9: e8 b2 89 fe ff              	call	0x14002bd90 <.text+0x2ad90>
+1400433de: 48 8b 0d 23 a9 ff ff        	mov	rcx, qword ptr [rip - 0x56dd] # 0x14003dd08
+1400433e5: e8 76 89 fe ff              	call	0x14002bd60 <.text+0x2ad60>
+1400433ea: 48 83 ec 28                 	sub	rsp, 0x28
+1400433ee: e8 21 e1 fb ff              	call	0x140001514 <.text+0x514>
+1400433f3: e8 74 e2 fb ff              	call	0x14000166c <.text+0x66c>
+1400433f8: e8 27 fd fb ff              	call	0x140003124 <.text+0x2124>
+1400433fd: e8 d2 02 fc ff              	call	0x1400036d4 <.text+0x26d4>
+140043402: e8 d5 02 fc ff              	call	0x1400036dc <.text+0x26dc>
+140043407: e8 b8 03 fc ff              	call	0x1400037c4 <.text+0x27c4>
+14004340c: e8 d7 0a fc ff              	call	0x140003ee8 <.text+0x2ee8>
+140043411: e8 96 0c fc ff              	call	0x1400040ac <.text+0x30ac>
+140043416: e8 41 10 fc ff              	call	0x14000445c <.text+0x345c>
+14004341b: e8 1c 11 fc ff              	call	0x14000453c <.text+0x353c>
+140043420: e8 db 20 fc ff              	call	0x140005500 <.text+0x4500>
+140043425: e8 d2 21 fc ff              	call	0x1400055fc <.text+0x45fc>
+14004342a: e8 91 25 fc ff              	call	0x1400059c0 <.text+0x49c0>
+14004342f: e8 f8 29 fc ff              	call	0x140005e2c <.text+0x4e2c>
+140043434: e8 a7 27 fc ff              	call	0x140005be0 <.text+0x4be0>
+140043439: 48 83 c4 28                 	add	rsp, 0x28
+14004343d: c3                          	ret
+14004343e: 48 89 4c 24 08              	mov	qword ptr [rsp + 0x8], rcx
+140043443: 48 89 54 24 10              	mov	qword ptr [rsp + 0x10], rdx
+140043448: 4c 89 44 24 18              	mov	qword ptr [rsp + 0x18], r8
+14004344d: 4c 89 4c 24 20              	mov	qword ptr [rsp + 0x20], r9
+140043452: 41 57                       	push	r15
+140043454: 48 31 c0                    	xor	rax, rax
+140043457: 50                          	push	rax
+140043458: 48 83 ec 28                 	sub	rsp, 0x28
+14004345c: 48 83 ec 08                 	sub	rsp, 0x8
+140043460: 68 01 00 ca 00              	push	0xca0001
+140043465: 48 b8 fa d0 03 40 01 00 00 00       	movabs	rax, 0x14003d0fa
+14004346f: 50                          	push	rax
+140043470: ff 74 24 70                 	push	qword ptr [rsp + 0x70]
+140043474: 4c 8b 4c 24 70              	mov	r9, qword ptr [rsp + 0x70]
+140043479: 4c 8b 44 24 68              	mov	r8, qword ptr [rsp + 0x68]
+14004347e: 48 8b 54 24 60              	mov	rdx, qword ptr [rsp + 0x60]
+140043483: 48 b9 ff ff ff ff ff ff ff ff       	movabs	rcx, -0x1
+14004348d: 48 83 ec 20                 	sub	rsp, 0x20
+140043491: e8 1a 08 fc ff              	call	0x140003cb0 <.text+0x2cb0>
+140043496: 48 83 c4 40                 	add	rsp, 0x40
+14004349a: 48 89 05 af a8 ff ff        	mov	qword ptr [rip - 0x5751], rax # 0x14003dd50
+1400434a1: 48 83 ec 08                 	sub	rsp, 0x8
+1400434a5: 68 14 00 00 00              	push	0x14
+1400434aa: 49 b9 5a 00 00 00 00 00 00 00       	movabs	r9, 0x5a
+1400434b4: 49 b8 14 00 00 00 00 00 00 00       	movabs	r8, 0x14
+1400434be: 48 ba 0a 00 00 00 00 00 00 00       	movabs	rdx, 0xa
+1400434c8: 48 b9 ff ff ff ff ff ff ff ff       	movabs	rcx, -0x1
+1400434d2: 48 83 ec 20                 	sub	rsp, 0x20
+1400434d6: e8 31 f7 fb ff              	call	0x140002c0c <.text+0x1c0c>
+1400434db: 48 83 c4 30                 	add	rsp, 0x30
+1400434df: 48 89 05 52 a8 ff ff        	mov	qword ptr [rip - 0x57ae], rax # 0x14003dd38
+1400434e6: 48 b8 8c d0 03 40 01 00 00 00       	movabs	rax, 0x14003d08c
+1400434f0: 50                          	push	rax
+1400434f1: 68 28 00 00 00              	push	0x28
+1400434f6: 49 b9 78 00 00 00 00 00 00 00       	movabs	r9, 0x78
+140043500: 49 b8 0a 00 00 00 00 00 00 00       	movabs	r8, 0xa
+14004350a: 48 ba 18 01 00 00 00 00 00 00       	movabs	rdx, 0x118
+140043514: 48 b9 ff ff ff ff ff ff ff ff       	movabs	rcx, -0x1
+14004351e: 48 83 ec 20                 	sub	rsp, 0x20
+140043522: e8 3d e9 fb ff              	call	0x140001e64 <.text+0xe64>
+140043527: 48 83 c4 30                 	add	rsp, 0x30
+14004352b: 48 89 05 e6 a7 ff ff        	mov	qword ptr [rip - 0x581a], rax # 0x14003dd18
+140043532: 48 b8 28 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d028
+14004353c: 50                          	push	rax
+14004353d: 68 3c 00 00 00              	push	0x3c
+140043542: 49 b9 86 01 00 00 00 00 00 00       	movabs	r9, 0x186
+14004354c: 49 b8 32 00 00 00 00 00 00 00       	movabs	r8, 0x32
+140043556: 48 ba 0a 00 00 00 00 00 00 00       	movabs	rdx, 0xa
+140043560: 48 b9 ff ff ff ff ff ff ff ff       	movabs	rcx, -0x1
+14004356a: 48 83 ec 20                 	sub	rsp, 0x20
+14004356e: e8 ed f6 fb ff              	call	0x140002c60 <.text+0x1c60>
+140043573: 48 83 c4 30                 	add	rsp, 0x30
+140043577: 48 89 05 c2 a7 ff ff        	mov	qword ptr [rip - 0x583e], rax # 0x14003dd40
+14004357e: 48 83 ec 08                 	sub	rsp, 0x8
+140043582: 68 01 00 00 00              	push	0x1
+140043587: 48 b8 28 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d028
+140043591: 50                          	push	rax
+140043592: 68 1e 00 00 00              	push	0x1e
+140043597: 49 b9 72 01 00 00 00 00 00 00       	movabs	r9, 0x172
+1400435a1: 49 b8 46 00 00 00 00 00 00 00       	movabs	r8, 0x46
+1400435ab: 48 ba 14 00 00 00 00 00 00 00       	movabs	rdx, 0x14
+1400435b5: 48 b9 ff ff ff ff ff ff ff ff       	movabs	rcx, -0x1
+1400435bf: 48 83 ec 20                 	sub	rsp, 0x20
+1400435c3: e8 74 fd fb ff              	call	0x14000333c <.text+0x233c>
+1400435c8: 48 83 c4 40                 	add	rsp, 0x40
+1400435cc: 48 89 05 85 a7 ff ff        	mov	qword ptr [rip - 0x587b], rax # 0x14003dd58
+1400435d3: 48 b9 00 00 00 00 00 00 00 00       	movabs	rcx, 0x0
+1400435dd: e8 ae 1f fc ff              	call	0x140005590 <.text+0x4590>
+1400435e2: 48 89 c2                    	mov	rdx, rax
+1400435e5: 48 8b 0d 6c a7 ff ff        	mov	rcx, qword ptr [rip - 0x5894] # 0x14003dd58
+1400435ec: e8 5b fc fb ff              	call	0x14000324c <.text+0x224c>
+1400435f1: 48 31 c0                    	xor	rax, rax
+1400435f4: 48 83 c4 30                 	add	rsp, 0x30
+1400435f8: 41 5f                       	pop	r15
+1400435fa: c3                          	ret
+1400435fb: 48 89 4c 24 08              	mov	qword ptr [rsp + 0x8], rcx
+140043600: 41 57                       	push	r15
+140043602: 48 31 c0                    	xor	rax, rax
+140043605: 50                          	push	rax
+140043606: 48 83 ec 28                 	sub	rsp, 0x28
+14004360a: e8 91 28 fc ff              	call	0x140005ea0 <.text+0x4ea0>
+14004360f: 4c 63 3d 4a a7 ff ff        	movsxd	r15, dword ptr [rip - 0x58b6] # 0x14003dd60
+140043616: 4d 21 ff                    	and	r15, r15
+140043619: 0f 85 ca 01 00 00           	jne	0x1400437e9 <.code+0x7e9>
+14004361f: 51                          	push	rcx
+140043620: 48 83 ec 28                 	sub	rsp, 0x28
+140043624: e8 67 2a fc ff              	call	0x140006090 <.text+0x5090>
+140043629: 48 83 c4 28                 	add	rsp, 0x28
+14004362d: 59                          	pop	rcx
+14004362e: 50                          	push	rax
+14004362f: 68 00 04 00 00              	push	0x400
+140043634: 68 10 00 00 00              	push	0x10
+140043639: 68 00 00 00 00              	push	0x0
+14004363e: d9 05 24 9b ff ff           	fld	dword ptr [rip - 0x64dc] # 0x14003d168
+140043644: 48 83 ec 08                 	sub	rsp, 0x8
+140043648: d9 1c 24                    	fstp	dword ptr [rsp]
+14004364b: 68 08 00 00 00              	push	0x8
+140043650: 68 00 00 00 00              	push	0x0
+140043655: 68 80 25 00 00              	push	0x2580
+14004365a: 51                          	push	rcx
+14004365b: 48 83 ec 28                 	sub	rsp, 0x28
+14004365f: e8 2c 2a fc ff              	call	0x140006090 <.text+0x5090>
+140043664: 48 83 c4 28                 	add	rsp, 0x28
+140043668: 59                          	pop	rcx
+140043669: 50                          	push	rax
+14004366a: 48 83 ec 08                 	sub	rsp, 0x8
+14004366e: 51                          	push	rcx
+14004366f: 48 83 ec 28                 	sub	rsp, 0x28
+140043673: e8 18 2a fc ff              	call	0x140006090 <.text+0x5090>
+140043678: 48 83 c4 28                 	add	rsp, 0x28
+14004367c: 59                          	pop	rcx
+14004367d: 48 89 c2                    	mov	rdx, rax
+140043680: 48 8b 0d b1 a6 ff ff        	mov	rcx, qword ptr [rip - 0x594f] # 0x14003dd38
+140043687: 48 83 ec 20                 	sub	rsp, 0x20
+14004368b: e8 10 fb fb ff              	call	0x1400031a0 <.text+0x21a0>
+140043690: 48 83 c4 28                 	add	rsp, 0x28
+140043694: e8 37 2a fc ff              	call	0x1400060d0 <.text+0x50d0>
+140043699: 68 00 00 00 00              	push	0x0
+14004369e: 50                          	push	rax
+14004369f: e8 cc 29 fc ff              	call	0x140006070 <.text+0x5070>
+1400436a4: 48 89 c2                    	mov	rdx, rax
+1400436a7: 58                          	pop	rax
+1400436a8: 48 01 54 24 08              	add	qword ptr [rsp + 0x8], rdx
+1400436ad: 59                          	pop	rcx
+1400436ae: 5a                          	pop	rdx
+1400436af: 41 58                       	pop	r8
+1400436b1: 41 59                       	pop	r9
+1400436b3: 48 83 ec 20                 	sub	rsp, 0x20
+1400436b7: e8 f0 df fb ff              	call	0x1400016ac <.text+0x6ac>
+1400436bc: 48 83 c4 48                 	add	rsp, 0x48
+1400436c0: 59                          	pop	rcx
+1400436c1: 50                          	push	rax
+1400436c2: 48 83 ec 28                 	sub	rsp, 0x28
+1400436c6: e8 59 07 00 00              	call	0x140043e24 <.code+0xe24>
+1400436cb: 48 83 c4 28                 	add	rsp, 0x28
+1400436cf: 58                          	pop	rax
+1400436d0: 49 89 c7                    	mov	r15, rax
+1400436d3: 4d 21 ff                    	and	r15, r15
+1400436d6: 0f 85 b5 00 00 00           	jne	0x140043791 <.code+0x791>
+1400436dc: 51                          	push	rcx
+1400436dd: 48 83 ec 28                 	sub	rsp, 0x28
+1400436e1: e8 aa 29 fc ff              	call	0x140006090 <.text+0x5090>
+1400436e6: 48 83 c4 28                 	add	rsp, 0x28
+1400436ea: 59                          	pop	rcx
+1400436eb: 50                          	push	rax
+1400436ec: 48 83 ec 08                 	sub	rsp, 0x8
+1400436f0: 51                          	push	rcx
+1400436f1: 48 83 ec 28                 	sub	rsp, 0x28
+1400436f5: e8 96 29 fc ff              	call	0x140006090 <.text+0x5090>
+1400436fa: 48 83 c4 28                 	add	rsp, 0x28
+1400436fe: 59                          	pop	rcx
+1400436ff: 50                          	push	rax
+140043700: 48 b9 2c d1 03 40 01 00 00 00       	movabs	rcx, 0x14003d12c
+14004370a: 48 83 ec 28                 	sub	rsp, 0x28
+14004370e: e8 dd 27 fc ff              	call	0x140005ef0 <.text+0x4ef0>
+140043713: 48 83 c4 28                 	add	rsp, 0x28
+140043717: 51                          	push	rcx
+140043718: 48 83 ec 20                 	sub	rsp, 0x20
+14004371c: e8 6f 29 fc ff              	call	0x140006090 <.text+0x5090>
+140043721: 48 83 c4 20                 	add	rsp, 0x20
+140043725: 59                          	pop	rcx
+140043726: 50                          	push	rax
+140043727: 51                          	push	rcx
+140043728: 48 83 ec 28                 	sub	rsp, 0x28
+14004372c: e8 5f 29 fc ff              	call	0x140006090 <.text+0x5090>
+140043731: 48 83 c4 28                 	add	rsp, 0x28
+140043735: 59                          	pop	rcx
+140043736: 48 89 c2                    	mov	rdx, rax
+140043739: 48 8b 0d f8 a5 ff ff        	mov	rcx, qword ptr [rip - 0x5a08] # 0x14003dd38
+140043740: 48 83 ec 20                 	sub	rsp, 0x20
+140043744: e8 57 fa fb ff              	call	0x1400031a0 <.text+0x21a0>
+140043749: 48 83 c4 20                 	add	rsp, 0x20
+14004374d: 58                          	pop	rax
+14004374e: e8 7d 29 fc ff              	call	0x1400060d0 <.text+0x50d0>
+140043753: 48 b8 ec d0 03 40 01 00 00 00       	movabs	rax, 0x14003d0ec
+14004375d: 50                          	push	rax
+14004375e: 50                          	push	rax
+14004375f: e8 0c 29 fc ff              	call	0x140006070 <.text+0x5070>
+140043764: 48 89 c2                    	mov	rdx, rax
+140043767: 58                          	pop	rax
+140043768: 48 01 54 24 08              	add	qword ptr [rsp + 0x8], rdx
+14004376d: 59                          	pop	rcx
+14004376e: 5a                          	pop	rdx
+14004376f: 48 83 ec 20                 	sub	rsp, 0x20
+140043773: e8 08 e3 fb ff              	call	0x140001a80 <.text+0xa80>
+140043778: 48 83 c4 28                 	add	rsp, 0x28
+14004377c: 59                          	pop	rcx
+14004377d: 50                          	push	rax
+14004377e: 48 83 ec 28                 	sub	rsp, 0x28
+140043782: e8 9d 06 00 00              	call	0x140043e24 <.code+0xe24>
+140043787: 48 83 c4 28                 	add	rsp, 0x28
+14004378b: 58                          	pop	rax
+14004378c: e9 c8 00 00 00              	jmp	0x140043859 <.code+0x859>
+140043791: 48 b8 2a d0 03 40 01 00 00 00       	movabs	rax, 0x14003d02a
+14004379b: 48 89 c2                    	mov	rdx, rax
+14004379e: 48 8b 0d 73 a5 ff ff        	mov	rcx, qword ptr [rip - 0x5a8d] # 0x14003dd18
+1400437a5: e8 2e fb fb ff              	call	0x1400032d8 <.text+0x22d8>
+1400437aa: 48 ba 01 00 00 00 00 00 00 00       	movabs	rdx, 0x1
+1400437b4: 48 8b 0d 7d a5 ff ff        	mov	rcx, qword ptr [rip - 0x5a83] # 0x14003dd38
+1400437bb: e8 68 f4 fb ff              	call	0x140002c28 <.text+0x1c28>
+1400437c0: c7 05 96 a5 ff ff 01 00 00 00       	mov	dword ptr [rip - 0x5a6a], 0x1 # 0x14003dd60
+1400437ca: e8 f9 1f fc ff              	call	0x1400057c8 <.text+0x47c8>
+1400437cf: 50                          	push	rax
+1400437d0: 48 8d 05 89 00 00 00        	lea	rax, [rip + 0x89]       # 0x140043860 <.code+0x860>
+1400437d7: 48 89 c1                    	mov	rcx, rax
+1400437da: 5a                          	pop	rdx
+1400437db: e8 d8 db fb ff              	call	0x1400013b8 <.text+0x3b8>
+1400437e0: 48 89 05 29 a5 ff ff        	mov	qword ptr [rip - 0x5ad7], rax # 0x14003dd10
+1400437e7: eb 6d                       	jmp	0x140043856 <.code+0x856>
+1400437e9: 48 8b 0d 20 a5 ff ff        	mov	rcx, qword ptr [rip - 0x5ae0] # 0x14003dd10
+1400437f0: e8 6f dd fb ff              	call	0x140001564 <.text+0x564>
+1400437f5: 48 b9 00 00 00 00 00 00 00 00       	movabs	rcx, 0x0
+1400437ff: e8 1c de fb ff              	call	0x140001620 <.text+0x620>
+140043804: 48 b8 8c d0 03 40 01 00 00 00       	movabs	rax, 0x14003d08c
+14004380e: 48 89 c2                    	mov	rdx, rax
+140043811: 48 8b 0d 00 a5 ff ff        	mov	rcx, qword ptr [rip - 0x5b00] # 0x14003dd18
+140043818: e8 bb fa fb ff              	call	0x1400032d8 <.text+0x22d8>
+14004381d: 48 ba 00 00 00 00 00 00 00 00       	movabs	rdx, 0x0
+140043827: 48 8b 0d 0a a5 ff ff        	mov	rcx, qword ptr [rip - 0x5af6] # 0x14003dd38
+14004382e: e8 f5 f3 fb ff              	call	0x140002c28 <.text+0x1c28>
+140043833: 48 b8 28 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d028
+14004383d: 48 89 c2                    	mov	rdx, rax
+140043840: 48 8b 0d 11 a5 ff ff        	mov	rcx, qword ptr [rip - 0x5aef] # 0x14003dd58
+140043847: e8 8c fa fb ff              	call	0x1400032d8 <.text+0x22d8>
+14004384c: c7 05 0a a5 ff ff 00 00 00 00       	mov	dword ptr [rip - 0x5af6], 0x0 # 0x14003dd60
+140043856: 48 31 c0                    	xor	rax, rax
+140043859: 48 83 c4 30                 	add	rsp, 0x30
+14004385d: 41 5f                       	pop	r15
+14004385f: c3                          	ret
+140043860: 48 89 4c 24 08              	mov	qword ptr [rsp + 0x8], rcx
+140043865: 55                          	push	rbp
+140043866: 41 57                       	push	r15
+140043868: 48 31 c0                    	xor	rax, rax
+14004386b: 50                          	push	rax
+14004386c: 50                          	push	rax
+14004386d: 48 83 ec 28                 	sub	rsp, 0x28
+140043871: 48 b9 00 00 00 00 00 00 00 00       	movabs	rcx, 0x0
+14004387b: e8 1c de fb ff              	call	0x14000169c <.text+0x69c>
+140043880: 48 21 c0                    	and	rax, rax
+140043883: 0f 84 6e 04 00 00           	je	0x140043cf7 <.code+0xcf7>
+140043889: 48 c7 44 24 28 00 00 00 00  	mov	qword ptr [rsp + 0x28], 0x0
+140043892: eb 00                       	jmp	0x140043894 <.code+0x894>
+140043894: 48 c7 c0 0f 00 00 00        	mov	rax, 0xf
+14004389b: 48 3b 44 24 28              	cmp	rax, qword ptr [rsp + 0x28]
+1400438a0: 7c 2b                       	jl	0x1400438cd <.code+0x8cd>
+1400438a2: 48 b8 52 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d052
+1400438ac: 48 89 c1                    	mov	rcx, rax
+1400438af: e8 5c 1c fc ff              	call	0x140005510 <.text+0x4510>
+1400438b4: 50                          	push	rax
+1400438b5: 4c 8b 7c 24 30              	mov	r15, qword ptr [rsp + 0x30]
+1400438ba: 48 8b 2d a7 a4 ff ff        	mov	rbp, qword ptr [rip - 0x5b59] # 0x14003dd68
+1400438c1: 58                          	pop	rax
+1400438c2: 41 88 04 2f                 	mov	byte ptr [r15 + rbp], al
+1400438c6: 48 ff 44 24 28              	inc	qword ptr [rsp + 0x28]
+1400438cb: 71 c7                       	jno	0x140043894 <.code+0x894>
+1400438cd: 48 b8 9c d0 03 40 01 00 00 00       	movabs	rax, 0x14003d09c
+1400438d7: 48 89 c1                    	mov	rcx, rax
+1400438da: e8 31 1c fc ff              	call	0x140005510 <.text+0x4510>
+1400438df: 50                          	push	rax
+1400438e0: 48 8b 2d a1 a4 ff ff        	mov	rbp, qword ptr [rip - 0x5b5f] # 0x14003dd88
+1400438e7: 58                          	pop	rax
+1400438e8: 88 45 00                    	mov	byte ptr [rbp], al
+1400438eb: 48 b8 98 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d098
+1400438f5: 48 89 c1                    	mov	rcx, rax
+1400438f8: e8 13 1c fc ff              	call	0x140005510 <.text+0x4510>
+1400438fd: 88 45 01                    	mov	byte ptr [rbp + 0x1], al
+140043900: 48 b8 6a d0 03 40 01 00 00 00       	movabs	rax, 0x14003d06a
+14004390a: 48 89 c1                    	mov	rcx, rax
+14004390d: e8 fe 1b fc ff              	call	0x140005510 <.text+0x4510>
+140043912: 88 45 02                    	mov	byte ptr [rbp + 0x2], al
+140043915: 49 b8 03 00 00 00 00 00 00 00       	movabs	r8, 0x3
+14004391f: 48 8b 15 62 a4 ff ff        	mov	rdx, qword ptr [rip - 0x5b9e] # 0x14003dd88
+140043926: 48 b9 00 00 00 00 00 00 00 00       	movabs	rcx, 0x0
+140043930: e8 f3 df fb ff              	call	0x140001928 <.text+0x928>
+140043935: 48 b9 64 00 00 00 00 00 00 00       	movabs	rcx, 0x64
+14004393f: e8 b4 fd fb ff              	call	0x1400036f8 <.text+0x26f8>
+140043944: 48 b9 00 00 00 00 00 00 00 00       	movabs	rcx, 0x0
+14004394e: e8 8d dc fb ff              	call	0x1400015e0 <.text+0x5e0>
+140043953: 49 89 c7                    	mov	r15, rax
+140043956: 49 83 ff 06                 	cmp	r15, 0x6
+14004395a: 0f 85 22 03 00 00           	jne	0x140043c82 <.code+0xc82>
+140043960: 49 b8 06 00 00 00 00 00 00 00       	movabs	r8, 0x6
+14004396a: 48 8b 15 f7 a3 ff ff        	mov	rdx, qword ptr [rip - 0x5c09] # 0x14003dd68
+140043971: 48 b9 00 00 00 00 00 00 00 00       	movabs	rcx, 0x0
+14004397b: e8 48 df fb ff              	call	0x1400018c8 <.text+0x8c8>
+140043980: 48 8b 2d e1 a3 ff ff        	mov	rbp, qword ptr [rip - 0x5c1f] # 0x14003dd68
+140043987: 4c 0f b6 7d 00              	movzx	r15, byte ptr [rbp]
+14004398c: 48 b8 9c d0 03 40 01 00 00 00       	movabs	rax, 0x14003d09c
+140043996: 48 89 c1                    	mov	rcx, rax
+140043999: e8 72 1b fc ff              	call	0x140005510 <.text+0x4510>
+14004399e: 49 39 c7                    	cmp	r15, rax
+1400439a1: 75 25                       	jne	0x1400439c8 <.code+0x9c8>
+1400439a3: 4c 0f b6 7d 01              	movzx	r15, byte ptr [rbp + 0x1]
+1400439a8: 48 b8 98 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d098
+1400439b2: 48 89 c1                    	mov	rcx, rax
+1400439b5: e8 56 1b fc ff              	call	0x140005510 <.text+0x4510>
+1400439ba: 49 39 c7                    	cmp	r15, rax
+1400439bd: 75 09                       	jne	0x1400439c8 <.code+0x9c8>
+1400439bf: 48 c7 c0 01 00 00 00        	mov	rax, 0x1
+1400439c6: eb 03                       	jmp	0x1400439cb <.code+0x9cb>
+1400439c8: 48 31 c0                    	xor	rax, rax
+1400439cb: 48 21 c0                    	and	rax, rax
+1400439ce: 74 25                       	je	0x1400439f5 <.code+0x9f5>
+1400439d0: 4c 0f b6 7d 02              	movzx	r15, byte ptr [rbp + 0x2]
+1400439d5: 48 b8 56 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d056
+1400439df: 48 89 c1                    	mov	rcx, rax
+1400439e2: e8 29 1b fc ff              	call	0x140005510 <.text+0x4510>
+1400439e7: 49 39 c7                    	cmp	r15, rax
+1400439ea: 75 09                       	jne	0x1400439f5 <.code+0x9f5>
+1400439ec: 48 c7 c0 01 00 00 00        	mov	rax, 0x1
+1400439f3: eb 03                       	jmp	0x1400439f8 <.code+0x9f8>
+1400439f5: 48 31 c0                    	xor	rax, rax
+1400439f8: 48 21 c0                    	and	rax, rax
+1400439fb: 74 25                       	je	0x140043a22 <.code+0xa22>
+1400439fd: 4c 0f b6 7d 03              	movzx	r15, byte ptr [rbp + 0x3]
+140043a02: 48 b8 5a d0 03 40 01 00 00 00       	movabs	rax, 0x14003d05a
+140043a0c: 48 89 c1                    	mov	rcx, rax
+140043a0f: e8 fc 1a fc ff              	call	0x140005510 <.text+0x4510>
+140043a14: 49 39 c7                    	cmp	r15, rax
+140043a17: 75 09                       	jne	0x140043a22 <.code+0xa22>
+140043a19: 48 c7 c0 01 00 00 00        	mov	rax, 0x1
+140043a20: eb 03                       	jmp	0x140043a25 <.code+0xa25>
+140043a22: 48 31 c0                    	xor	rax, rax
+140043a25: 48 21 c0                    	and	rax, rax
+140043a28: 74 25                       	je	0x140043a4f <.code+0xa4f>
+140043a2a: 4c 0f b6 7d 04              	movzx	r15, byte ptr [rbp + 0x4]
+140043a2f: 48 b8 66 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d066
+140043a39: 48 89 c1                    	mov	rcx, rax
+140043a3c: e8 cf 1a fc ff              	call	0x140005510 <.text+0x4510>
+140043a41: 49 39 c7                    	cmp	r15, rax
+140043a44: 75 09                       	jne	0x140043a4f <.code+0xa4f>
+140043a46: 48 c7 c0 01 00 00 00        	mov	rax, 0x1
+140043a4d: eb 03                       	jmp	0x140043a52 <.code+0xa52>
+140043a4f: 48 31 c0                    	xor	rax, rax
+140043a52: 48 21 c0                    	and	rax, rax
+140043a55: 74 25                       	je	0x140043a7c <.code+0xa7c>
+140043a57: 4c 0f b6 7d 05              	movzx	r15, byte ptr [rbp + 0x5]
+140043a5c: 48 b8 6a d0 03 40 01 00 00 00       	movabs	rax, 0x14003d06a
+140043a66: 48 89 c1                    	mov	rcx, rax
+140043a69: e8 a2 1a fc ff              	call	0x140005510 <.text+0x4510>
+140043a6e: 49 39 c7                    	cmp	r15, rax
+140043a71: 75 09                       	jne	0x140043a7c <.code+0xa7c>
+140043a73: 48 c7 c0 01 00 00 00        	mov	rax, 0x1
+140043a7a: eb 03                       	jmp	0x140043a7f <.code+0xa7f>
+140043a7c: 48 31 c0                    	xor	rax, rax
+140043a7f: 48 21 c0                    	and	rax, rax
+140043a82: 0f 85 b3 01 00 00           	jne	0x140043c3b <.code+0xc3b>
+140043a88: 48 8b 2d d9 a2 ff ff        	mov	rbp, qword ptr [rip - 0x5d27] # 0x14003dd68
+140043a8f: 4c 0f b6 7d 00              	movzx	r15, byte ptr [rbp]
+140043a94: 48 b8 9c d0 03 40 01 00 00 00       	movabs	rax, 0x14003d09c
+140043a9e: 48 89 c1                    	mov	rcx, rax
+140043aa1: e8 6a 1a fc ff              	call	0x140005510 <.text+0x4510>
+140043aa6: 49 39 c7                    	cmp	r15, rax
+140043aa9: 75 25                       	jne	0x140043ad0 <.code+0xad0>
+140043aab: 4c 0f b6 7d 01              	movzx	r15, byte ptr [rbp + 0x1]
+140043ab0: 48 b8 98 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d098
+140043aba: 48 89 c1                    	mov	rcx, rax
+140043abd: e8 4e 1a fc ff              	call	0x140005510 <.text+0x4510>
+140043ac2: 49 39 c7                    	cmp	r15, rax
+140043ac5: 75 09                       	jne	0x140043ad0 <.code+0xad0>
+140043ac7: 48 c7 c0 01 00 00 00        	mov	rax, 0x1
+140043ace: eb 03                       	jmp	0x140043ad3 <.code+0xad3>
+140043ad0: 48 31 c0                    	xor	rax, rax
+140043ad3: 48 21 c0                    	and	rax, rax
+140043ad6: 74 25                       	je	0x140043afd <.code+0xafd>
+140043ad8: 4c 0f b6 7d 02              	movzx	r15, byte ptr [rbp + 0x2]
+140043add: 48 b8 62 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d062
+140043ae7: 48 89 c1                    	mov	rcx, rax
+140043aea: e8 21 1a fc ff              	call	0x140005510 <.text+0x4510>
+140043aef: 49 39 c7                    	cmp	r15, rax
+140043af2: 75 09                       	jne	0x140043afd <.code+0xafd>
+140043af4: 48 c7 c0 01 00 00 00        	mov	rax, 0x1
+140043afb: eb 03                       	jmp	0x140043b00 <.code+0xb00>
+140043afd: 48 31 c0                    	xor	rax, rax
+140043b00: 48 21 c0                    	and	rax, rax
+140043b03: 74 25                       	je	0x140043b2a <.code+0xb2a>
+140043b05: 4c 0f b6 7d 03              	movzx	r15, byte ptr [rbp + 0x3]
+140043b0a: 48 b8 56 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d056
+140043b14: 48 89 c1                    	mov	rcx, rax
+140043b17: e8 f4 19 fc ff              	call	0x140005510 <.text+0x4510>
+140043b1c: 49 39 c7                    	cmp	r15, rax
+140043b1f: 75 09                       	jne	0x140043b2a <.code+0xb2a>
+140043b21: 48 c7 c0 01 00 00 00        	mov	rax, 0x1
+140043b28: eb 03                       	jmp	0x140043b2d <.code+0xb2d>
+140043b2a: 48 31 c0                    	xor	rax, rax
+140043b2d: 48 21 c0                    	and	rax, rax
+140043b30: 0f 84 fb 00 00 00           	je	0x140043c31 <.code+0xc31>
+140043b36: 4c 0f b6 7d 04              	movzx	r15, byte ptr [rbp + 0x4]
+140043b3b: 48 b8 56 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d056
+140043b45: 48 89 c1                    	mov	rcx, rax
+140043b48: e8 c3 19 fc ff              	call	0x140005510 <.text+0x4510>
+140043b4d: 49 39 c7                    	cmp	r15, rax
+140043b50: 74 25                       	je	0x140043b77 <.code+0xb77>
+140043b52: 48 8b 2d 0f a2 ff ff        	mov	rbp, qword ptr [rip - 0x5df1] # 0x14003dd68
+140043b59: 4c 0f b6 7d 04              	movzx	r15, byte ptr [rbp + 0x4]
+140043b5e: 48 b8 62 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d062
+140043b68: 48 89 c1                    	mov	rcx, rax
+140043b6b: e8 a0 19 fc ff              	call	0x140005510 <.text+0x4510>
+140043b70: 49 39 c7                    	cmp	r15, rax
+140043b73: 74 02                       	je	0x140043b77 <.code+0xb77>
+140043b75: eb 09                       	jmp	0x140043b80 <.code+0xb80>
+140043b77: 48 c7 c0 01 00 00 00        	mov	rax, 0x1
+140043b7e: eb 03                       	jmp	0x140043b83 <.code+0xb83>
+140043b80: 48 31 c0                    	xor	rax, rax
+140043b83: 48 21 c0                    	and	rax, rax
+140043b86: 75 25                       	jne	0x140043bad <.code+0xbad>
+140043b88: 48 8b 2d d9 a1 ff ff        	mov	rbp, qword ptr [rip - 0x5e27] # 0x14003dd68
+140043b8f: 4c 0f b6 7d 04              	movzx	r15, byte ptr [rbp + 0x4]
+140043b94: 48 b8 5a d0 03 40 01 00 00 00       	movabs	rax, 0x14003d05a
+140043b9e: 48 89 c1                    	mov	rcx, rax
+140043ba1: e8 6a 19 fc ff              	call	0x140005510 <.text+0x4510>
+140043ba6: 49 39 c7                    	cmp	r15, rax
+140043ba9: 74 02                       	je	0x140043bad <.code+0xbad>
+140043bab: eb 09                       	jmp	0x140043bb6 <.code+0xbb6>
+140043bad: 48 c7 c0 01 00 00 00        	mov	rax, 0x1
+140043bb4: eb 03                       	jmp	0x140043bb9 <.code+0xbb9>
+140043bb6: 48 31 c0                    	xor	rax, rax
+140043bb9: 48 21 c0                    	and	rax, rax
+140043bbc: 75 25                       	jne	0x140043be3 <.code+0xbe3>
+140043bbe: 48 8b 2d a3 a1 ff ff        	mov	rbp, qword ptr [rip - 0x5e5d] # 0x14003dd68
+140043bc5: 4c 0f b6 7d 04              	movzx	r15, byte ptr [rbp + 0x4]
+140043bca: 48 b8 5e d0 03 40 01 00 00 00       	movabs	rax, 0x14003d05e
+140043bd4: 48 89 c1                    	mov	rcx, rax
+140043bd7: e8 34 19 fc ff              	call	0x140005510 <.text+0x4510>
+140043bdc: 49 39 c7                    	cmp	r15, rax
+140043bdf: 74 02                       	je	0x140043be3 <.code+0xbe3>
+140043be1: eb 09                       	jmp	0x140043bec <.code+0xbec>
+140043be3: 48 c7 c0 01 00 00 00        	mov	rax, 0x1
+140043bea: eb 03                       	jmp	0x140043bef <.code+0xbef>
+140043bec: 48 31 c0                    	xor	rax, rax
+140043bef: 48 21 c0                    	and	rax, rax
+140043bf2: 74 2c                       	je	0x140043c20 <.code+0xc20>
+140043bf4: 48 8b 2d 6d a1 ff ff        	mov	rbp, qword ptr [rip - 0x5e93] # 0x14003dd68
+140043bfb: 4c 0f b6 7d 05              	movzx	r15, byte ptr [rbp + 0x5]
+140043c00: 48 b8 6a d0 03 40 01 00 00 00       	movabs	rax, 0x14003d06a
+140043c0a: 48 89 c1                    	mov	rcx, rax
+140043c0d: e8 fe 18 fc ff              	call	0x140005510 <.text+0x4510>
+140043c12: 49 39 c7                    	cmp	r15, rax
+140043c15: 75 09                       	jne	0x140043c20 <.code+0xc20>
+140043c17: 48 c7 c0 01 00 00 00        	mov	rax, 0x1
+140043c1e: eb 03                       	jmp	0x140043c23 <.code+0xc23>
+140043c20: 48 31 c0                    	xor	rax, rax
+140043c23: 48 21 c0                    	and	rax, rax
+140043c26: 74 09                       	je	0x140043c31 <.code+0xc31>
+140043c28: 48 c7 c0 01 00 00 00        	mov	rax, 0x1
+140043c2f: eb 03                       	jmp	0x140043c34 <.code+0xc34>
+140043c31: 48 31 c0                    	xor	rax, rax
+140043c34: 48 21 c0                    	and	rax, rax
+140043c37: 75 02                       	jne	0x140043c3b <.code+0xc3b>
+140043c39: eb 09                       	jmp	0x140043c44 <.code+0xc44>
+140043c3b: 48 c7 c0 01 00 00 00        	mov	rax, 0x1
+140043c42: eb 03                       	jmp	0x140043c47 <.code+0xc47>
+140043c44: 48 31 c0                    	xor	rax, rax
+140043c47: 48 21 c0                    	and	rax, rax
+140043c4a: 74 1b                       	je	0x140043c67 <.code+0xc67>
+140043c4c: 48 b8 a0 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d0a0
+140043c56: 48 89 c2                    	mov	rdx, rax
+140043c59: 48 8b 0d f8 a0 ff ff        	mov	rcx, qword ptr [rip - 0x5f08] # 0x14003dd58
+140043c60: e8 73 f6 fb ff              	call	0x1400032d8 <.text+0x22d8>
+140043c65: eb 19                       	jmp	0x140043c80 <.code+0xc80>
+140043c67: 48 b8 ce d0 03 40 01 00 00 00       	movabs	rax, 0x14003d0ce
+140043c71: 48 89 c2                    	mov	rdx, rax
+140043c74: 48 8b 0d dd a0 ff ff        	mov	rcx, qword ptr [rip - 0x5f23] # 0x14003dd58
+140043c7b: e8 58 f6 fb ff              	call	0x1400032d8 <.text+0x22d8>
+140043c80: eb 73                       	jmp	0x140043cf5 <.code+0xcf5>
+140043c82: 48 b9 00 00 00 00 00 00 00 00       	movabs	rcx, 0x0
+140043c8c: e8 4f d9 fb ff              	call	0x1400015e0 <.text+0x5e0>
+140043c91: 49 89 c7                    	mov	r15, rax
+140043c94: 4d 21 ff                    	and	r15, r15
+140043c97: 75 1b                       	jne	0x140043cb4 <.code+0xcb4>
+140043c99: 48 b8 6e d0 03 40 01 00 00 00       	movabs	rax, 0x14003d06e
+140043ca3: 48 89 c2                    	mov	rdx, rax
+140043ca6: 48 8b 0d ab a0 ff ff        	mov	rcx, qword ptr [rip - 0x5f55] # 0x14003dd58
+140043cad: e8 26 f6 fb ff              	call	0x1400032d8 <.text+0x22d8>
+140043cb2: eb 41                       	jmp	0x140043cf5 <.code+0xcf5>
+140043cb4: 48 b9 00 00 00 00 00 00 00 00       	movabs	rcx, 0x0
+140043cbe: e8 1d d9 fb ff              	call	0x1400015e0 <.text+0x5e0>
+140043cc3: 49 89 c0                    	mov	r8, rax
+140043cc6: 48 8b 15 ab a0 ff ff        	mov	rdx, qword ptr [rip - 0x5f55] # 0x14003dd78
+140043ccd: 48 b9 00 00 00 00 00 00 00 00       	movabs	rcx, 0x0
+140043cd7: e8 ec db fb ff              	call	0x1400018c8 <.text+0x8c8>
+140043cdc: 48 b8 b0 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d0b0
+140043ce6: 48 89 c2                    	mov	rdx, rax
+140043ce9: 48 8b 0d 68 a0 ff ff        	mov	rcx, qword ptr [rip - 0x5f98] # 0x14003dd58
+140043cf0: e8 e3 f5 fb ff              	call	0x1400032d8 <.text+0x22d8>
+140043cf5: eb 28                       	jmp	0x140043d1f <.code+0xd1f>
+140043cf7: 48 b8 34 d0 03 40 01 00 00 00       	movabs	rax, 0x14003d034
+140043d01: 48 89 c2                    	mov	rdx, rax
+140043d04: 48 8b 0d 4d a0 ff ff        	mov	rcx, qword ptr [rip - 0x5fb3] # 0x14003dd58
+140043d0b: e8 c8 f5 fb ff              	call	0x1400032d8 <.text+0x22d8>
+140043d10: 48 b9 64 00 00 00 00 00 00 00       	movabs	rcx, 0x64
+140043d1a: e8 d9 f9 fb ff              	call	0x1400036f8 <.text+0x26f8>
+140043d1f: e9 4d fb ff ff              	jmp	0x140043871 <.code+0x871>
+140043d24: 48 31 c0                    	xor	rax, rax
+140043d27: 48 83 c4 38                 	add	rsp, 0x38
+140043d2b: 41 5f                       	pop	r15
+140043d2d: 5d                          	pop	rbp
+140043d2e: c3                          	ret
+140043d2f: 48 89 4c 24 08              	mov	qword ptr [rsp + 0x8], rcx
+140043d34: 48 83 ec 28                 	sub	rsp, 0x28
+140043d38: 48 31 c0                    	xor	rax, rax
+140043d3b: 48 83 c4 28                 	add	rsp, 0x28
+140043d3f: c3                          	ret
+140043d40: 48 89 4c 24 08              	mov	qword ptr [rsp + 0x8], rcx
+140043d45: 41 57                       	push	r15
+140043d47: 48 31 c0                    	xor	rax, rax
+140043d4a: 50                          	push	rax
+140043d4b: 48 83 ec 28                 	sub	rsp, 0x28
+140043d4f: e8 4c 21 fc ff              	call	0x140005ea0 <.text+0x4ea0>
+140043d54: ff 74 24 40                 	push	qword ptr [rsp + 0x40]
+140043d58: 49 c7 c7 3c 33 00 00        	mov	r15, 0x333c
+140043d5f: 4c 3b 3c 24                 	cmp	r15, qword ptr [rsp]
+140043d63: 75 11                       	jne	0x140043d76 <.code+0xd76>
+140043d65: 48 31 c0                    	xor	rax, rax
+140043d68: 48 83 c4 08                 	add	rsp, 0x8
+140043d6c: e9 ab 00 00 00              	jmp	0x140043e1c <.code+0xe1c>
+140043d71: e9 96 00 00 00              	jmp	0x140043e0c <.code+0xe0c>
+140043d76: 49 c7 c7 2d 33 00 00        	mov	r15, 0x332d
+140043d7d: 4c 3b 3c 24                 	cmp	r15, qword ptr [rsp]
+140043d81: 75 13                       	jne	0x140043d96 <.code+0xd96>
+140043d83: 48 83 ec 08                 	sub	rsp, 0x8
+140043d87: 48 83 ec 20                 	sub	rsp, 0x20
+140043d8b: e8 24 1a fc ff              	call	0x1400057b4 <.text+0x47b4>
+140043d90: 48 83 c4 28                 	add	rsp, 0x28
+140043d94: eb 76                       	jmp	0x140043e0c <.code+0xe0c>
+140043d96: 49 c7 c7 2c 33 00 00        	mov	r15, 0x332c
+140043d9d: 4c 3b 3c 24                 	cmp	r15, qword ptr [rsp]
+140043da1: 75 69                       	jne	0x140043e0c <.code+0xe0c>
+140043da3: 48 83 ec 08                 	sub	rsp, 0x8
+140043da7: 48 83 ec 20                 	sub	rsp, 0x20
+140043dab: e8 04 1a fc ff              	call	0x1400057b4 <.text+0x47b4>
+140043db0: 48 83 c4 28                 	add	rsp, 0x28
+140043db4: 50                          	push	rax
+140043db5: 4c 8b 3d 7c 9f ff ff        	mov	r15, qword ptr [rip - 0x6084] # 0x14003dd38
+140043dbc: 4c 3b 3c 24                 	cmp	r15, qword ptr [rsp]
+140043dc0: 75 1f                       	jne	0x140043de1 <.code+0xde1>
+140043dc2: 48 83 ec 20                 	sub	rsp, 0x20
+140043dc6: e8 fd 19 fc ff              	call	0x1400057c8 <.text+0x47c8>
+140043dcb: 48 83 c4 20                 	add	rsp, 0x20
+140043dcf: 48 89 c1                    	mov	rcx, rax
+140043dd2: 48 83 ec 20                 	sub	rsp, 0x20
+140043dd6: e8 54 ff ff ff              	call	0x140043d2f <.code+0xd2f>
+140043ddb: 48 83 c4 20                 	add	rsp, 0x20
+140043ddf: eb 2a                       	jmp	0x140043e0b <.code+0xe0b>
+140043de1: 4c 8b 3d 30 9f ff ff        	mov	r15, qword ptr [rip - 0x60d0] # 0x14003dd18
+140043de8: 4c 3b 3c 24                 	cmp	r15, qword ptr [rsp]
+140043dec: 75 1d                       	jne	0x140043e0b <.code+0xe0b>
+140043dee: 48 83 ec 20                 	sub	rsp, 0x20
+140043df2: e8 d1 19 fc ff              	call	0x1400057c8 <.text+0x47c8>
+140043df7: 48 83 c4 20                 	add	rsp, 0x20
+140043dfb: 48 89 c1                    	mov	rcx, rax
+140043dfe: 48 83 ec 20                 	sub	rsp, 0x20
+140043e02: e8 f4 f7 ff ff              	call	0x1400435fb <.code+0x5fb>
+140043e07: 48 83 c4 20                 	add	rsp, 0x20
+140043e0b: 58                          	pop	rax
+140043e0c: 48 83 c4 08                 	add	rsp, 0x8
+140043e10: 48 c7 c0 01 00 00 00        	mov	rax, 0x1
+140043e17: eb 03                       	jmp	0x140043e1c <.code+0xe1c>
+140043e19: 48 31 c0                    	xor	rax, rax
+140043e1c: 48 83 c4 30                 	add	rsp, 0x30
+140043e20: 41 5f                       	pop	r15
+140043e22: c3                          	ret
+140043e23: cc                          	int3
+140043e24: 48 83 ec 48                 	sub	rsp, 0x48
+140043e28: 48 89 44 24 28              	mov	qword ptr [rsp + 0x28], rax
+140043e2d: 48 89 4c 24 30              	mov	qword ptr [rsp + 0x30], rcx
+140043e32: e8 e9 7f fe ff              	call	0x14002be20 <.text+0x2ae20>
+140043e37: 48 89 44 24 38              	mov	qword ptr [rsp + 0x38], rax
+140043e3c: 48 8b 0d 65 93 ff ff        	mov	rcx, qword ptr [rip - 0x6c9b] # 0x14003d1a8
+140043e43: e8 c8 7f fe ff              	call	0x14002be10 <.text+0x2ae10>
+140043e48: 48 8b 4c 24 30              	mov	rcx, qword ptr [rsp + 0x30]
+140043e4d: 48 89 48 10                 	mov	qword ptr [rax + 0x10], rcx
+140043e51: 48 8b 4c 24 38              	mov	rcx, qword ptr [rsp + 0x38]
+140043e56: e8 d5 7f fe ff              	call	0x14002be30 <.text+0x2ae30>
+140043e5b: 48 8b 44 24 28              	mov	rax, qword ptr [rsp + 0x28]
+140043e60: 48 83 c4 48                 	add	rsp, 0x48
+140043e64: c3                          	ret
