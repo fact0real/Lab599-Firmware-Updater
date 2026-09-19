@@ -86,7 +86,7 @@
     self.window = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 950, 920)
         styleMask:(NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable)
         backing:NSBackingStoreBuffered defer:NO];
-    self.window.title = @"Lab599 Utility 2.3";
+    self.window.title = @"Lab599 Utility";
     self.window.delegate = self;
     self.window.minSize = NSMakeSize(920, 890);
     [self.window center];
@@ -129,17 +129,29 @@
     NSMenuItem *helpItem = [[NSMenuItem alloc] initWithTitle:@"Help" action:NULL keyEquivalent:@""];
     [menu addItem:helpItem];
     NSMenu *helpMenu = [[NSMenu alloc] initWithTitle:@"Help"];
+    [helpMenu addItemWithTitle:@"About Lab599 Utility" action:@selector(showAboutWindow:) keyEquivalent:@""];
+    [helpMenu addItem:[NSMenuItem separatorItem]];
     [helpMenu addItemWithTitle:@"Official Lab599 Downloads Website" action:@selector(openLab599Website:) keyEquivalent:@""];
     [helpMenu addItemWithTitle:@"GitHub Project (EP2AES)" action:@selector(openGitHubRepo:) keyEquivalent:@""];
     helpItem.submenu = helpMenu;
 
     NSApp.mainMenu = menu;
 
-    // Header & Info
+    // Header
     NSTextField *heading = [self label:@"Lab599 Utility"];
     heading.font = [NSFont systemFontOfSize:22 weight:NSFontWeightSemibold];
-    NSTextField *subtitle = [self label:@"Version 2.3  |  TX-500 Discovery, MP & PRO  |  Developed by EP2AES"];
-    subtitle.textColor = NSColor.secondaryLabelColor;
+    NSButton *aboutHeaderBtn = [NSButton buttonWithTitle:@"About Lab599 Utility…" target:self action:@selector(showAboutWindow:)];
+    aboutHeaderBtn.bezelStyle = NSBezelStyleInline;
+    aboutHeaderBtn.font = [NSFont systemFontOfSize:12];
+
+    NSView *headerSpacer = [NSView new];
+    headerSpacer.translatesAutoresizingMaskIntoConstraints = NO;
+    [headerSpacer setContentHuggingPriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
+
+    NSStackView *headerRow = [NSStackView stackViewWithViews:@[heading, headerSpacer, aboutHeaderBtn]];
+    headerRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+    headerRow.alignment = NSLayoutAttributeCenterY;
+    headerRow.translatesAutoresizingMaskIntoConstraints = NO;
 
     NSTextField *instructions = [NSTextField wrappingLabelWithString:
         @"Connect the CAT-USB cable and stable external power. Close other radio applications. On your transceiver (TX-500 Discovery / TX-500MP), hold the third top function key while pressing POWER. Start only when the screen displays \"The loader is waiting...\". Keep power and cable connected until completion."];
@@ -276,7 +288,7 @@
 
     // Main Layout Stack
     NSStackView *stack = [NSStackView stackViewWithViews:@[
-        heading, subtitle, self.operationPicker, instructions,
+        headerRow, self.operationPicker, instructions,
         portRow, fileRow, self.radioPreviewBox, timeRow, self.tools.view, self.driverController.view, self.docsController.view,
         self.progressBar, self.statusLabel,
         buttonRow,
@@ -294,6 +306,7 @@
         [stack.trailingAnchor constraintEqualToAnchor:self.window.contentView.trailingAnchor constant:-24],
         [stack.topAnchor constraintEqualToAnchor:self.window.contentView.topAnchor constant:24],
         [stack.bottomAnchor constraintLessThanOrEqualToAnchor:self.window.contentView.bottomAnchor constant:-24],
+        [headerRow.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [instructions.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.radioPreviewBox.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.tools.view.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
@@ -304,7 +317,7 @@
         [scroll.widthAnchor constraintEqualToAnchor:stack.widthAnchor]
     ]];
 
-    [self appendLog:@"Lab599 Utility 2.3 initialized."];
+    [self appendLog:@"Lab599 Utility 2.4 initialized."];
     [self appendLog:@"BL20 protocol engine ready: 57600 baud, 8N1, two-ACK header+payload cycle."];
     [self appendLog:@"TimeSync ready: 9600 baud, TM set/query with clock read-back verification."];
     [self refreshPorts:nil];
@@ -849,7 +862,7 @@
 - (void)showAboutWindow:(id)sender {
     (void)sender;
     if (!self.aboutWindow) {
-        self.aboutWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 520, 420)
+        self.aboutWindow = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 540, 540)
             styleMask:(NSWindowStyleMaskTitled | NSWindowStyleMaskClosable)
             backing:NSBackingStoreBuffered defer:NO];
         self.aboutWindow.title = @"About Lab599 Utility";
@@ -866,26 +879,71 @@
         }
         NSImageView *iconView = [NSImageView imageViewWithImage:icon];
         iconView.imageScaling = NSImageScaleProportionallyUpOrDown;
-        [iconView.widthAnchor constraintEqualToConstant:96].active = YES;
-        [iconView.heightAnchor constraintEqualToConstant:96].active = YES;
+        [iconView.widthAnchor constraintEqualToConstant:72].active = YES;
+        [iconView.heightAnchor constraintEqualToConstant:72].active = YES;
 
         // Information text
         NSTextField *appName = [self label:@"Lab599 Utility"];
-        appName.font = [NSFont systemFontOfSize:18 weight:NSFontWeightBold];
+        appName.font = [NSFont systemFontOfSize:20 weight:NSFontWeightBold];
 
-        NSTextField *appVer = [self label:@"Version 2.2 (Build 8, Universal macOS)"];
+        NSTextField *appVer = [self label:@"Version 2.4 (Build 10, Universal macOS)"];
         appVer.textColor = NSColor.secondaryLabelColor;
+        appVer.font = [NSFont systemFontOfSize:13 weight:NSFontWeightMedium];
+
+        NSTextField *hwLabel = [self label:@"Supported Hardware: Lab599 TX-500 Discovery, TX-500MP & TX-500PRO"];
+        hwLabel.font = [NSFont systemFontOfSize:12 weight:NSFontWeightSemibold];
+        hwLabel.textColor = [NSColor colorWithCalibratedRed:0.12 green:0.50 blue:0.90 alpha:1.0];
 
         NSTextField *authorLabel = [self label:@"Developed by EP2AES (factoreal)"];
-        authorLabel.font = [NSFont systemFontOfSize:14 weight:NSFontWeightSemibold];
+        authorLabel.font = [NSFont systemFontOfSize:13 weight:NSFontWeightSemibold];
 
-        NSTextField *callsignLabel = [self label:@"Ham Radio Callsign: EP2AES  |  Email: EP2AES@asis.sh"];
+        NSTextField *callsignLabel = [self label:@"Ham Radio Callsign: EP2AES  •  Email: EP2AES@asis.sh"];
         callsignLabel.textColor = NSColor.secondaryLabelColor;
+        callsignLabel.font = [NSFont systemFontOfSize:11];
 
-        NSTextField *compat = [NSTextField wrappingLabelWithString:
-            @"Firmware updates, clock synchronization, CAT testing, settings backups, 100-channel memory management, FTDI D2XX driver installation, and official documentation & downloads catalog for Lab599 TX-500, TX-500MP & TX-500PRO series radios. Protocols and file formats recovered from the supplied utilities. Independent software by EP2AES."];
-        compat.textColor = NSColor.labelColor;
-        compat.font = [NSFont systemFontOfSize:12];
+        // Features Card Box
+        NSBox *featuresBox = [NSBox new];
+        featuresBox.boxType = NSBoxCustom;
+        featuresBox.cornerRadius = 8.0;
+        featuresBox.borderWidth = 1.0;
+        featuresBox.borderColor = [NSColor separatorColor];
+        featuresBox.fillColor = [NSColor controlBackgroundColor];
+        featuresBox.translatesAutoresizingMaskIntoConstraints = NO;
+
+        NSTextField *boxTitle = [self label:@"Radio Management & Diagnostic Features"];
+        boxTitle.font = [NSFont systemFontOfSize:12 weight:NSFontWeightBold];
+
+        NSTextField *featuresList = [NSTextField wrappingLabelWithString:
+            @"• Firmware Updates with automatic MCU model detection (Discovery vs MP) & BL20 verification\n"
+            @"• Precision Real-Time Clock (RTC) synchronization with host time / UTC\n"
+            @"• Real-time CAT command terminal and transceiver diagnostics\n"
+            @"• EEPROM Settings backup, restore & side-by-side visual diff comparison\n"
+            @"• 100-channel memory manager, operating profiles (SOTA/POTA, FT8, Contest) & CSV import/export\n"
+            @"• FTDI D2XX USB serial driver installation & system diagnostics\n"
+            @"• Official Lab599 documentation, schematics & firmware downloads library"];
+        featuresList.textColor = NSColor.labelColor;
+        featuresList.font = [NSFont systemFontOfSize:11];
+
+        NSStackView *boxStack = [NSStackView stackViewWithViews:@[boxTitle, featuresList]];
+        boxStack.orientation = NSUserInterfaceLayoutOrientationVertical;
+        boxStack.alignment = NSLayoutAttributeLeading;
+        boxStack.spacing = 5;
+        boxStack.translatesAutoresizingMaskIntoConstraints = NO;
+        [featuresBox.contentView addSubview:boxStack];
+
+        [NSLayoutConstraint activateConstraints:@[
+            [boxStack.leadingAnchor constraintEqualToAnchor:featuresBox.contentView.leadingAnchor constant:12],
+            [boxStack.trailingAnchor constraintEqualToAnchor:featuresBox.contentView.trailingAnchor constant:-12],
+            [boxStack.topAnchor constraintEqualToAnchor:featuresBox.contentView.topAnchor constant:10],
+            [boxStack.bottomAnchor constraintEqualToAnchor:featuresBox.contentView.bottomAnchor constant:-10],
+            [featuresList.widthAnchor constraintEqualToAnchor:boxStack.widthAnchor]
+        ]];
+
+        NSTextField *disclaimer = [NSTextField wrappingLabelWithString:
+            @"Independent software created for the amateur radio community. Protocols and file formats reverse-engineered from original tools."];
+        disclaimer.textColor = NSColor.tertiaryLabelColor;
+        disclaimer.font = [NSFont systemFontOfSize:10];
+        disclaimer.alignment = NSTextAlignmentCenter;
 
         // GitHub button
         NSButton *gitBtn = [NSButton buttonWithTitle:@"View on GitHub: https://github.com/fact0real/Lab599-Firmware-Updater"
@@ -903,20 +961,21 @@
         closeBtn.keyEquivalent = @"\r";
 
         NSStackView *aboutStack = [NSStackView stackViewWithViews:@[
-            iconView, appName, appVer, authorLabel, callsignLabel, compat, gitBtn, webBtn, closeBtn
+            iconView, appName, appVer, hwLabel, authorLabel, callsignLabel, featuresBox, disclaimer, gitBtn, webBtn, closeBtn
         ]];
         aboutStack.translatesAutoresizingMaskIntoConstraints = NO;
         aboutStack.orientation = NSUserInterfaceLayoutOrientationVertical;
         aboutStack.alignment = NSLayoutAttributeCenterX;
-        aboutStack.spacing = 10;
+        aboutStack.spacing = 8;
         [self.aboutWindow.contentView addSubview:aboutStack];
 
         [NSLayoutConstraint activateConstraints:@[
-            [aboutStack.leadingAnchor constraintEqualToAnchor:self.aboutWindow.contentView.leadingAnchor constant:24],
-            [aboutStack.trailingAnchor constraintEqualToAnchor:self.aboutWindow.contentView.trailingAnchor constant:-24],
-            [aboutStack.topAnchor constraintEqualToAnchor:self.aboutWindow.contentView.topAnchor constant:20],
-            [aboutStack.bottomAnchor constraintLessThanOrEqualToAnchor:self.aboutWindow.contentView.bottomAnchor constant:-20],
-            [compat.widthAnchor constraintEqualToAnchor:aboutStack.widthAnchor]
+            [aboutStack.leadingAnchor constraintEqualToAnchor:self.aboutWindow.contentView.leadingAnchor constant:20],
+            [aboutStack.trailingAnchor constraintEqualToAnchor:self.aboutWindow.contentView.trailingAnchor constant:-20],
+            [aboutStack.topAnchor constraintEqualToAnchor:self.aboutWindow.contentView.topAnchor constant:16],
+            [aboutStack.bottomAnchor constraintLessThanOrEqualToAnchor:self.aboutWindow.contentView.bottomAnchor constant:-16],
+            [featuresBox.widthAnchor constraintEqualToAnchor:aboutStack.widthAnchor],
+            [disclaimer.widthAnchor constraintEqualToAnchor:aboutStack.widthAnchor]
         ]];
     }
     [self.aboutWindow makeKeyAndOrderFront:nil];
