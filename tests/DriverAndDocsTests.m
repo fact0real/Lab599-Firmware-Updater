@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #import "../Headers/Lab599DriverController.h"
 #import "../Headers/Lab599DocsController.h"
+#import "../Headers/Lab599FirmwareCatalog.h"
 
 static void Check(BOOL ok, NSString *label) {
     if (!ok) {
@@ -22,7 +23,23 @@ int main(void) {
         NSImage *radioImg = [driverCtrl loadRadioImage];
         Check(radioImg != nil, @"TX-500 radio image loads successfully");
         Check(radioImg.size.width > 0 && radioImg.size.height > 0, @"TX-500 radio image has valid dimensions");
-        printf("PASS: Driver controller status, devices, and TX-500 radio image verified (size: %.0fx%.0f)\n", radioImg.size.width, radioImg.size.height);
+
+        NSImage *mpImg = [[NSImage alloc] initWithContentsOfFile:@"Resources/tx500_mp.png"];
+        Check(mpImg != nil, @"TX-500MP radio image loads successfully");
+        Check(mpImg.size.width > 0 && mpImg.size.height > 0, @"TX-500MP radio image has valid dimensions");
+
+        NSImage *proImg = [[NSImage alloc] initWithContentsOfFile:@"Resources/tx500_pro.png"];
+        Check(proImg != nil, @"TX-500PRO radio image loads successfully");
+        Check(proImg.size.width > 0 && proImg.size.height > 0, @"TX-500PRO radio image has valid dimensions");
+
+        NSImage *altaiImg = [[NSImage alloc] initWithContentsOfFile:@"Resources/tx500_pro_altai.png"];
+        Check(altaiImg != nil, @"TX-500PRO ALTAI radio image loads successfully");
+        Check(altaiImg.size.width > 0 && altaiImg.size.height > 0, @"TX-500PRO ALTAI radio image has valid dimensions");
+        printf("PASS: All 4 radio hardware models verified (Discovery: %.0fx%.0f, MP: %.0fx%.0f, PRO: %.0fx%.0f, ALTAI: %.0fx%.0f)\n",
+               radioImg.size.width, radioImg.size.height,
+               mpImg.size.width, mpImg.size.height,
+               proImg.size.width, proImg.size.height,
+               altaiImg.size.width, altaiImg.size.height);
 
         // 2. Documentation Controller Tests
         Lab599DocsController *docsCtrl = [Lab599DocsController new];
@@ -69,6 +86,21 @@ int main(void) {
         Check([parsed[4].fileFormat isEqualToString:@"FW"], @"RU FW format recognized");
         Check([parsed[5].fileFormat isEqualToString:@"TXT"], @"RU TXT format recognized");
         printf("PASS: Documentation live HTML parser verified with com and ru formats\n");
+
+        // 3. Firmware Catalog Model Tests
+        NSArray<Lab599FirmwareItem *> *fwCatalog = [Lab599FirmwareCatalog fallbackFirmwareCatalog];
+        BOOL foundDiscFW = NO, foundMPFW = NO, foundProFW = NO, foundAltaiFW = NO;
+        for (Lab599FirmwareItem *item in fwCatalog) {
+            if ([item.model isEqualToString:@"TX-500 Discovery"]) foundDiscFW = YES;
+            if ([item.model isEqualToString:@"TX-500MP"]) foundMPFW = YES;
+            if ([item.model isEqualToString:@"TX-500PRO"]) foundProFW = YES;
+            if ([item.model isEqualToString:@"TX-500PRO ALTAI"]) foundAltaiFW = YES;
+        }
+        Check(foundDiscFW, @"Fallback catalog contains TX-500 Discovery firmware");
+        Check(foundMPFW, @"Fallback catalog contains TX-500MP firmware");
+        Check(foundProFW, @"Fallback catalog contains TX-500PRO firmware");
+        Check(foundAltaiFW, @"Fallback catalog contains TX-500PRO ALTAI firmware");
+        printf("PASS: Firmware catalog verified for Discovery, MP, PRO, and PRO ALTAI models (%lu items)\n", (unsigned long)fwCatalog.count);
 
         printf("All Driver and Documentation tests passed.\n");
     }

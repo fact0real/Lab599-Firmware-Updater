@@ -86,6 +86,26 @@
     mpPatch.isLatest = NO;
     [items addObject:mpPatch];
 
+    Lab599FirmwareItem *proLatest = [Lab599FirmwareItem new];
+    proLatest.title = @"TX-500PRO Firmware v1.29.05";
+    proLatest.model = @"TX-500PRO";
+    proLatest.version = @"1.29.05";
+    proLatest.fileSizeString = @"245 KB";
+    proLatest.downloadURL = [NSURL URLWithString:@"https://downloads.lab599.ru/TX500PRO/mtrx_pro1.29.05.fw"];
+    proLatest.changelog = @"Official TX-500PRO commercial release.\n- Rotary volume & squelch knobs\n- Tactical audio DSP profiles";
+    proLatest.isLatest = YES;
+    [items addObject:proLatest];
+
+    Lab599FirmwareItem *altaiLatest = [Lab599FirmwareItem new];
+    altaiLatest.title = @"TX-500PRO ALTAI Firmware v1.29.05";
+    altaiLatest.model = @"TX-500PRO ALTAI";
+    altaiLatest.version = @"1.29.05";
+    altaiLatest.fileSizeString = @"245 KB";
+    altaiLatest.downloadURL = [NSURL URLWithString:@"https://downloads.lab599.ru/TX500PRO/mtrx_altai1.29.05.fw"];
+    altaiLatest.changelog = @"Official TX-500PRO ALTAI commercial release.\n- Keypad arrow navigation & channelized OS\n- Advanced encryption and remote control protocol";
+    altaiLatest.isLatest = YES;
+    [items addObject:altaiLatest];
+
     return items;
 }
 
@@ -128,8 +148,8 @@
     NSMutableArray<Lab599FirmwareItem *> *results = [NSMutableArray array];
     NSMutableDictionary<NSString *, Lab599FirmwareItem *> *itemByUrl = [NSMutableDictionary dictionary];
 
-    // Find all links to .fw files
-    NSRegularExpression *linkRegex = [NSRegularExpression regularExpressionWithPattern:@"<a\\s+[^>]*href=[\"'](https?://downloads\\.lab599\\.com/[^\"'\\s]+\\.fw)[\"'][^>]*>(.*?)</a>"
+    // Find all links to .fw files (.com or .ru)
+    NSRegularExpression *linkRegex = [NSRegularExpression regularExpressionWithPattern:@"<a\\s+[^>]*href=[\"'](https?://downloads\\.lab599\\.(?:com|ru)/[^\"'\\s]+\\.fw)[\"'][^>]*>(.*?)</a>"
                                                                                options:NSRegularExpressionCaseInsensitive | NSRegularExpressionDotMatchesLineSeparators
                                                                                  error:nil];
     NSArray<NSTextCheckingResult *> *matches = [linkRegex matchesInString:html options:0 range:NSMakeRange(0, html.length)];
@@ -163,7 +183,12 @@
     // Determine model and fallback titles for each item
     for (Lab599FirmwareItem *item in results) {
         NSString *path = item.downloadURL.path;
-        if ([path containsString:@"TX500MP"] || [item.title containsString:@"TX-500MP"]) {
+        NSString *lastComp = item.downloadURL.lastPathComponent.lowercaseString;
+        if ([path containsString:@"ALTAI"] || [item.title containsString:@"ALTAI"] || [lastComp containsString:@"altai"] || [lastComp containsString:@"_alt"]) {
+            item.model = @"TX-500PRO ALTAI";
+        } else if ([path containsString:@"TX500PRO"] || [item.title containsString:@"TX-500PRO"] || [item.title containsString:@"Discovery Pro"] || [lastComp containsString:@"pro"]) {
+            item.model = @"TX-500PRO";
+        } else if ([path containsString:@"TX500MP"] || [item.title containsString:@"TX-500MP"] || [lastComp containsString:@"mp"]) {
             item.model = @"TX-500MP";
         } else if ([path containsString:@"TX500"] || [item.title containsString:@"TX-500"]) {
             item.model = @"TX-500 Discovery";

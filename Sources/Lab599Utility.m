@@ -3,9 +3,11 @@
 #import "TX500Transfer.h"
 #import "TX500TimeSync.h"
 #import "Lab599FirmwareCatalog.h"
+#import "Lab599TelemetryController.h"
 #import "Lab599ToolsController.h"
 #import "Lab599DriverController.h"
 #import "Lab599DocsController.h"
+#import "Lab599FeedbackController.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate>
 @property(nonatomic, strong) NSWindow *window;
@@ -31,9 +33,11 @@
 @property(nonatomic, strong) NSPopUpButton *timeZoneMenu;
 @property(nonatomic, strong) NSButton *syncButton;
 @property(nonatomic, strong) NSTimer *clockTimer;
+@property(nonatomic, strong) Lab599TelemetryController *telemetryController;
 @property(nonatomic, strong) Lab599ToolsController *tools;
 @property(nonatomic, strong) Lab599DriverController *driverController;
 @property(nonatomic, strong) Lab599DocsController *docsController;
+@property(nonatomic, strong) Lab599FeedbackController *feedbackController;
 
 // Online Firmware Sheet components
 @property(nonatomic, strong) NSWindow *catalogSheet;
@@ -57,6 +61,13 @@
 @property(nonatomic, strong) NSTextField *radioModelLabel;
 @property(nonatomic, strong) NSTextField *radioSpecsLabel;
 @property(nonatomic, strong) NSTextField *radioCompatibilityBadge;
+
+// Power Safety & Battery Pack Detection
+@property(nonatomic, strong) NSBox *powerSafetyBox;
+@property(nonatomic, strong) NSTextField *powerSafetyTitleLabel;
+@property(nonatomic, strong) NSTextField *powerSafetyDescLabel;
+@property(nonatomic, strong) NSButton *powerCheckButton;
+@property(nonatomic, assign) double lastDetectedVoltage;
 @end
 
 @implementation AppDelegate
@@ -133,6 +144,7 @@
     NSMenuItem *helpAbout = [helpMenu addItemWithTitle:@"About Lab599 Utility" action:@selector(showAboutWindow:) keyEquivalent:@""];
     helpAbout.target = self;
     [helpMenu addItem:[NSMenuItem separatorItem]];
+    [helpMenu addItemWithTitle:@"Send Feedback & Report Issue..." action:@selector(selectFeedbackTab:) keyEquivalent:@""];
     [helpMenu addItemWithTitle:@"Official Lab599 Downloads Website" action:@selector(openLab599Website:) keyEquivalent:@""];
     [helpMenu addItemWithTitle:@"GitHub Project (EP2AES)" action:@selector(openGitHubRepo:) keyEquivalent:@""];
     helpItem.submenu = helpMenu;
@@ -148,21 +160,29 @@
     instructions.textColor = NSColor.secondaryLabelColor;
     self.instructions = instructions;
     self.operationPicker = [NSSegmentedControl segmentedControlWithLabels:@[
-        @"Firmware Update", @"Time Sync", @"CAT Test", @"Settings", @"Memory", @"Driver Install", @"Documentation"
+        @"Firmware Update", @"Time Sync", @"Telemetry", @"CAT Test", @"Settings", @"Memory", @"Driver Install", @"Documentation", @"Feedback & Suggestion"
     ] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(operationChanged:)];
     self.operationPicker.selectedSegment = 0;
 
     NSArray<NSString *> *symbols = @[
         @"cpu",
         @"clock",
+        @"gauge.with.needle",
         @"antenna.radiowaves.left.and.right",
         @"slider.horizontal.3",
         @"memorychip",
         @"wrench.and.screwdriver",
-        @"doc.text"
+        @"doc.text",
+        @"bubble.left.and.bubble.right"
     ];
     for (NSUInteger i = 0; i < symbols.count; i++) {
         NSImage *img = [NSImage imageWithSystemSymbolName:symbols[i] accessibilityDescription:nil];
+        if (!img && [symbols[i] isEqualToString:@"gauge.with.needle"]) {
+            img = [NSImage imageWithSystemSymbolName:@"gauge" accessibilityDescription:nil];
+        }
+        if (!img && [symbols[i] isEqualToString:@"bubble.left.and.bubble.right"]) {
+            img = [NSImage imageWithSystemSymbolName:@"text.bubble" accessibilityDescription:nil];
+        }
         if (img) {
             [self.operationPicker setImage:img forSegment:i];
         }
@@ -191,6 +211,7 @@
     fileRow.spacing = 8;
     self.firmwareRow = fileRow;
     self.radioPreviewBox = [self buildRadioPreviewBox];
+    self.powerSafetyBox = [self buildPowerSafetyBox];
 
     // Time synchronization is a separate operation in normal radio mode.
     self.timeZoneMenu = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
@@ -246,6 +267,20 @@
 
     __weak AppDelegate *weakSelf = self;
 
+    // Telemetry Controller
+    self.telemetryController = [Lab599TelemetryController new];
+    self.telemetryController.selectedPortProvider = ^NSString * { return weakSelf.hasPorts ? weakSelf.portMenu.selectedItem.title : nil; };
+    self.telemetryController.logHandler = ^(NSString *message) { [weakSelf appendLog:message]; };
+    self.telemetryController.onTelemetryData = ^(TXTelemetryData *data) {
+        if (data.voltage > 7.0) {
+            weakSelf.lastDetectedVoltage = data.voltage;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf updatePowerSafetyUI];
+            });
+        }
+    };
+    self.telemetryController.view.hidden = YES;
+
     self.tools = [Lab599ToolsController new];
     self.tools.window = self.window;
     self.tools.selectedPort = ^NSString * { return weakSelf.hasPorts ? weakSelf.portMenu.selectedItem.title : nil; };
@@ -276,10 +311,20 @@
     self.docsController.activityChanged = ^(BOOL busy) { [weakSelf setToolsBusy:busy]; };
     self.docsController.view.hidden = YES;
 
+    // Feedback & Suggestion Controller
+    self.feedbackController = [Lab599FeedbackController new];
+    self.feedbackController.window = self.window;
+    self.feedbackController.selectedPortProvider = ^NSString * { return weakSelf.hasPorts ? weakSelf.portMenu.selectedItem.title : nil; };
+    self.feedbackController.log = ^(NSString *message) { [weakSelf appendLog:message]; };
+    self.feedbackController.statusChanged = ^(NSString *message, double progress) {
+        weakSelf.statusLabel.stringValue = message; weakSelf.progressBar.doubleValue = progress;
+    };
+    self.feedbackController.view.hidden = YES;
+
     // Main Layout Stack
     NSStackView *stack = [NSStackView stackViewWithViews:@[
         heading, self.operationPicker, instructions,
-        portRow, fileRow, self.radioPreviewBox, timeRow, self.tools.view, self.driverController.view, self.docsController.view,
+        portRow, fileRow, self.radioPreviewBox, self.powerSafetyBox, timeRow, self.telemetryController.view, self.tools.view, self.driverController.view, self.docsController.view, self.feedbackController.view,
         self.progressBar, self.statusLabel,
         buttonRow,
         [self label:@"Diagnostic log:"], scroll
@@ -298,22 +343,53 @@
         [stack.bottomAnchor constraintLessThanOrEqualToAnchor:self.window.contentView.bottomAnchor constant:-24],
         [instructions.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.radioPreviewBox.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
+        [self.powerSafetyBox.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
+        [self.telemetryController.view.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.tools.view.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.driverController.view.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.docsController.view.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
+        [self.feedbackController.view.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.progressBar.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.statusLabel.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [scroll.widthAnchor constraintEqualToAnchor:stack.widthAnchor]
     ]];
 
-    [self appendLog:@"Lab599 Utility 2.6 initialized."];
+    [self appendLog:@"Lab599 Utility 2.7 initialized."];
     [self appendLog:@"BL20 protocol engine ready: 57600 baud, 8N1, two-ACK header+payload cycle."];
     [self appendLog:@"TimeSync ready: 9600 baud, TM set/query with clock read-back verification."];
     [self refreshPorts:nil];
     [self updateClockPreview:nil];
     self.clockTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateClockPreview:) userInfo:nil repeats:YES];
+    if ([[NSProcessInfo processInfo].arguments containsObject:@"--telemetry-demo"]) {
+        self.operationPicker.selectedSegment = 2;
+        [self operationChanged:self.operationPicker];
+        [self.telemetryController startDemoMonitoring];
+    }
+    if ([[NSProcessInfo processInfo].arguments containsObject:@"--feedback"]) {
+        self.operationPicker.selectedSegment = 8;
+        [self operationChanged:self.operationPicker];
+    }
+    for (NSUInteger i = 0; i < [NSProcessInfo processInfo].arguments.count; i++) {
+        if ([[NSProcessInfo processInfo].arguments[i] isEqualToString:@"--load-firmware"] && i + 1 < [NSProcessInfo processInfo].arguments.count) {
+            NSString *fwPath = [NSProcessInfo processInfo].arguments[i + 1];
+            NSURL *url = [NSURL fileURLWithPath:fwPath];
+            NSData *data = [NSData dataWithContentsOfURL:url];
+            if (data) {
+                [self setLoadedFirmwareURL:url firmwareData:data isOnlineDownload:NO];
+            }
+        } else if ([[NSProcessInfo processInfo].arguments[i] isEqualToString:@"--battery-sim"] && i + 1 < [NSProcessInfo processInfo].arguments.count) {
+            double v = [[NSProcessInfo processInfo].arguments[i + 1] doubleValue];
+            if (v > 0) {
+                self.lastDetectedVoltage = v;
+                [self updatePowerSafetyUI];
+            }
+        }
+    }
     [self.window makeKeyAndOrderFront:nil];
     [NSApp activateIgnoringOtherApps:YES];
+    if ([[NSProcessInfo processInfo].arguments containsObject:@"--about"]) {
+        [self showAboutWindow:nil];
+    }
 }
 
 #pragma mark - Serial Ports
@@ -366,18 +442,32 @@
     self.clockPreview.stringValue = [NSString stringWithFormat:@"%@  (%@)", time, zone.name];
 }
 
+- (void)selectFeedbackTab:(id)sender {
+    (void)sender;
+    self.operationPicker.selectedSegment = 8;
+    [self operationChanged:self.operationPicker];
+}
+
 - (void)operationChanged:(id)sender {
     (void)sender;
     if (self.busy) return;
     NSInteger operation = self.operationPicker.selectedSegment;
     BOOL isFW = (operation == 0);
     BOOL isSync = (operation == 1);
-    BOOL isTools = (operation >= 2 && operation <= 4);
-    BOOL isDriver = (operation == 5);
-    BOOL isDocs = (operation == 6);
+    BOOL isTelemetry = (operation == 2);
+    BOOL isTools = (operation >= 3 && operation <= 5);
+    BOOL isDriver = (operation == 6);
+    BOOL isDocs = (operation == 7);
+    BOOL isFeedback = (operation == 8);
+
+    if (!isTelemetry && self.telemetryController.engine.isRunning) {
+        [self.telemetryController stopMonitoring];
+    }
+
+    self.telemetryController.view.hidden = !isTelemetry;
 
     self.tools.view.hidden = !isTools;
-    if (isTools) [self.tools selectTool:operation - 2];
+    if (isTools) [self.tools selectTool:operation - 3];
 
     self.driverController.view.hidden = !isDriver;
     if (isDriver) [self.driverController checkDriverStatus];
@@ -385,9 +475,13 @@
     self.docsController.view.hidden = !isDocs;
     if (isDocs) [self.docsController refreshLocalAvailability];
 
-    self.portRow.hidden = (isDriver || isDocs);
+    self.feedbackController.view.hidden = !isFeedback;
+    if (isFeedback) [self.feedbackController refreshDiagnostics];
+
+    self.portRow.hidden = (isDriver || isDocs || isFeedback);
     self.firmwareRow.hidden = !isFW;
     self.radioPreviewBox.hidden = !isFW;
+    self.powerSafetyBox.hidden = !isFW;
     self.timeRow.hidden = !isSync;
 
     self.updateButton.hidden = !isFW;
@@ -395,6 +489,7 @@
     self.updateButton.keyEquivalent = isFW ? @"\r" : @"";
     self.syncButton.keyEquivalent = isSync ? @"\r" : @"";
     self.progressBar.doubleValue = 0;
+    self.progressBar.hidden = (isTelemetry || isFeedback);
 
     if (isFW) {
         self.instructions.stringValue = @"Connect the CAT-USB cable and stable external power. Close other radio applications. On your transceiver (TX-500 Discovery / TX-500MP), hold the third top function key while pressing POWER. Start only when the screen displays \"The loader is waiting...\". Keep power and cable connected until completion.";
@@ -402,6 +497,9 @@
     } else if (isSync) {
         self.instructions.stringValue = @"Turn the radio on normally with POWER. Connect the CAT-USB cable, use CAT at 9600 baud, and close other radio applications. Choose Mac local time or UTC below. Synchronization uses your Mac's clock; check its accuracy in System Settings. No firmware file is needed.";
         self.statusLabel.stringValue = @"Ready to synchronize the radio clock in normal operating mode.";
+    } else if (isTelemetry) {
+        self.instructions.stringValue = @"Live diagnostic telemetry monitoring for Lab599 TX-500 Discovery / TX-500MP. Displays real-time RF output power, antenna SWR, supply/battery voltage, current consumption, and PA temperature via Kenwood / LAB599 CAT protocol.";
+        self.statusLabel.stringValue = @"Ready. Select CAT serial port or enable Demo Mode to observe live telemetry meters.";
     } else if (isTools) {
         self.instructions.stringValue = @"Turn the radio on normally. Connect its CAT-USB cable, set CAT to 9600 baud and close other radio applications.";
         self.statusLabel.stringValue = @"Ready. File editing and backup saving also work without a connected radio.";
@@ -411,6 +509,9 @@
     } else if (isDocs) {
         self.instructions.stringValue = @"Official Lab599 product documentation, user manuals, firmware releases, utilities, and drivers. Download directly or open local copies.";
         self.statusLabel.stringValue = @"Browse and download official Lab599 resources.";
+    } else if (isFeedback) {
+        self.instructions.stringValue = @"Share your feedback, feature requests, or report bugs directly to GitHub Issues. Callsign and contact info are saved locally for convenience.";
+        self.statusLabel.stringValue = @"Ready to prepare and submit feedback to GitHub Issues.";
     }
     [self updateClockPreview:nil];
 }
@@ -479,26 +580,26 @@
 
 #pragma mark - Radio Hardware Preview (Firmware Update)
 
-- (NSImage *)loadRadioImage {
-    NSImage *image = [NSImage imageNamed:@"tx500_radio"];
+- (NSImage *)loadRadioImageNamed:(NSString *)name {
+    if (!name.length) name = @"tx500_radio";
+    NSImage *image = [NSImage imageNamed:name];
     if (image) return image;
-    NSString *resPath = [[NSBundle mainBundle] pathForResource:@"tx500_radio" ofType:@"png"];
+    NSString *resPath = [[NSBundle mainBundle] pathForResource:name ofType:@"png"];
     if (resPath && [[NSFileManager defaultManager] fileExistsAtPath:resPath]) {
         image = [[NSImage alloc] initWithContentsOfFile:resPath];
         if (image) return image;
     }
     NSString *bundleDir = [[NSBundle mainBundle] bundlePath];
+    NSString *filename = [name stringByAppendingPathExtension:@"png"];
     NSArray<NSString *> *candidates = @[
-        [bundleDir stringByAppendingPathComponent:@"Contents/Resources/tx500_radio.png"],
-        @"Resources/tx500_radio.png",
-        @"../Resources/tx500_radio.png",
-        @"assets/tx500_radio.png",
-        @"../assets/tx500_radio.png",
-        @"Manual/tx500_radio_discovery.png",
-        @"../Manual/tx500_radio_discovery.png",
-        @"/Users/factoreal/Downloads/TX-500/Updater/Resources/tx500_radio.png",
-        @"/Users/factoreal/Downloads/TX-500/Updater/assets/tx500_radio.png",
-        @"/Users/factoreal/Downloads/TX-500/Manual/tx500_radio_discovery.png"
+        [bundleDir stringByAppendingPathComponent:[NSString stringWithFormat:@"Contents/Resources/%@", filename]],
+        [NSString stringWithFormat:@"Resources/%@", filename],
+        [NSString stringWithFormat:@"../Resources/%@", filename],
+        [NSString stringWithFormat:@"assets/%@", filename],
+        [NSString stringWithFormat:@"../assets/%@", filename],
+        [NSString stringWithFormat:@"/Users/factoreal/Downloads/TX-500/Updater/Resources/%@", filename],
+        [NSString stringWithFormat:@"/Users/factoreal/Downloads/TX-500/Updater/assets/%@", filename],
+        [NSString stringWithFormat:@"/Users/factoreal/Downloads/TX-500/Manual/%@", filename]
     ];
     for (NSString *path in candidates) {
         if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
@@ -507,6 +608,10 @@
         }
     }
     return nil;
+}
+
+- (NSImage *)loadRadioImage {
+    return [self loadRadioImageNamed:@"tx500_radio"];
 }
 
 - (NSBox *)buildRadioPreviewBox {
@@ -562,30 +667,172 @@
     return box;
 }
 
+- (NSBox *)buildPowerSafetyBox {
+    NSBox *box = [NSBox new];
+    box.titlePosition = NSNoTitle;
+    box.boxType = NSBoxCustom;
+    box.cornerRadius = 8.0;
+    box.borderWidth = 1.0;
+    box.borderColor = [NSColor separatorColor];
+    box.fillColor = [NSColor controlBackgroundColor];
+    box.translatesAutoresizingMaskIntoConstraints = NO;
+
+    self.powerSafetyTitleLabel = [NSTextField labelWithString:@"⚡ Power Requirement: 9–15V DC (Stable External Power Recommended)"];
+    self.powerSafetyTitleLabel.font = [NSFont systemFontOfSize:12 weight:NSFontWeightBold];
+    self.powerSafetyTitleLabel.textColor = [NSColor labelColor];
+
+    self.powerSafetyDescLabel = [NSTextField wrappingLabelWithString:@"Note for BP-500/550 Battery Pack: In bootloader mode (\"The loader is waiting...\"), the transceiver does not detect the Battery Pack and powers off automatically after 10 seconds. Connect external power (13.8V DC) or keep the Battery Pack PWR button held continuously throughout the update."];
+    self.powerSafetyDescLabel.font = [NSFont systemFontOfSize:11];
+    self.powerSafetyDescLabel.textColor = [NSColor secondaryLabelColor];
+
+    self.powerCheckButton = [NSButton buttonWithTitle:@"Check Radio Voltage" target:self action:@selector(checkPowerStatus:)];
+    self.powerCheckButton.bezelStyle = NSBezelStyleRounded;
+    self.powerCheckButton.controlSize = NSControlSizeSmall;
+    self.powerCheckButton.font = [NSFont systemFontOfSize:11];
+
+    NSStackView *vStack = [NSStackView stackViewWithViews:@[self.powerSafetyTitleLabel, self.powerSafetyDescLabel]];
+    vStack.orientation = NSUserInterfaceLayoutOrientationVertical;
+    vStack.alignment = NSLayoutAttributeLeading;
+    vStack.spacing = 3;
+    vStack.translatesAutoresizingMaskIntoConstraints = NO;
+
+    NSStackView *hStack = [NSStackView stackViewWithViews:@[vStack, self.powerCheckButton]];
+    hStack.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+    hStack.alignment = NSLayoutAttributeCenterY;
+    hStack.spacing = 12;
+    hStack.translatesAutoresizingMaskIntoConstraints = NO;
+    [box.contentView addSubview:hStack];
+
+    [NSLayoutConstraint activateConstraints:@[
+        [hStack.leadingAnchor constraintEqualToAnchor:box.contentView.leadingAnchor constant:12],
+        [hStack.trailingAnchor constraintEqualToAnchor:box.contentView.trailingAnchor constant:-12],
+        [hStack.topAnchor constraintEqualToAnchor:box.contentView.topAnchor constant:8],
+        [hStack.bottomAnchor constraintEqualToAnchor:box.contentView.bottomAnchor constant:-8],
+        [vStack.trailingAnchor constraintEqualToAnchor:self.powerCheckButton.leadingAnchor constant:-12]
+    ]];
+
+    return box;
+}
+
+- (void)updatePowerSafetyUI {
+    if (self.lastDetectedVoltage > 7.0 && self.lastDetectedVoltage <= 12.8) {
+        self.powerSafetyBox.borderColor = [NSColor systemOrangeColor];
+        self.powerSafetyBox.fillColor = [NSColor colorWithSRGBRed:1.0 green:0.5 blue:0.0 alpha:0.08];
+        self.powerSafetyTitleLabel.stringValue = [NSString stringWithFormat:@"⚠️ CAUTION: BP-500/550 Battery Pack Power Detected (%.1f V)", self.lastDetectedVoltage];
+        self.powerSafetyTitleLabel.textColor = [NSColor systemOrangeColor];
+        self.powerSafetyDescLabel.stringValue = @"Transceiver is running on Battery Pack! In bootloader mode (\"The loader is waiting...\"), the radio does NOT detect the Battery Pack and switches off automatically after 10 seconds. Connect an external power supply (13.8V DC) or keep the Battery Pack PWR button firmly held down for the entire update.";
+        self.powerSafetyDescLabel.textColor = [NSColor labelColor];
+    } else if (self.lastDetectedVoltage > 13.0) {
+        self.powerSafetyBox.borderColor = [NSColor colorWithSRGBRed:0.2 green:0.7 blue:0.3 alpha:0.8];
+        self.powerSafetyBox.fillColor = [NSColor colorWithSRGBRed:0.1 green:0.7 blue:0.2 alpha:0.08];
+        self.powerSafetyTitleLabel.stringValue = [NSString stringWithFormat:@"✓ Stable External DC Power Verified (%.1f V)", self.lastDetectedVoltage];
+        self.powerSafetyTitleLabel.textColor = [NSColor colorWithSRGBRed:0.1 green:0.65 blue:0.25 alpha:1.0];
+        self.powerSafetyDescLabel.stringValue = @"External DC power supply detected. Voltage is within optimal operating range (9–15V) for firmware updating.";
+        self.powerSafetyDescLabel.textColor = [NSColor secondaryLabelColor];
+    } else {
+        self.powerSafetyBox.borderColor = [NSColor separatorColor];
+        self.powerSafetyBox.fillColor = [NSColor controlBackgroundColor];
+        self.powerSafetyTitleLabel.stringValue = @"⚡ Power Requirement: 9–15V DC (External Power Recommended)";
+        self.powerSafetyTitleLabel.textColor = [NSColor labelColor];
+        self.powerSafetyDescLabel.stringValue = @"Note for BP-500/550 Battery Pack: In bootloader mode (\"The loader is waiting...\"), the transceiver does not detect the Battery Pack and powers off automatically after 10 seconds. Connect external power (13.8V DC) or keep the Battery Pack PWR button held continuously throughout the update.";
+        self.powerSafetyDescLabel.textColor = [NSColor secondaryLabelColor];
+    }
+}
+
+- (void)checkPowerStatus:(id)sender {
+    (void)sender;
+    if (self.busy) return;
+    NSString *port = self.portMenu.selectedItem.title;
+    if (!self.hasPorts || ![port hasPrefix:@"/dev/cu."]) {
+        [self showAlert:@"Serial Port Required" message:@"Please select a valid radio serial port first." warning:YES];
+        return;
+    }
+
+    [self appendLog:[NSString stringWithFormat:@"Probing radio power status via CAT on %@...", port]];
+    self.powerCheckButton.enabled = NO;
+
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        NSError *err = nil;
+        Lab599SerialPort *sp = [Lab599SerialPort openPath:port speed:B9600 error:&err];
+        double probedVolts = 0.0;
+        if (sp) {
+            [sp writeData:[@"RM5;\r" dataUsingEncoding:NSASCIIStringEncoding] timeout:0.5 cancellation:nil error:nil];
+            NSData *reply = [sp readMaximum:64 timeout:0.5 cancellation:nil error:nil];
+            [sp close];
+            if (reply.length > 0) {
+                NSString *str = [[NSString alloc] initWithData:reply encoding:NSASCIIStringEncoding];
+                if ([str containsString:@"RM5"]) {
+                    NSString *numStr = [[str componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""];
+                    if (numStr.length > 1) {
+                        int val = [numStr substringFromIndex:1].intValue;
+                        if (val > 50 && val < 200) probedVolts = val / 10.0;
+                        else if (val <= 30) probedVolts = 9.0 + ((val / 30.0) * 6.0);
+                    }
+                }
+            }
+        }
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.powerCheckButton.enabled = YES;
+            if (probedVolts > 7.0) {
+                self.lastDetectedVoltage = probedVolts;
+                [self updatePowerSafetyUI];
+                [self appendLog:[NSString stringWithFormat:@"CAT power check successful: Voltage = %.1f V (%@)",
+                    probedVolts, (probedVolts <= 12.8 ? @"BP-500/550 Battery Pack" : @"External DC Power Supply")]];
+            } else {
+                [self appendLog:@"CAT power check: Radio did not respond to CAT query. The radio may already be in Loader mode, off, or at a different baud rate."];
+            }
+        });
+    });
+}
+
 - (void)updateRadioPreviewForFirmwareData:(NSData *)data url:(NSURL *)url {
     if (!data || data.length < 16) {
+        self.radioImageView.image = [self loadRadioImageNamed:@"tx500_radio"];
         self.radioModelLabel.stringValue = @"Target Radio: Lab599 Discovery TX-500";
+        self.radioSpecsLabel.stringValue = @"Target Specs: 256×128 Monochrome LCD • 32-bit Floating-Point DSP • All-Aluminum CNC Waterproof Chassis";
         self.radioCompatibilityBadge.stringValue = @"● Model Verification: Select or download a .fw file above to verify radio compatibility.";
         self.radioCompatibilityBadge.textColor = NSColor.secondaryLabelColor;
         return;
     }
 
     const uint8_t *bytes = (const uint8_t *)data.bytes;
-    BOOL isDiscovery = (memcmp(bytes + 12, "\xaa\xb4\x1a\xc6", 4) == 0);
-    BOOL isMP = (memcmp(bytes + 12, "\x96\x3b\xcd\xf4", 4) == 0) || [url.lastPathComponent containsString:@"MP"];
+    NSString *nameLower = url.lastPathComponent.lowercaseString;
+    NSString *pathLower = url.path.lowercaseString;
+
+    BOOL isAltai = [nameLower containsString:@"altai"] || [nameLower containsString:@"_alt"] || [pathLower containsString:@"altai"];
+    BOOL isPro = !isAltai && ([nameLower containsString:@"pro"] || [pathLower containsString:@"tx500pro"]);
+    BOOL isMP = !isPro && !isAltai && ((memcmp(bytes + 12, "\x96\x3b\xcd\xf4", 4) == 0) || [nameLower containsString:@"mp"] || [pathLower containsString:@"tx500mp"]);
+    BOOL isDiscovery = (memcmp(bytes + 12, "\xaa\xb4\x1a\xc6", 4) == 0) && !isPro && !isAltai && !isMP;
 
     if (isDiscovery) {
+        self.radioImageView.image = [self loadRadioImageNamed:@"tx500_radio"];
         self.radioModelLabel.stringValue = @"Target Radio: Lab599 Discovery TX-500";
         self.radioSpecsLabel.stringValue = @"256×128 Monochrome LCD • 32-bit Floating-Point DSP • All-Aluminum CNC Waterproof Chassis";
         self.radioCompatibilityBadge.stringValue = @"✓ Hardware Match Confirmed: Lab599 TX-500 Discovery (BL20 Model ID: 0xc61ab4aa)";
         self.radioCompatibilityBadge.textColor = [NSColor colorWithSRGBRed:0.1 green:0.65 blue:0.25 alpha:1.0];
+    } else if (isAltai) {
+        self.radioImageView.image = [self loadRadioImageNamed:@"tx500_pro_altai"] ?: [self loadRadioImage];
+        self.radioModelLabel.stringValue = @"Target Radio: Lab599 TX-500PRO ALTAI";
+        self.radioSpecsLabel.stringValue = @"Keypad Arrow Navigation • Channelized ALTAI OS • Commercial / Tactical Waterproof Transceiver";
+        self.radioCompatibilityBadge.stringValue = @"✓ Hardware Match Confirmed: Lab599 TX-500PRO ALTAI (Firmware: ALTAI Commercial OS)";
+        self.radioCompatibilityBadge.textColor = [NSColor colorWithSRGBRed:0.1 green:0.65 blue:0.25 alpha:1.0];
+    } else if (isPro) {
+        self.radioImageView.image = [self loadRadioImageNamed:@"tx500_pro"] ?: [self loadRadioImage];
+        self.radioModelLabel.stringValue = @"Target Radio: Lab599 TX-500PRO (Tactical)";
+        self.radioSpecsLabel.stringValue = @"Rotary Volume & Squelch Knobs • TUNE/MULTI Dial • Tactical Audio DSP & Extended Filters";
+        self.radioCompatibilityBadge.stringValue = @"✓ Hardware Match Confirmed: Lab599 TX-500PRO (Firmware: TX-500PRO Tactical)";
+        self.radioCompatibilityBadge.textColor = [NSColor colorWithSRGBRed:0.1 green:0.65 blue:0.25 alpha:1.0];
     } else if (isMP) {
+        self.radioImageView.image = [self loadRadioImageNamed:@"tx500_mp"] ?: [self loadRadioImage];
         self.radioModelLabel.stringValue = @"Target Radio: Lab599 TX-500MP (Manpack)";
-        self.radioSpecsLabel.stringValue = @"192×96 Monochrome LCD • 32-bit Floating-Point DSP • Manpack Form Factor";
+        self.radioSpecsLabel.stringValue = @"192×96 Monochrome LCD • Integrated Battery System • Rugged Manpack Transceiver";
         self.radioCompatibilityBadge.stringValue = @"⚠️ Notice: Firmware is targeted for TX-500MP hardware (BL20 Model ID: 0x963bcdf4). Do not flash to Discovery.";
         self.radioCompatibilityBadge.textColor = [NSColor colorWithSRGBRed:0.85 green:0.45 blue:0.0 alpha:1.0];
     } else {
+        self.radioImageView.image = [self loadRadioImageNamed:@"tx500_radio"];
         self.radioModelLabel.stringValue = @"Target Radio: Custom / Unknown Lab599 Hardware";
+        self.radioSpecsLabel.stringValue = @"Target Specs: Lab599 Transceiver Hardware Platform";
         self.radioCompatibilityBadge.stringValue = @"⚠️ Unrecognized Hardware ID. Verify model before flashing.";
         self.radioCompatibilityBadge.textColor = NSColor.systemOrangeColor;
     }
@@ -878,7 +1125,7 @@
         NSTextField *appName = [self label:@"Lab599 Utility"];
         appName.font = [NSFont systemFontOfSize:20 weight:NSFontWeightBold];
 
-        NSTextField *appVer = [self label:@"Version 2.6 (Build 12, Universal macOS)"];
+        NSTextField *appVer = [self label:@"Version 2.7 (Build 13, Universal macOS)"];
         appVer.textColor = NSColor.secondaryLabelColor;
         appVer.font = [NSFont systemFontOfSize:13 weight:NSFontWeightMedium];
 
@@ -906,13 +1153,15 @@
         boxTitle.font = [NSFont systemFontOfSize:12 weight:NSFontWeightBold];
 
         NSTextField *featuresList = [NSTextField wrappingLabelWithString:
+            @"• Live Radio Telemetry Dashboard: supply voltage, current drain, RF power, SWR & PA temp\n"
             @"• Firmware Updates with automatic MCU model detection (Discovery vs MP) & BL20 verification\n"
             @"• Precision Real-Time Clock (RTC) synchronization with host time / UTC\n"
             @"• Real-time CAT command terminal and transceiver diagnostics\n"
             @"• EEPROM Settings backup, restore & side-by-side visual diff comparison\n"
             @"• 100-channel memory manager, operating profiles (SOTA/POTA, FT8, Contest) & CSV import/export\n"
             @"• FTDI D2XX USB serial driver installation & system diagnostics\n"
-            @"• Official Lab599 documentation, schematics & firmware downloads library"];
+            @"• Official Lab599 documentation, schematics & firmware downloads library\n"
+            @"• Direct GitHub Issue reporter for feature suggestions, feedback & bug reports"];
         featuresList.textColor = NSColor.labelColor;
         featuresList.font = [NSFont systemFontOfSize:11];
 
@@ -1035,12 +1284,44 @@
         return;
     }
 
+    if (self.lastDetectedVoltage > 7.0 && self.lastDetectedVoltage <= 12.8) {
+        NSAlert *batteryAlert = [NSAlert new];
+        batteryAlert.alertStyle = NSAlertStyleCritical;
+        batteryAlert.messageText = @"⚠️ Critical Warning: BP-500/550 Battery Pack Detected!";
+        batteryAlert.informativeText = [NSString stringWithFormat:
+            @"The transceiver is running on battery power (detected: %.1f V).\n\n"
+            @"CRITICAL SAFETY NOTICE (Lab599 User Manual):\n"
+            @"\"Note for transceivers equipped with a BP-500/550 Battery Pack: in bootloader mode, the transceiver does not detect the Battery Pack. Since no data communication occurs for 10 seconds, the battery pack switches off automatically.\"\n\n"
+            @"An unexpected power shutdown during firmware writing will corrupt the firmware and may brick your radio!\n\n"
+            @"REQUIRED ACTION:\n"
+            @"1. Connect the transceiver to an external DC power supply (9–15 V, recommended 13.8 V).\n"
+            @"— OR —\n"
+            @"2. If flashing on battery pack, you MUST hold down the PWR button on the Battery Pack continuously during the ENTIRE update process.\n\n"
+            @"Are you holding the Battery Pack PWR button, or ready to connect external power?",
+            self.lastDetectedVoltage];
+        [batteryAlert addButtonWithTitle:@"I am holding Battery PWR button — Proceed"];
+        [batteryAlert addButtonWithTitle:@"Cancel Update (Connect External Power)"];
+        if ([batteryAlert runModal] != NSAlertFirstButtonReturn) {
+            [self appendLog:@"Update cancelled by user to connect external power supply."];
+            return;
+        }
+    }
+
     NSAlert *confirmation = [NSAlert new];
     confirmation.alertStyle = NSAlertStyleWarning;
     confirmation.messageText = @"Start the firmware update?";
+    NSString *powerInfo = nil;
+    if (self.lastDetectedVoltage > 13.0) {
+        powerInfo = [NSString stringWithFormat:@"Power Source: External DC Power Supply (%.1f V) verified stable.", self.lastDetectedVoltage];
+    } else if (self.lastDetectedVoltage > 7.0) {
+        powerInfo = [NSString stringWithFormat:@"Power Source: BP-500/550 Battery Pack (%.1f V) — Ensure PWR button is held!", self.lastDetectedVoltage];
+    } else {
+        powerInfo = @"Power Source: 9–15V DC external power required (Hold Battery Pack PWR if on BP-500/550).";
+    }
+
     confirmation.informativeText = [NSString stringWithFormat:
-        @"Firmware: %@\nPort: %@\n\nThe transceiver must display \"The loader is waiting...\" and have stable external power. Keep power and USB cable firmly connected throughout the update.",
-        self.firmwareURL.lastPathComponent, port];
+        @"Firmware: %@\nPort: %@\n%@\n\nThe transceiver must display \"The loader is waiting...\". Keep power and USB cable firmly connected throughout the update.",
+        self.firmwareURL.lastPathComponent, port, powerInfo];
     [confirmation addButtonWithTitle:@"Start Update"];
     [confirmation addButtonWithTitle:@"Cancel"];
     if ([confirmation runModal] != NSAlertFirstButtonReturn) return;
@@ -1114,6 +1395,7 @@
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
     (void)sender;
+    [self.telemetryController stopMonitoring];
     if (!self.busy) return [self.tools confirmDiscard] ? NSTerminateNow : NSTerminateCancel;
     NSBeep();
     return NSTerminateCancel;
