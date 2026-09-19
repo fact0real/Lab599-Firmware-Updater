@@ -6,7 +6,7 @@
 #import <termios.h>
 #import <unistd.h>
 #import <math.h>
-#import "../TX500TimeSync.h"
+#import "../Headers/TX500TimeSync.h"
 
 static void Check(BOOL passed, NSString *message) {
     if (!passed) { fprintf(stderr, "FAIL: %s\n", message.UTF8String); exit(1); }

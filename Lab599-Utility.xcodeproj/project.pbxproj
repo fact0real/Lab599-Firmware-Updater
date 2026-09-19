@@ -10,16 +10,19 @@
 		10000001 /* Lab599Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000001 /* Lab599Utility.m */; };
 		10000002 /* Lab599FirmwareCatalog.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000002 /* Lab599FirmwareCatalog.m */; };
 		10000003 /* TX500Transfer.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000003 /* TX500Transfer.m */; };
-		10000004 /* assets/AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 20000004 /* assets/AppIcon.icns */; };
+		10000004 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 20000004 /* AppIcon.icns */; };
 		10000005 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20000005 /* Cocoa.framework */; };
 		10000006 /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20000006 /* UniformTypeIdentifiers.framework */; };
 		10000007 /* TX500TimeSync.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000007 /* TX500TimeSync.m */; };
-		10000030 /* Lab599SerialPort.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000030; };
-		10000031 /* TX500CATTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000031; };
-		10000032 /* TX500Configuration.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000032; };
-		10000033 /* Lab599ToolsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000033; };
-		10000034 /* Lab599DriverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000034; };
-		10000035 /* Lab599DocsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000035; };
+		10000008 /* tx500_radio.png in Resources */ = {isa = PBXBuildFile; fileRef = 20000008 /* tx500_radio.png */; };
+		10000009 /* ftdi in Resources */ = {isa = PBXBuildFile; fileRef = 20000009 /* ftdi */; };
+		10000030 /* Lab599SerialPort.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000030 /* Lab599SerialPort.m */; };
+		10000031 /* TX500CATTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000031 /* TX500CATTest.m */; };
+		10000032 /* TX500Configuration.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000032 /* TX500Configuration.m */; };
+		10000033 /* Lab599ToolsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000033 /* Lab599ToolsController.m */; };
+		10000034 /* Lab599DriverController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000034 /* Lab599DriverController.m */; };
+		10000035 /* Lab599DocsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000035 /* Lab599DocsController.m */; };
+		10000036 /* TX500ProfilesAndBackup.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000036 /* TX500ProfilesAndBackup.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,26 +30,30 @@
 		20000001 /* Lab599Utility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Lab599Utility.m; sourceTree = "<group>"; };
 		20000002 /* Lab599FirmwareCatalog.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Lab599FirmwareCatalog.m; sourceTree = "<group>"; };
 		20000003 /* TX500Transfer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TX500Transfer.m; sourceTree = "<group>"; };
-		20000004 /* assets/AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = assets/AppIcon.icns; sourceTree = "<group>"; };
+		20000004 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
 		20000005 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		20000006 /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
+		20000007 /* TX500TimeSync.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TX500TimeSync.m; sourceTree = "<group>"; };
+		20000008 /* tx500_radio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tx500_radio.png; sourceTree = "<group>"; };
+		20000009 /* ftdi */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ftdi; sourceTree = "<group>"; };
 		20000011 /* Lab599FirmwareCatalog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lab599FirmwareCatalog.h; sourceTree = "<group>"; };
 		20000012 /* TX500Transfer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500Transfer.h; sourceTree = "<group>"; };
-		20000020 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		20000007 /* TX500TimeSync.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TX500TimeSync.m; sourceTree = "<group>"; };
 		20000013 /* TX500TimeSync.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500TimeSync.h; sourceTree = "<group>"; };
+		20000020 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		20000030 /* Lab599SerialPort.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Lab599SerialPort.m; sourceTree = "<group>"; };
-		20000040 /* Lab599SerialPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lab599SerialPort.h; sourceTree = "<group>"; };
 		20000031 /* TX500CATTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TX500CATTest.m; sourceTree = "<group>"; };
-		20000041 /* TX500CATTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500CATTest.h; sourceTree = "<group>"; };
 		20000032 /* TX500Configuration.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TX500Configuration.m; sourceTree = "<group>"; };
-		20000042 /* TX500Configuration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500Configuration.h; sourceTree = "<group>"; };
 		20000033 /* Lab599ToolsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Lab599ToolsController.m; sourceTree = "<group>"; };
-		20000043 /* Lab599ToolsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lab599ToolsController.h; sourceTree = "<group>"; };
 		20000034 /* Lab599DriverController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Lab599DriverController.m; sourceTree = "<group>"; };
-		20000044 /* Lab599DriverController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lab599DriverController.h; sourceTree = "<group>"; };
 		20000035 /* Lab599DocsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Lab599DocsController.m; sourceTree = "<group>"; };
+		20000036 /* TX500ProfilesAndBackup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TX500ProfilesAndBackup.m; sourceTree = "<group>"; };
+		20000040 /* Lab599SerialPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lab599SerialPort.h; sourceTree = "<group>"; };
+		20000041 /* TX500CATTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500CATTest.h; sourceTree = "<group>"; };
+		20000042 /* TX500Configuration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500Configuration.h; sourceTree = "<group>"; };
+		20000043 /* Lab599ToolsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lab599ToolsController.h; sourceTree = "<group>"; };
+		20000044 /* Lab599DriverController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lab599DriverController.h; sourceTree = "<group>"; };
 		20000045 /* Lab599DocsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lab599DocsController.h; sourceTree = "<group>"; };
+		20000046 /* TX500ProfilesAndBackup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500ProfilesAndBackup.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,15 +86,17 @@
 				20000001 /* Lab599Utility.m */,
 				20000002 /* Lab599FirmwareCatalog.m */,
 				20000003 /* TX500Transfer.m */,
+				20000007 /* TX500TimeSync.m */,
 				20000030 /* Lab599SerialPort.m */,
 				20000031 /* TX500CATTest.m */,
 				20000032 /* TX500Configuration.m */,
+				20000036 /* TX500ProfilesAndBackup.m */,
 				20000033 /* Lab599ToolsController.m */,
 				20000034 /* Lab599DriverController.m */,
 				20000035 /* Lab599DocsController.m */,
-				20000007 /* TX500TimeSync.m */,
 			);
 			name = Sources;
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		40000003 /* Headers */ = {
@@ -95,24 +104,29 @@
 			children = (
 				20000011 /* Lab599FirmwareCatalog.h */,
 				20000012 /* TX500Transfer.h */,
+				20000013 /* TX500TimeSync.h */,
 				20000040 /* Lab599SerialPort.h */,
 				20000041 /* TX500CATTest.h */,
 				20000042 /* TX500Configuration.h */,
+				20000046 /* TX500ProfilesAndBackup.h */,
 				20000043 /* Lab599ToolsController.h */,
 				20000044 /* Lab599DriverController.h */,
 				20000045 /* Lab599DocsController.h */,
-				20000013 /* TX500TimeSync.h */,
 			);
 			name = Headers;
+			path = Headers;
 			sourceTree = "<group>";
 		};
 		40000004 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				20000004 /* assets/AppIcon.icns */,
+				20000004 /* AppIcon.icns */,
+				20000008 /* tx500_radio.png */,
+				20000009 /* ftdi */,
 				20000020 /* Info.plist */,
 			);
 			name = Resources;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		40000005 /* Frameworks */ = {
@@ -166,7 +180,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 60000003 /* Build configuration list for PBXProject "Lab599-Updater" */;
+			buildConfigurationList = 60000003 /* Build configuration list for PBXProject "Lab599-Utility" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -189,7 +203,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				10000004 /* assets/AppIcon.icns in Resources */,
+				10000004 /* AppIcon.icns in Resources */,
+				10000008 /* tx500_radio.png in Resources */,
+				10000009 /* ftdi in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,13 +219,14 @@
 				10000001 /* Lab599Utility.m in Sources */,
 				10000002 /* Lab599FirmwareCatalog.m in Sources */,
 				10000003 /* TX500Transfer.m in Sources */,
+				10000007 /* TX500TimeSync.m in Sources */,
 				10000030 /* Lab599SerialPort.m in Sources */,
 				10000031 /* TX500CATTest.m in Sources */,
 				10000032 /* TX500Configuration.m in Sources */,
+				10000036 /* TX500ProfilesAndBackup.m in Sources */,
 				10000033 /* Lab599ToolsController.m in Sources */,
 				10000034 /* Lab599DriverController.m in Sources */,
 				10000035 /* Lab599DocsController.m in Sources */,
-				10000007 /* TX500TimeSync.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +286,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/Headers",
+					"$(SRCROOT)/Sources",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -276,6 +298,7 @@
 				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = macosx;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Headers";
 			};
 			name = Debug;
 		};
@@ -326,12 +349,18 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/Headers",
+					"$(SRCROOT)/Sources",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = macosx;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/Headers";
 			};
 			name = Release;
 		};
@@ -342,16 +371,16 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 12;
 				DEAD_CODE_STRIPPING = YES;
-				INFOPLIST_FILE = Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Lab599 Updater & Time Sync";
+				INFOPLIST_FILE = Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Lab599 Utility";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "local.lab599.firmware-updater";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -364,16 +393,16 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 12;
 				DEAD_CODE_STRIPPING = YES;
-				INFOPLIST_FILE = Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Lab599 Updater & Time Sync";
+				INFOPLIST_FILE = Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Lab599 Utility";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "local.lab599.firmware-updater";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -391,7 +420,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		60000003 /* Build configuration list for PBXProject "Lab599-Updater" */ = {
+		60000003 /* Build configuration list for PBXProject "Lab599-Utility" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				70000001 /* Debug */,

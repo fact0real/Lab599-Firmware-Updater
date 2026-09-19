@@ -306,7 +306,7 @@
         [scroll.widthAnchor constraintEqualToAnchor:stack.widthAnchor]
     ]];
 
-    [self appendLog:@"Lab599 Utility 2.5 initialized."];
+    [self appendLog:@"Lab599 Utility 2.6 initialized."];
     [self appendLog:@"BL20 protocol engine ready: 57600 baud, 8N1, two-ACK header+payload cycle."];
     [self appendLog:@"TimeSync ready: 9600 baud, TM set/query with clock read-back verification."];
     [self refreshPorts:nil];
@@ -490,10 +490,13 @@
     NSString *bundleDir = [[NSBundle mainBundle] bundlePath];
     NSArray<NSString *> *candidates = @[
         [bundleDir stringByAppendingPathComponent:@"Contents/Resources/tx500_radio.png"],
+        @"Resources/tx500_radio.png",
+        @"../Resources/tx500_radio.png",
         @"assets/tx500_radio.png",
         @"../assets/tx500_radio.png",
         @"Manual/tx500_radio_discovery.png",
         @"../Manual/tx500_radio_discovery.png",
+        @"/Users/factoreal/Downloads/TX-500/Updater/Resources/tx500_radio.png",
         @"/Users/factoreal/Downloads/TX-500/Updater/assets/tx500_radio.png",
         @"/Users/factoreal/Downloads/TX-500/Manual/tx500_radio_discovery.png"
     ];
@@ -875,7 +878,7 @@
         NSTextField *appName = [self label:@"Lab599 Utility"];
         appName.font = [NSFont systemFontOfSize:20 weight:NSFontWeightBold];
 
-        NSTextField *appVer = [self label:@"Version 2.5 (Build 11, Universal macOS)"];
+        NSTextField *appVer = [self label:@"Version 2.6 (Build 12, Universal macOS)"];
         appVer.textColor = NSColor.secondaryLabelColor;
         appVer.font = [NSFont systemFontOfSize:13 weight:NSFontWeightMedium];
 

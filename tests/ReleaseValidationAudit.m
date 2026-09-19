@@ -1,5 +1,4 @@
-#import <Foundation/Foundation.h>
-#import "../TX500Transfer.h"
+#import "../Headers/TX500Transfer.h"
 
 // A release-readiness check, not a transfer simulation. This file never calls
 // TXFlashFirmware and never opens a serial port. Altered images exist only in

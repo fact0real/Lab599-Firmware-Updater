@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
-#import "../Lab599DriverController.h"
-#import "../Lab599DocsController.h"
+#import "../Headers/Lab599DriverController.h"
+#import "../Headers/Lab599DocsController.h"
 
 static void Check(BOOL ok, NSString *label) {
     if (!ok) {

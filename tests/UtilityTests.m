@@ -4,9 +4,9 @@
 #import <poll.h>
 #import <unistd.h>
 #import <fcntl.h>
-#import "../TX500CATTest.h"
-#import "../TX500Configuration.h"
-#import "../TX500ProfilesAndBackup.h"
+#import "../Headers/TX500CATTest.h"
+#import "../Headers/TX500Configuration.h"
+#import "../Headers/TX500ProfilesAndBackup.h"
 
 static void Check(BOOL ok, NSString *label) { if(!ok) { fprintf(stderr,"FAIL: %s\n",label.UTF8String); exit(1); } }
 static NSData *ASCII(NSString *s) { return [s dataUsingEncoding:NSASCIIStringEncoding]; }

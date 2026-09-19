@@ -62,10 +62,13 @@ static NSBox *CreateCardBox(void) {
     NSString *bundleDir = [[NSBundle mainBundle] bundlePath];
     NSArray<NSString *> *candidates = @[
         [bundleDir stringByAppendingPathComponent:@"Contents/Resources/tx500_radio.png"],
+        @"Resources/tx500_radio.png",
+        @"../Resources/tx500_radio.png",
         @"assets/tx500_radio.png",
         @"../assets/tx500_radio.png",
         @"Manual/tx500_radio_discovery.png",
         @"../Manual/tx500_radio_discovery.png",
+        @"/Users/factoreal/Downloads/TX-500/Updater/Resources/tx500_radio.png",
         @"/Users/factoreal/Downloads/TX-500/Updater/assets/tx500_radio.png",
         @"/Users/factoreal/Downloads/TX-500/Manual/tx500_radio_discovery.png"
     ];
@@ -310,11 +313,15 @@ static NSBox *CreateCardBox(void) {
     NSString *execDir = [[NSBundle mainBundle] bundlePath];
     NSArray<NSString *> *candidates = @[
         [execDir stringByAppendingPathComponent:@"Contents/Resources/ftdi"],
+        [execDir stringByAppendingPathComponent:@"Resources/ftdi"],
+        @"Resources/ftdi",
+        @"../Resources/ftdi",
         [execDir stringByAppendingPathComponent:@"assets/ftdi"],
         @"assets/ftdi",
         @"../assets/ftdi",
         @"../FTDICHIP",
         @"FTDICHIP",
+        @"/Users/factoreal/Downloads/TX-500/Updater/Resources/ftdi",
         @"/Users/factoreal/Downloads/TX-500/Updater/assets/ftdi",
         @"/Users/factoreal/Downloads/TX-500/FTDICHIP"
     ];

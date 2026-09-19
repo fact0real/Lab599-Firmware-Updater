@@ -6,7 +6,7 @@
 #import <sys/ioctl.h>
 #import <termios.h>
 #import <unistd.h>
-#import "../TX500Transfer.h"
+#import "../Headers/TX500Transfer.h"
 
 // A radio-side emulator using a real macOS pseudo-terminal. It implements the
 // two-ACK protocol recovered from the official binaries, not per-byte ACKs.
