@@ -176,6 +176,31 @@ int main(void) { @autoreleasepool {
     CATScenario(@[@"ID019;",@"ID500;",@"ID501;",@"ID502;",@"ID505;"],NO,YES);
     CATScenario(@[@"",@"ID;",@"ID503;",@"ID500;extra",@"ID500;"],NO,NO);
     CATScenario(@[@""],YES,NO);
+
+    // Test interactive CAT execution & radio state parsing
+    int catM, catS; char catPath[256];
+    Check(openpty(&catM, &catS, catPath, NULL, NULL) == 0, @"Interactive CAT pty");
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        // Respond to FA; query
+        uint8_t buf[64];
+        ssize_t n = read(catM, buf, sizeof(buf));
+        if (n > 0) {
+            const char *reply = "FA00014074000;";
+            (void)write(catM, reply, strlen(reply));
+        }
+    });
+    double rtt = 0;
+    NSError *catErr = nil;
+    NSString *catResp = TXExecuteCATCommand(@(catPath), @"FA;", 0.5, &rtt, &catErr);
+    Check(!catErr && [catResp isEqualToString:@"FA00014074000;"] && rtt >= 0, @"Execute CAT command FA;");
+    close(catM); close(catS);
+
+    // Test TXRadioState defaults and copy
+    TXRadioState *state = [TXRadioState new];
+    Check(state.frequencyHz == 14074000 && [state.operatingMode isEqualToString:@"USB"] && state.rfPowerWatts == 10.0, @"RadioState defaults");
+    TXRadioState *stateCopy = [state copy];
+    Check(stateCopy.frequencyHz == state.frequencyHz && [stateCopy.modelID isEqualToString:state.modelID], @"RadioState copy");
+    printf("PASS: Interactive CAT execution and TXRadioState snapshot engine\n");
     for(NSNumber *mem in @[@NO,@YES]) {
         ConfigurationScenario(mem.boolValue,NO,@"fragmented");ConfigurationScenario(mem.boolValue,YES,@"");
         ConfigurationScenario(mem.boolValue,YES,@"mismatch");ConfigurationScenario(mem.boolValue,NO,@"malformed");

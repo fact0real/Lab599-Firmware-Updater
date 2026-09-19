@@ -413,6 +413,8 @@ NSArray<TXMemoryChannel *> *TXImportMemoryFromCSV(NSString *csvString, NSError *
 @implementation TXSettingsComparisonResult
 @end
 
+#import "TX500SettingsModel.h"
+
 TXSettingsComparisonResult *TXCompareSettings(NSData *dataA, NSData *dataB, NSString *nameA, NSString *nameB) {
     TXSettingsComparisonResult *result = [TXSettingsComparisonResult new];
     result.totalSettings = 1024;
@@ -433,6 +435,8 @@ TXSettingsComparisonResult *TXCompareSettings(NSData *dataA, NSData *dataB, NSSt
             item.address = 1000 + i;
             item.valueA = bytesA[i];
             item.valueB = bytesB[i];
+            item.settingName = [TX500SettingsModel descriptionForAddress:item.address];
+            item.category = [TX500SettingsModel categoryForAddress:item.address];
             item.changeDescription = [NSString stringWithFormat:@"%u  ->  %u  (Δ %+d)",
                 bytesA[i], bytesB[i], (int)bytesB[i] - (int)bytesA[i]];
             [diffs addObject:item];

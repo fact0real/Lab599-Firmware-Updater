@@ -14,14 +14,16 @@ int main(void) {
 
         // 1. Data Defaults and Alarms
         TXTelemetryData *d = [TXTelemetryData new];
-        Check(d.voltage >= 13.0 && d.voltage <= 14.0, @"Default voltage is nominal 13.8V");
-        Check(d.currentAmps < 0.20, @"Default RX current is ~110 mA");
-        Check(d.rfPowerWatts == 0.0, @"Default RF power is 0W");
-        Check(d.swr == 1.0, @"Default SWR is 1.0");
+        Check(d.voltage == 0.0 && !d.voltageValid, @"Voltage starts unavailable, not at a fabricated nominal value");
+        Check(!d.currentValid && !d.temperatureValid, @"Unsupported current and temperature start unavailable");
+        Check(!d.rfPowerValid && !d.swrValid && !d.swrMeterValid, @"Power and SWR are not fabricated before CAT replies");
+        Check(!d.frequencyValid && !d.modeValid && !d.txStateValid && !d.sMeterValid,
+              @"Radio state starts unavailable before CAT replies");
         Check(!d.overvoltageAlert && !d.highSWRAlert && !d.overtempAlert, @"Default has no safety alarms");
 
         // Overvoltage test (>15.0V)
         d.voltage = 15.5;
+        d.voltageValid = YES;
         [d evaluateAlarms];
         Check(d.overvoltageAlert == YES, @"Overvoltage guard triggers at >15.0V");
 
@@ -32,16 +34,19 @@ int main(void) {
 
         // High SWR test (>=3.0)
         d.swr = 3.5;
+        d.swrValid = YES;
         [d evaluateAlarms];
         Check(d.highSWRAlert == YES, @"High SWR guard triggers at >=3.0");
 
         // PA Overheat test (>60.0°C)
         d.temperatureCelsius = 65.0;
+        d.temperatureValid = YES;
         [d evaluateAlarms];
         Check(d.overtempAlert == YES, @"PA thermal guard triggers at >60°C");
 
         // Power Source classification tests (BP-500/550 vs External DC)
         d.voltage = 11.8;
+        d.voltageValid = YES;
         Check(d.isBatteryPackPowered == YES, @"11.8V is classified as BP-500/550 Battery Pack");
         Check(d.isExternalDCPowered == NO, @"11.8V is not external DC");
         Check([d.powerSourceDescription containsString:@"BP-500/550"], @"Description contains BP-500/550");
@@ -63,6 +68,7 @@ int main(void) {
         Check(ifData.frequencyHz == 14074000, @"Frequency parsed accurately (14.074 MHz)");
         Check(ifData.isTransmitting == YES, @"TX active state parsed from IF frame");
         Check([ifData.operatingMode isEqualToString:@"USB"], @"USB mode parsed from IF frame");
+        Check(ifData.frequencyValid && ifData.modeValid && ifData.txStateValid, @"IF fields are marked valid");
 
         NSString *ifDig = @"IF00007074000     +0000000000600000 ;";
         [TX500TelemetryEngine parseIFReply:ifDig intoData:ifData];
@@ -70,32 +76,57 @@ int main(void) {
         Check(ifData.isTransmitting == NO, @"RX state parsed from IF frame");
         Check([ifData.operatingMode isEqualToString:@"DIG"], @"DIG mode parsed from IF frame");
 
+        // Dedicated commands remain available when IF is unavailable in DIG mode.
+        TXTelemetryData *stateData = [TXTelemetryData new];
+        Check([TX500TelemetryEngine parseFAReply:@"FA00024889300;" intoData:stateData], @"Physical FA reply parsed");
+        Check(stateData.frequencyValid && stateData.frequencyHz == 24889300, @"FA preserves 1 Hz frequency precision");
+        Check([TX500TelemetryEngine parseMDReply:@"MD2;" intoData:stateData], @"Physical MD reply parsed");
+        Check(stateData.modeValid && [stateData.operatingMode isEqualToString:@"USB"], @"MD2 maps to USB");
+        Check([TX500TelemetryEngine parsePTReply:@"PT0;" intoData:stateData], @"Physical PT reply parsed");
+        Check(stateData.txStateValid && !stateData.isTransmitting, @"PT0 maps to RX");
+        Check([TX500TelemetryEngine parsePCReply:@"PC050;" intoData:stateData], @"Physical PC reply parsed");
+        Check(stateData.rfPowerValid && fabs(stateData.rfPowerWatts - 5.0) < 0.01,
+              @"PC050 maps to the configured 5.0W setpoint");
+
         // 3. Parser: RM; meter frames
         TXTelemetryData *rmData = [TXTelemetryData new];
-        // Power (type 0, 30 dots = 10W)
+        // Power and SWR are reported as raw 0-30 dots; no invented engineering conversion.
         BOOL rm0Ok = [TX500TelemetryEngine parseRMReply:@"RM00030;" intoData:rmData];
-        Check(rm0Ok, @"RM0 power frame parsed");
-        Check(fabs(rmData.rfPowerWatts - 10.0) < 0.1, @"10W maximum RF power mapped accurately");
+        Check(rm0Ok && rmData.sMeterValid, @"RM0 raw power-meter frame parsed");
+        Check(rmData.sMeterDots == 30 && !rmData.rfPowerValid,
+              @"RM0 retains 30 raw dots and does not fabricate watts");
 
-        // SWR (type 1, 15 dots = 3.0 SWR)
         BOOL rm1Ok = [TX500TelemetryEngine parseRMReply:@"RM10015;" intoData:rmData];
-        Check(rm1Ok, @"RM1 SWR frame parsed");
-        Check(fabs(rmData.swr - 3.0) < 0.1, @"SWR 3.0 mapped accurately from 15 dots");
+        Check(rm1Ok && rmData.swrMeterValid, @"RM1 raw SWR-meter frame parsed");
+        Check(rmData.swrMeterDots == 15 && !rmData.swrValid,
+              @"RM1 retains 15 raw dots and does not fabricate an SWR ratio");
 
-        // Voltage (type 5, 138 tenths = 13.8V)
-        BOOL rm5Ok = [TX500TelemetryEngine parseRMReply:@"RM50138;" intoData:rmData];
-        Check(rm5Ok, @"RM5 Voltage frame parsed");
-        Check(fabs(rmData.voltage - 13.8) < 0.1, @"Voltage 13.8V mapped accurately");
+        // Voltage uses the documented LAB599 VL; command, not an RM meter selector.
+        BOOL vlTenthsOK = [TX500TelemetryEngine parseVLReply:@"VL0121;" intoData:rmData];
+        Check(vlTenthsOK, @"VL voltage frame with tenths scaling parsed");
+        Check(rmData.voltageValid && fabs(rmData.voltage - 12.1) < 0.01, @"VL0121 maps accurately to 12.1V");
 
-        // Temperature (type 6, 42°C)
-        BOOL rm6Ok = [TX500TelemetryEngine parseRMReply:@"RM60042;" intoData:rmData];
-        Check(rm6Ok, @"RM6 Temperature frame parsed");
-        Check(fabs(rmData.temperatureCelsius - 42.0) < 0.1, @"PA Temp 42°C mapped accurately");
+        TXTelemetryData *vlHundredthsData = [TXTelemetryData new];
+        BOOL vlHundredthsOK = [TX500TelemetryEngine parseVLReply:@"\r\nVL1210;\r\n" intoData:vlHundredthsData];
+        Check(vlHundredthsOK, @"VL voltage frame with hundredths scaling and line noise parsed");
+        Check(vlHundredthsData.voltageValid && fabs(vlHundredthsData.voltage - 12.1) < 0.01,
+              @"VL1210 maps accurately to 12.1V");
+
+        TXTelemetryData *physicalReplyData = [TXTelemetryData new];
+        Check([TX500TelemetryEngine parseVLReply:@"VL12.1 ;" intoData:physicalReplyData],
+              @"Exact physical TX-500 reply format is parsed");
+        Check(fabs(physicalReplyData.voltage - 12.1) < 0.01, @"Physical TX-500 reply maps to 12.1V");
+
+        TXTelemetryData *invalidVoltage = [TXTelemetryData new];
+        Check(![TX500TelemetryEngine parseVLReply:@"?;" intoData:invalidVoltage], @"CAT error is not accepted as voltage");
+        Check(![TX500TelemetryEngine parseRMReply:@"RM50138;" intoData:invalidVoltage], @"Undocumented RM5 selector is rejected");
+        Check(!invalidVoltage.voltageValid, @"Invalid reply cannot mark voltage as verified");
 
         // 4. Parser: SM; S-Meter frame
         BOOL smOk = [TX500TelemetryEngine parseSMReply:@"SM00018;" intoData:rmData];
         Check(smOk, @"SM S-Meter frame parsed");
-        Check(rmData.sMeterDots == 18, @"S-meter 18 dots parsed accurately");
+        Check(rmData.sMeterValid && rmData.sMeterDots == 18, @"S-meter 18 raw dots parsed accurately");
+        Check(![TX500TelemetryEngine parseSMReply:@"SM00031;" intoData:rmData], @"Out-of-range S-meter frame rejected");
 
         // 5. Demo / Simulation Generator Check
         TX500TelemetryEngine *engine = [TX500TelemetryEngine new];
@@ -103,6 +134,11 @@ int main(void) {
         for (int i = 0; i < 150; i++) {
             [engine stepDemo:demoData];
             [demoData evaluateAlarms];
+            Check(demoData.voltageValid, @"Demo voltage is explicitly marked valid");
+            Check(demoData.frequencyValid && demoData.modeValid && demoData.txStateValid && demoData.sMeterValid,
+                  @"Demo radio state is explicitly marked valid");
+            Check(demoData.currentValid && demoData.rfPowerValid && demoData.temperatureValid,
+                  @"Demo-only synthetic measurements are explicitly marked valid");
             Check(demoData.voltage >= 9.0 && demoData.voltage <= 16.0, @"Demo voltage in range");
             Check(demoData.currentAmps >= 0.05 && demoData.currentAmps <= 4.0, @"Demo current in range");
             Check(demoData.rfPowerWatts >= 0.0 && demoData.rfPowerWatts <= 12.0, @"Demo RF power in range");
@@ -125,7 +161,7 @@ int main(void) {
         Check(demoData.temperatureAverages != nil && demoData.temperatureAverages.hasData, @"Temp averages populated");
         Check(demoData.temperatureAverages.avg5m >= 20.0 && demoData.temperatureAverages.avg5m <= 65.0, @"5m temp average in valid range");
 
-        printf("PASS: All 20 Telemetry, CAT parser & Rolling Average checks passed successfully.\n");
+        printf("PASS: Telemetry validity, CAT parser, alarm, demo, and rolling-average checks passed.\n");
     }
     return 0;
 }

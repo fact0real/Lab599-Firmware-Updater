@@ -35,6 +35,8 @@ NSArray<TXMemoryChannel *> * _Nullable TXImportMemoryFromCSV(NSString *csvString
 
 @interface TXSettingsDiffItem : NSObject
 @property(nonatomic) NSUInteger address; // 1000 to 2023
+@property(nonatomic, copy) NSString *settingName;
+@property(nonatomic, copy) NSString *category;
 @property(nonatomic) uint8_t valueA;
 @property(nonatomic) uint8_t valueB;
 @property(nonatomic, copy) NSString *changeDescription;

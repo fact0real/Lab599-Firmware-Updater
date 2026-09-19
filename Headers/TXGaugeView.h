@@ -22,6 +22,8 @@ typedef NS_ENUM(NSInteger, TXGaugeColorZone) {
 @property (nonatomic, assign) BOOL invertThresholds; // If true, lower values are critical (e.g. low voltage)
 @property (nonatomic, copy, nullable) NSString *alertText;
 @property (nonatomic, assign) BOOL isAlertActive;
+@property (nonatomic, assign) BOOL valueAvailable;
+@property (nonatomic, copy) NSString *unavailableText;
 
 // Custom nominal range (for drawing color arcs)
 @property (nonatomic, assign) double greenStart;
@@ -48,6 +50,7 @@ typedef NS_ENUM(NSInteger, TXGaugeColorZone) {
                        format:(NSString *)format;
 
 - (void)setValue:(double)value animated:(BOOL)animated;
+- (void)setUnavailable:(nullable NSString *)message;
 - (void)setAverages5m:(double)m5 m15:(double)m15 m30:(double)m30 m60:(double)m60;
 - (void)resetPeak;
 

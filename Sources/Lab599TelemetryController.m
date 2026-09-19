@@ -56,20 +56,20 @@
     statusCard.layer.borderColor = [NSColor colorWithCalibratedWhite:0.5 alpha:0.25].CGColor;
     statusCard.layer.backgroundColor = [NSColor colorWithCalibratedWhite:0.5 alpha:0.08].CGColor;
 
-    self.freqDisplay = [NSTextField labelWithString:@"14.074.000 MHz"];
+    self.freqDisplay = [NSTextField labelWithString:@"— MHz"];
     self.freqDisplay.font = [NSFont monospacedDigitSystemFontOfSize:20 weight:NSFontWeightHeavy];
     self.freqDisplay.textColor = [NSColor labelColor];
 
-    self.modeBadge = [NSTextField labelWithString:@"DIG (FT8)"];
+    self.modeBadge = [NSTextField labelWithString:@"[ MODE — ]"];
     self.modeBadge.font = [NSFont systemFontOfSize:11 weight:NSFontWeightBold];
     self.modeBadge.textColor = [NSColor systemBlueColor];
 
-    self.txrxBadge = [NSTextField labelWithString:@"● RECEIVE"];
+    self.txrxBadge = [NSTextField labelWithString:@"● STATE UNKNOWN"];
     self.txrxBadge.font = [NSFont systemFontOfSize:12 weight:NSFontWeightHeavy];
-    self.txrxBadge.textColor = [NSColor systemGreenColor];
+    self.txrxBadge.textColor = [NSColor secondaryLabelColor];
 
     // S-Meter
-    self.sMeterLabel = [NSTextField labelWithString:@"S-Meter:"];
+    self.sMeterLabel = [NSTextField labelWithString:@"S-Meter: —"];
     self.sMeterLabel.font = [NSFont systemFontOfSize:10 weight:NSFontWeightMedium];
     self.sMeterLabel.textColor = [NSColor secondaryLabelColor];
 
@@ -78,7 +78,7 @@
     self.sMeterBar.levelIndicatorStyle = NSLevelIndicatorStyleContinuousCapacity;
     self.sMeterBar.minValue = 0;
     self.sMeterBar.maxValue = 30;
-    self.sMeterBar.doubleValue = 12;
+    self.sMeterBar.doubleValue = 0;
     self.sMeterBar.warningValue = 20;
     self.sMeterBar.criticalValue = 27;
 
@@ -126,22 +126,25 @@
     ]];
 
     // 2. Gauges Setup
-    // Top Row: 2 Primary Gauges (Power, SWR)
-    self.powerGauge = [[TXGaugeView alloc] initWithTitle:@"RF OUTPUT POWER" unit:@"W" min:0.0 max:12.0 format:@"%.1f"];
-    self.powerGauge.greenStart = 0.0;
+    // PC; reports the configured power in tenths of a watt. It is a setpoint,
+    // not a calibrated forward-power measurement.
+    self.powerGauge = [[TXGaugeView alloc] initWithTitle:@"TX POWER SETPOINT" unit:@"W" min:1.0 max:10.0 format:@"%.1f"];
+    self.powerGauge.greenStart = 1.0;
     self.powerGauge.greenEnd = 10.0;
     self.powerGauge.yellowStart = 10.0;
-    self.powerGauge.yellowEnd = 11.0;
-    self.powerGauge.redStart = 11.0;
-    self.powerGauge.redEnd = 12.0;
+    self.powerGauge.yellowEnd = 10.0;
+    self.powerGauge.redStart = 10.0;
+    self.powerGauge.redEnd = 10.0;
+    self.powerGauge.subBadge = @"PC; configured";
 
-    self.swrGauge = [[TXGaugeView alloc] initWithTitle:@"ANTENNA SWR" unit:@":1" min:1.0 max:5.0 format:@"%.2f"];
-    self.swrGauge.greenStart = 1.0;
-    self.swrGauge.greenEnd = 1.5;
-    self.swrGauge.yellowStart = 1.5;
-    self.swrGauge.yellowEnd = 2.5;
-    self.swrGauge.redStart = 3.0;
-    self.swrGauge.redEnd = 5.0;
+    self.swrGauge = [[TXGaugeView alloc] initWithTitle:@"SWR METER (RAW)" unit:@"dots" min:0.0 max:30.0 format:@"%.0f"];
+    self.swrGauge.greenStart = 0.0;
+    self.swrGauge.greenEnd = 0.0;
+    self.swrGauge.yellowStart = 0.0;
+    self.swrGauge.yellowEnd = 0.0;
+    self.swrGauge.redStart = 0.0;
+    self.swrGauge.redEnd = 0.0;
+    self.swrGauge.subBadge = @"RM1 raw 0–30";
 
     NSStackView *topGauges = [NSStackView stackViewWithViews:@[self.powerGauge, self.swrGauge]];
     topGauges.orientation = NSUserInterfaceLayoutOrientationHorizontal;
@@ -158,7 +161,7 @@
     self.voltGauge.yellowEnd = 10.5;
     self.voltGauge.greenStart = 10.5;
     self.voltGauge.greenEnd = 14.8;
-    self.voltGauge.currentValue = 13.8;
+    [self.voltGauge setUnavailable:@"N/A"];
 
     self.currentGauge = [[TXGaugeView alloc] initWithTitle:@"CURRENT DRAIN" unit:@"A" min:0.0 max:4.0 format:@"%.2f"];
     self.currentGauge.greenStart = 0.0;
@@ -167,7 +170,8 @@
     self.currentGauge.yellowEnd = 3.2;
     self.currentGauge.redStart = 3.2;
     self.currentGauge.redEnd = 4.0;
-    self.currentGauge.currentValue = 0.11;
+    self.currentGauge.subBadge = @"not in CAT rev.3";
+    [self.currentGauge setUnavailable:@"N/A"];
 
     self.tempGauge = [[TXGaugeView alloc] initWithTitle:@"PA TEMPERATURE" unit:@"°C" min:10.0 max:80.0 format:@"%.1f"];
     self.tempGauge.greenStart = 10.0;
@@ -176,7 +180,8 @@
     self.tempGauge.yellowEnd = 58.0;
     self.tempGauge.redStart = 60.0;
     self.tempGauge.redEnd = 80.0;
-    self.tempGauge.currentValue = 32.0;
+    self.tempGauge.subBadge = @"not in CAT rev.3";
+    [self.tempGauge setUnavailable:@"N/A"];
 
     NSStackView *bottomGauges = [NSStackView stackViewWithViews:@[self.voltGauge, self.currentGauge, self.tempGauge]];
     bottomGauges.orientation = NSUserInterfaceLayoutOrientationHorizontal;
@@ -187,17 +192,17 @@
     [self.tempGauge.heightAnchor constraintEqualToConstant:172].active = YES;
 
     // 3. Safety Guard Banner & Multi-Interval Controls (Bottom)
-    self.voltGuard = [NSTextField labelWithString:@"⚡ Voltage: Normal (<15V)"];
+    self.voltGuard = [NSTextField labelWithString:@"⚡ Voltage: waiting for VL reply"];
     self.voltGuard.font = [NSFont systemFontOfSize:11 weight:NSFontWeightMedium];
-    self.voltGuard.textColor = [NSColor systemGreenColor];
+    self.voltGuard.textColor = [NSColor secondaryLabelColor];
 
-    self.swrGuard = [NSTextField labelWithString:@"📶 SWR: Normal (<3.0)"];
+    self.swrGuard = [NSTextField labelWithString:@"📶 SWR: raw CAT meter is available during TX"];
     self.swrGuard.font = [NSFont systemFontOfSize:11 weight:NSFontWeightMedium];
-    self.swrGuard.textColor = [NSColor systemGreenColor];
+    self.swrGuard.textColor = [NSColor secondaryLabelColor];
 
-    self.tempGuard = [NSTextField labelWithString:@"🌡️ Thermal: Normal (<60°C)"];
+    self.tempGuard = [NSTextField labelWithString:@"ⓘ Current and PA temperature are not exposed by CAT rev.3"];
     self.tempGuard.font = [NSFont systemFontOfSize:11 weight:NSFontWeightMedium];
-    self.tempGuard.textColor = [NSColor systemGreenColor];
+    self.tempGuard.textColor = [NSColor secondaryLabelColor];
 
     NSTextField *avgLabel = [NSTextField labelWithString:@"Averages:"];
     avgLabel.font = [NSFont systemFontOfSize:11 weight:NSFontWeightMedium];
@@ -335,18 +340,25 @@
 
 - (void)applyTelemetryData:(TXTelemetryData *)d {
     // Frequency
-    if (d.frequencyHz > 0) {
+    if (d.frequencyValid) {
         double mhz = (double)d.frequencyHz / 1000000.0;
-        self.freqDisplay.stringValue = [NSString stringWithFormat:@"%.3f MHz", mhz];
+        self.freqDisplay.stringValue = [NSString stringWithFormat:@"%.6f MHz", mhz];
+    } else {
+        self.freqDisplay.stringValue = @"— MHz";
     }
 
     // Mode
-    if (d.operatingMode.length > 0) {
+    if (d.modeValid && d.operatingMode.length > 0) {
         self.modeBadge.stringValue = [NSString stringWithFormat:@"[ %@ ]", d.operatingMode];
+    } else {
+        self.modeBadge.stringValue = @"[ MODE — ]";
     }
 
     // TX / RX State
-    if (d.isTransmitting) {
+    if (!d.txStateValid) {
+        self.txrxBadge.stringValue = @"● STATE UNKNOWN";
+        self.txrxBadge.textColor = [NSColor secondaryLabelColor];
+    } else if (d.isTransmitting) {
         self.txrxBadge.stringValue = @"● TRANSMITTING";
         self.txrxBadge.textColor = [NSColor systemRedColor];
     } else {
@@ -355,14 +367,31 @@
     }
 
     // S-Meter
-    self.sMeterBar.doubleValue = d.sMeterDots;
+    if (d.sMeterValid) {
+        self.sMeterBar.doubleValue = d.sMeterDots;
+        self.sMeterLabel.stringValue = [NSString stringWithFormat:@"%@: %ld/30 raw",
+            (d.txStateValid && d.isTransmitting) ? @"TX meter" : @"S-Meter", (long)d.sMeterDots];
+    } else {
+        self.sMeterBar.doubleValue = 0;
+        self.sMeterLabel.stringValue = @"S-Meter: —";
+    }
 
     // Update Gauges
-    [self.powerGauge setValue:d.rfPowerWatts animated:YES];
-    [self.swrGauge setValue:d.swr animated:YES];
-    [self.voltGauge setValue:d.voltage animated:YES];
-    [self.currentGauge setValue:d.currentAmps animated:YES];
-    [self.tempGauge setValue:d.temperatureCelsius animated:YES];
+    if (d.rfPowerValid) [self.powerGauge setValue:d.rfPowerWatts animated:YES];
+    else [self.powerGauge setUnavailable:@"N/A"];
+
+    if (d.swrMeterValid) [self.swrGauge setValue:d.swrMeterDots animated:YES];
+    else [self.swrGauge setUnavailable:(d.txStateValid && !d.isTransmitting) ? @"RX" : @"N/A"];
+
+    if (d.voltageValid) {
+        [self.voltGauge setValue:d.voltage animated:YES];
+    } else [self.voltGauge setUnavailable:@"N/A"];
+
+    if (d.currentValid) [self.currentGauge setValue:d.currentAmps animated:YES];
+    else [self.currentGauge setUnavailable:@"N/A"];
+
+    if (d.temperatureValid) [self.tempGauge setValue:d.temperatureCelsius animated:YES];
+    else [self.tempGauge setUnavailable:@"N/A"];
 
     // Update Multi-Interval Rolling Averages (5m, 15m, 30m, 60m)
     if (d.rfPowerAverages && d.rfPowerAverages.hasData) {
@@ -371,12 +400,9 @@
                                    m30:d.rfPowerAverages.avg30m
                                    m60:d.rfPowerAverages.avg60m];
     }
-    if (d.swrAverages && d.swrAverages.hasData) {
-        [self.swrGauge setAverages5m:d.swrAverages.avg5m
-                                 m15:d.swrAverages.avg15m
-                                 m30:d.swrAverages.avg30m
-                                 m60:d.swrAverages.avg60m];
-    }
+    // Raw SWR meter dots have no documented engineering conversion, so no
+    // ratio averages are attached to the raw-dot gauge.
+    self.swrGauge.hasAverages = NO;
     if (d.voltageAverages && d.voltageAverages.hasData) {
         [self.voltGauge setAverages5m:d.voltageAverages.avg5m
                                   m15:d.voltageAverages.avg15m
@@ -397,13 +423,13 @@
     }
 
     // Alerts on Gauges
-    self.voltGauge.isAlertActive = d.overvoltageAlert || d.lowVoltageAlert;
+    self.voltGauge.isAlertActive = d.voltageValid && (d.overvoltageAlert || d.lowVoltageAlert);
     self.voltGauge.alertText = d.overvoltageAlert ? @"OVERVOLTAGE >15V" : (d.lowVoltageAlert ? @"LOW BATTERY" : nil);
 
-    self.swrGauge.isAlertActive = d.highSWRAlert;
-    self.swrGauge.alertText = d.highSWRAlert ? @"HIGH SWR ≥ 3.0" : nil;
+    self.swrGauge.isAlertActive = NO;
+    self.swrGauge.alertText = nil;
 
-    self.tempGauge.isAlertActive = d.overtempAlert;
+    self.tempGauge.isAlertActive = d.temperatureValid && d.overtempAlert;
     self.tempGauge.alertText = d.overtempAlert ? @"PA OVERHEAT >60°C" : nil;
 
     if (self.onTelemetryData) {
@@ -411,7 +437,10 @@
     }
 
     // Bottom Safety Pills
-    if (d.overvoltageAlert) {
+    if (!d.voltageValid) {
+        self.voltGuard.stringValue = @"⚡ Voltage: Waiting for VL reply";
+        self.voltGuard.textColor = [NSColor secondaryLabelColor];
+    } else if (d.overvoltageAlert) {
         self.voltGuard.stringValue = @"⚠️ OVERVOLTAGE ALERT (>15.0V)!";
         self.voltGuard.textColor = [NSColor systemRedColor];
     } else if (d.isBatteryPackPowered) {
@@ -425,20 +454,29 @@
         self.voltGuard.textColor = [NSColor systemGreenColor];
     }
 
-    if (d.highSWRAlert) {
+    if (d.swrValid && d.highSWRAlert) {
         self.swrGuard.stringValue = @"⚠️ HIGH SWR PROTECT: Power Throttled";
         self.swrGuard.textColor = [NSColor systemRedColor];
+    } else if (d.swrMeterValid) {
+        self.swrGuard.stringValue = [NSString stringWithFormat:@"📶 SWR meter: %ld/30 raw dots (CAT does not report a ratio)",
+                                     (long)d.swrMeterDots];
+        self.swrGuard.textColor = [NSColor labelColor];
     } else {
-        self.swrGuard.stringValue = [NSString stringWithFormat:@"📶 SWR Guard: OK (%.2f:1)", d.swr];
-        self.swrGuard.textColor = [NSColor systemGreenColor];
+        self.swrGuard.stringValue = (d.txStateValid && !d.isTransmitting)
+            ? @"📶 SWR meter: available only while transmitting"
+            : @"📶 SWR meter: waiting for a valid CAT reply";
+        self.swrGuard.textColor = [NSColor secondaryLabelColor];
     }
 
-    if (d.overtempAlert) {
+    if (d.temperatureValid && d.overtempAlert) {
         self.tempGuard.stringValue = @"⚠️ THERMAL INHIBIT: PA HOT (>60°C)";
         self.tempGuard.textColor = [NSColor systemRedColor];
-    } else {
+    } else if (d.temperatureValid) {
         self.tempGuard.stringValue = [NSString stringWithFormat:@"🌡️ Thermal Guard: OK (%.1f°C)", d.temperatureCelsius];
         self.tempGuard.textColor = [NSColor systemGreenColor];
+    } else {
+        self.tempGuard.stringValue = @"ⓘ Current and PA temperature are not exposed by CAT rev.3";
+        self.tempGuard.textColor = [NSColor secondaryLabelColor];
     }
 }
 

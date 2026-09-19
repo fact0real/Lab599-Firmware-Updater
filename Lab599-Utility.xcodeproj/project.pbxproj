@@ -30,6 +30,9 @@
 		10000038 /* TX500TelemetryEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000038 /* TX500TelemetryEngine.m */; };
 		10000039 /* Lab599TelemetryController.m in Sources */ = {isa = PBXBuildFile; fileRef = 20000039 /* Lab599TelemetryController.m */; };
 		1000003A /* Lab599FeedbackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2000003A /* Lab599FeedbackController.m */; };
+		1000003B /* TX500ScreenModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2000003B /* TX500ScreenModel.m */; };
+		1000003C /* TX500ScreenRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2000003C /* TX500ScreenRenderer.m */; };
+		1000003D /* TX500ScreenCaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2000003D /* TX500ScreenCaptureController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +64,9 @@
 		20000038 /* TX500TelemetryEngine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TX500TelemetryEngine.m; sourceTree = "<group>"; };
 		20000039 /* Lab599TelemetryController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Lab599TelemetryController.m; sourceTree = "<group>"; };
 		2000003A /* Lab599FeedbackController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Lab599FeedbackController.m; sourceTree = "<group>"; };
+		2000003B /* TX500ScreenModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TX500ScreenModel.m; sourceTree = "<group>"; };
+		2000003C /* TX500ScreenRenderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TX500ScreenRenderer.m; sourceTree = "<group>"; };
+		2000003D /* TX500ScreenCaptureController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TX500ScreenCaptureController.m; sourceTree = "<group>"; };
 		20000040 /* Lab599SerialPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lab599SerialPort.h; sourceTree = "<group>"; };
 		20000041 /* TX500CATTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500CATTest.h; sourceTree = "<group>"; };
 		20000042 /* TX500Configuration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500Configuration.h; sourceTree = "<group>"; };
@@ -72,6 +78,9 @@
 		20000048 /* TX500TelemetryEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500TelemetryEngine.h; sourceTree = "<group>"; };
 		20000049 /* Lab599TelemetryController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lab599TelemetryController.h; sourceTree = "<group>"; };
 		2000004A /* Lab599FeedbackController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lab599FeedbackController.h; sourceTree = "<group>"; };
+		2000004B /* TX500ScreenModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500ScreenModel.h; sourceTree = "<group>"; };
+		2000004C /* TX500ScreenRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500ScreenRenderer.h; sourceTree = "<group>"; };
+		2000004D /* TX500ScreenCaptureController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500ScreenCaptureController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +125,9 @@
 				20000038 /* TX500TelemetryEngine.m */,
 				20000039 /* Lab599TelemetryController.m */,
 				2000003A /* Lab599FeedbackController.m */,
+				2000003B /* TX500ScreenModel.m */,
+				2000003C /* TX500ScreenRenderer.m */,
+				2000003D /* TX500ScreenCaptureController.m */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -137,6 +149,9 @@
 				20000048 /* TX500TelemetryEngine.h */,
 				20000049 /* Lab599TelemetryController.h */,
 				2000004A /* Lab599FeedbackController.h */,
+				2000004B /* TX500ScreenModel.h */,
+				2000004C /* TX500ScreenRenderer.h */,
+				2000004D /* TX500ScreenCaptureController.h */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -260,6 +275,9 @@
 				10000038 /* TX500TelemetryEngine.m in Sources */,
 				10000039 /* Lab599TelemetryController.m in Sources */,
 				1000003A /* Lab599FeedbackController.m in Sources */,
+				1000003B /* TX500ScreenModel.m in Sources */,
+				1000003C /* TX500ScreenRenderer.m in Sources */,
+				1000003D /* TX500ScreenCaptureController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,7 +422,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 26;
 				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Lab599 Utility";
@@ -413,7 +431,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.7;
+				MARKETING_VERSION = 2.20;
 				PRODUCT_BUNDLE_IDENTIFIER = local.lab599.utility;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -426,7 +444,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 26;
 				DEAD_CODE_STRIPPING = YES;
 				INFOPLIST_FILE = Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Lab599 Utility";
@@ -435,7 +453,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.7;
+				MARKETING_VERSION = 2.20;
 				PRODUCT_BUNDLE_IDENTIFIER = local.lab599.utility;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

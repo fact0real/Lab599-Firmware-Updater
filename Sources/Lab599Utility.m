@@ -8,6 +8,36 @@
 #import "Lab599DriverController.h"
 #import "Lab599DocsController.h"
 #import "Lab599FeedbackController.h"
+#import "TX500ScreenCaptureController.h"
+
+static NSString *Lab599ReadCATFrame(Lab599SerialPort *port, NSString *command,
+                                    NSTimeInterval timeout, NSError **error) {
+    if (![port discardInput:error]) return nil;
+    NSData *request = [command dataUsingEncoding:NSASCIIStringEncoding];
+    if (![port writeData:request timeout:timeout cancellation:nil error:error]) return nil;
+
+    NSMutableData *response = [NSMutableData data];
+    NSData *terminator = [@";" dataUsingEncoding:NSASCIIStringEncoding];
+    double deadline = Lab599MonotonicTime() + timeout;
+    while (Lab599MonotonicTime() < deadline) {
+        NSTimeInterval remaining = deadline - Lab599MonotonicTime();
+        NSData *chunk = [port readMaximum:64 timeout:MIN(0.12, MAX(0.01, remaining))
+                             cancellation:nil error:nil];
+        if (!chunk.length) continue;
+        [response appendData:chunk];
+        NSRange endRange = [response rangeOfData:terminator options:0
+                                           range:NSMakeRange(0, response.length)];
+        if (endRange.location != NSNotFound) {
+            NSData *frame = [response subdataWithRange:NSMakeRange(0, NSMaxRange(endRange))];
+            return [[NSString alloc] initWithData:frame encoding:NSASCIIStringEncoding];
+        }
+    }
+    if (error) {
+        *error = [NSError errorWithDomain:Lab599SerialErrorDomain code:Lab599SerialTimeout
+                                 userInfo:@{NSLocalizedDescriptionKey: @"The radio did not return a complete CAT frame."}];
+    }
+    return nil;
+}
 
 @interface AppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate>
 @property(nonatomic, strong) NSWindow *window;
@@ -38,6 +68,7 @@
 @property(nonatomic, strong) Lab599DriverController *driverController;
 @property(nonatomic, strong) Lab599DocsController *docsController;
 @property(nonatomic, strong) Lab599FeedbackController *feedbackController;
+@property(nonatomic, strong) TX500ScreenCaptureController *screenController;
 
 // Online Firmware Sheet components
 @property(nonatomic, strong) NSWindow *catalogSheet;
@@ -94,12 +125,12 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
     (void)notification;
-    self.window = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 950, 920)
+    self.window = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 980, 980)
         styleMask:(NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable)
         backing:NSBackingStoreBuffered defer:NO];
     self.window.title = @"Lab599 Utility";
     self.window.delegate = self;
-    self.window.minSize = NSMakeSize(920, 890);
+    self.window.minSize = NSMakeSize(960, 950);
     [self.window center];
 
     // Menus
@@ -124,6 +155,9 @@
     [fileMenu addItemWithTitle:@"Choose Firmware File..." action:@selector(chooseFirmware:) keyEquivalent:@"o"];
     [fileMenu addItemWithTitle:@"Download from Lab599..." action:@selector(openCatalogSheet:) keyEquivalent:@"d"];
     [fileMenu addItemWithTitle:@"Save Diagnostic Log..." action:@selector(saveLog:) keyEquivalent:@"s"];
+    [fileMenu addItem:[NSMenuItem separatorItem]];
+    NSMenuItem *screenCaptureItem = [fileMenu addItemWithTitle:@"Capture Radio Screenshot..." action:@selector(captureRadioScreenshotMenuAction:) keyEquivalent:@"S"];
+    screenCaptureItem.target = self;
     [fileMenu addItem:[NSMenuItem separatorItem]];
     [fileMenu addItemWithTitle:@"Close Window" action:@selector(performClose:) keyEquivalent:@"w"];
     fileItem.submenu = fileMenu;
@@ -160,7 +194,7 @@
     instructions.textColor = NSColor.secondaryLabelColor;
     self.instructions = instructions;
     self.operationPicker = [NSSegmentedControl segmentedControlWithLabels:@[
-        @"Firmware Update", @"Time Sync", @"Telemetry", @"CAT Test", @"Settings", @"Memory", @"Driver Install", @"Documentation", @"Feedback & Suggestion"
+        @"Firmware Update", @"Time Sync", @"Telemetry", @"Radio Screen", @"CAT Test", @"Settings", @"Memory", @"Driver Install", @"Documentation", @"Feedback & Suggestion"
     ] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(operationChanged:)];
     self.operationPicker.selectedSegment = 0;
 
@@ -168,6 +202,7 @@
         @"cpu",
         @"clock",
         @"gauge.with.needle",
+        @"display",
         @"antenna.radiowaves.left.and.right",
         @"slider.horizontal.3",
         @"memorychip",
@@ -179,6 +214,9 @@
         NSImage *img = [NSImage imageWithSystemSymbolName:symbols[i] accessibilityDescription:nil];
         if (!img && [symbols[i] isEqualToString:@"gauge.with.needle"]) {
             img = [NSImage imageWithSystemSymbolName:@"gauge" accessibilityDescription:nil];
+        }
+        if (!img && [symbols[i] isEqualToString:@"display"]) {
+            img = [NSImage imageWithSystemSymbolName:@"tv" accessibilityDescription:nil];
         }
         if (!img && [symbols[i] isEqualToString:@"bubble.left.and.bubble.right"]) {
             img = [NSImage imageWithSystemSymbolName:@"text.bubble" accessibilityDescription:nil];
@@ -272,7 +310,9 @@
     self.telemetryController.selectedPortProvider = ^NSString * { return weakSelf.hasPorts ? weakSelf.portMenu.selectedItem.title : nil; };
     self.telemetryController.logHandler = ^(NSString *message) { [weakSelf appendLog:message]; };
     self.telemetryController.onTelemetryData = ^(TXTelemetryData *data) {
-        if (data.voltage > 7.0) {
+        // Demo samples are valid for drawing the telemetry UI, but must never
+        // be presented as a physical power-supply verification.
+        if (data.voltageValid && !weakSelf.telemetryController.engine.demoMode) {
             weakSelf.lastDetectedVoltage = data.voltage;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf updatePowerSafetyUI];
@@ -280,6 +320,16 @@
         }
     };
     self.telemetryController.view.hidden = YES;
+
+    // Radio Screen Controller
+    self.screenController = [TX500ScreenCaptureController new];
+    self.screenController.window = self.window;
+    self.screenController.selectedPortProvider = ^NSString * { return weakSelf.hasPorts ? weakSelf.portMenu.selectedItem.title : nil; };
+    self.screenController.logHandler = ^(NSString *message) { [weakSelf appendLog:message]; };
+    self.screenController.statusHandler = ^(NSString *message, double progress) {
+        weakSelf.statusLabel.stringValue = message; weakSelf.progressBar.doubleValue = progress;
+    };
+    self.screenController.view.hidden = YES;
 
     self.tools = [Lab599ToolsController new];
     self.tools.window = self.window;
@@ -324,7 +374,7 @@
     // Main Layout Stack
     NSStackView *stack = [NSStackView stackViewWithViews:@[
         heading, self.operationPicker, instructions,
-        portRow, fileRow, self.radioPreviewBox, self.powerSafetyBox, timeRow, self.telemetryController.view, self.tools.view, self.driverController.view, self.docsController.view, self.feedbackController.view,
+        portRow, fileRow, self.radioPreviewBox, self.powerSafetyBox, timeRow, self.telemetryController.view, self.screenController.view, self.tools.view, self.driverController.view, self.docsController.view, self.feedbackController.view,
         self.progressBar, self.statusLabel,
         buttonRow,
         [self label:@"Diagnostic log:"], scroll
@@ -345,6 +395,7 @@
         [self.radioPreviewBox.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.powerSafetyBox.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.telemetryController.view.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
+        [self.screenController.view.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.tools.view.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.driverController.view.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.docsController.view.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
@@ -354,7 +405,9 @@
         [scroll.widthAnchor constraintEqualToAnchor:stack.widthAnchor]
     ]];
 
-    [self appendLog:@"Lab599 Utility 2.7 initialized."];
+    NSString *appVer = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] ?: @"2.8";
+    NSString *appBuild = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] ?: @"14";
+    [self appendLog:[NSString stringWithFormat:@"Lab599 Utility %@ (Build %@) initialized.", appVer, appBuild]];
     [self appendLog:@"BL20 protocol engine ready: 57600 baud, 8N1, two-ACK header+payload cycle."];
     [self appendLog:@"TimeSync ready: 9600 baud, TM set/query with clock read-back verification."];
     [self refreshPorts:nil];
@@ -365,11 +418,49 @@
         [self operationChanged:self.operationPicker];
         [self.telemetryController startDemoMonitoring];
     }
+    if ([[NSProcessInfo processInfo].arguments containsObject:@"--screen-demo"]) {
+        self.operationPicker.selectedSegment = 3;
+        [self operationChanged:self.operationPicker];
+    }
+    if ([[NSProcessInfo processInfo].arguments containsObject:@"--cat-test"]) {
+        self.operationPicker.selectedSegment = 4;
+        [self operationChanged:self.operationPicker];
+    }
     if ([[NSProcessInfo processInfo].arguments containsObject:@"--feedback"]) {
-        self.operationPicker.selectedSegment = 8;
+        self.operationPicker.selectedSegment = 9;
         [self operationChanged:self.operationPicker];
     }
     for (NSUInteger i = 0; i < [NSProcessInfo processInfo].arguments.count; i++) {
+        if ([[NSProcessInfo processInfo].arguments[i] isEqualToString:@"--screenshot-window"] && i + 1 < [NSProcessInfo processInfo].arguments.count) {
+            NSString *outPath = [NSProcessInfo processInfo].arguments[i + 1];
+            self.window.appearance = [NSAppearance appearanceNamed:NSAppearanceNameDarkAqua];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.window layoutIfNeeded];
+                [self.window.contentView layoutSubtreeIfNeeded];
+                NSRect rect = self.window.contentView.bounds;
+                NSBitmapImageRep *rep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+                                                                                pixelsWide:(NSInteger)rect.size.width
+                                                                                pixelsHigh:(NSInteger)rect.size.height
+                                                                             bitsPerSample:8
+                                                                           samplesPerPixel:4
+                                                                                  hasAlpha:YES
+                                                                                  isPlanar:NO
+                                                                            colorSpaceName:NSCalibratedRGBColorSpace
+                                                                               bytesPerRow:0
+                                                                              bitsPerPixel:0];
+                NSGraphicsContext *ctx = [NSGraphicsContext graphicsContextWithBitmapImageRep:rep];
+                [NSGraphicsContext saveGraphicsState];
+                [NSGraphicsContext setCurrentContext:ctx];
+                [[NSColor colorWithCalibratedRed:0.13 green:0.13 blue:0.14 alpha:1.0] setFill];
+                NSRectFill(rect);
+                [self.window.contentView displayRectIgnoringOpacity:rect inContext:ctx];
+                [NSGraphicsContext restoreGraphicsState];
+                NSData *png = [rep representationUsingType:NSBitmapImageFileTypePNG properties:@{}];
+                [png writeToFile:outPath atomically:YES];
+                NSLog(@"Saved window screenshot to %@", outPath);
+                [NSApp terminate:nil];
+            });
+        }
         if ([[NSProcessInfo processInfo].arguments[i] isEqualToString:@"--load-firmware"] && i + 1 < [NSProcessInfo processInfo].arguments.count) {
             NSString *fwPath = [NSProcessInfo processInfo].arguments[i + 1];
             NSURL *url = [NSURL fileURLWithPath:fwPath];
@@ -444,8 +535,15 @@
 
 - (void)selectFeedbackTab:(id)sender {
     (void)sender;
-    self.operationPicker.selectedSegment = 8;
+    self.operationPicker.selectedSegment = 9;
     [self operationChanged:self.operationPicker];
+}
+
+- (void)captureRadioScreenshotMenuAction:(id)sender {
+    (void)sender;
+    self.operationPicker.selectedSegment = 3;
+    [self operationChanged:self.operationPicker];
+    [self.screenController saveScreenshotDialog];
 }
 
 - (void)operationChanged:(id)sender {
@@ -455,19 +553,31 @@
     BOOL isFW = (operation == 0);
     BOOL isSync = (operation == 1);
     BOOL isTelemetry = (operation == 2);
-    BOOL isTools = (operation >= 3 && operation <= 5);
-    BOOL isDriver = (operation == 6);
-    BOOL isDocs = (operation == 7);
-    BOOL isFeedback = (operation == 8);
+    BOOL isScreen = (operation == 3);
+    BOOL isTools = (operation >= 4 && operation <= 6);
+    BOOL isDriver = (operation == 7);
+    BOOL isDocs = (operation == 8);
+    BOOL isFeedback = (operation == 9);
 
     if (!isTelemetry && self.telemetryController.engine.isRunning) {
         [self.telemetryController stopMonitoring];
     }
+    if (!isScreen && self.screenController.liveSyncActive) {
+        [self.screenController stopLiveSync];
+    }
 
     self.telemetryController.view.hidden = !isTelemetry;
+    self.screenController.view.hidden = !isScreen;
+    if (isScreen) {
+        if (self.screenController.liveSyncActive && !self.screenController.demoModeActive) {
+            [self.screenController startLiveSync];
+        } else if (self.screenController.demoModeActive) {
+            [self.screenController startDemoTimer];
+        }
+    }
 
     self.tools.view.hidden = !isTools;
-    if (isTools) [self.tools selectTool:operation - 3];
+    if (isTools) [self.tools selectTool:operation - 4];
 
     self.driverController.view.hidden = !isDriver;
     if (isDriver) [self.driverController checkDriverStatus];
@@ -489,7 +599,7 @@
     self.updateButton.keyEquivalent = isFW ? @"\r" : @"";
     self.syncButton.keyEquivalent = isSync ? @"\r" : @"";
     self.progressBar.doubleValue = 0;
-    self.progressBar.hidden = (isTelemetry || isFeedback);
+    self.progressBar.hidden = (isTelemetry || isScreen || isFeedback);
 
     if (isFW) {
         self.instructions.stringValue = @"Connect the CAT-USB cable and stable external power. Close other radio applications. On your transceiver (TX-500 Discovery / TX-500MP), hold the third top function key while pressing POWER. Start only when the screen displays \"The loader is waiting...\". Keep power and cable connected until completion.";
@@ -500,9 +610,18 @@
     } else if (isTelemetry) {
         self.instructions.stringValue = @"Live diagnostic telemetry monitoring for Lab599 TX-500 Discovery / TX-500MP. Displays real-time RF output power, antenna SWR, supply/battery voltage, current consumption, and PA temperature via Kenwood / LAB599 CAT protocol.";
         self.statusLabel.stringValue = @"Ready. Select CAT serial port or enable Demo Mode to observe live telemetry meters.";
-    } else if (isTools) {
-        self.instructions.stringValue = @"Turn the radio on normally. Connect its CAT-USB cable, set CAT to 9600 baud and close other radio applications.";
-        self.statusLabel.stringValue = @"Ready. File editing and backup saving also work without a connected radio.";
+    } else if (isScreen) {
+        self.instructions.stringValue = @"Real-Time LCD Screen Capture & Live Display for Lab599 TX-500 Discovery / TX-500MP. Faithfully simulates the 256×128 monochrome LCD matrix with authentic typography, calibrated S-meter / RF power bars, panadapter spectrum, and milled aluminum chassis bezel. Capture screenshots, copy to clipboard, or choose amber, daylight, green, or OLED themes.";
+        self.statusLabel.stringValue = @"Ready. Click 'Refresh' or toggle 'Live Auto-Sync' to stream the radio screen.";
+    } else if (operation == 4) {
+        self.instructions.stringValue = @"Lab599 CAT Studio & Interactive Diagnostics. Inspect live transceiver parameters (frequency, mode, power, filters), write settings directly or use quick amateur band chips, execute raw CAT commands, and test serial latency.";
+        self.statusLabel.stringValue = @"Ready. Connect transceiver CAT port (9600 baud, 8N1) to monitor, control or send commands.";
+    } else if (operation == 5) {
+        self.instructions.stringValue = @"Transceiver Configuration Settings Editor & Backup. Inspect and modify named parameters, export/import JSON, compare backups, and restore 1024-byte binary blocks to the radio.";
+        self.statusLabel.stringValue = @"Ready. File editing, comparison, and backup saving also work without a connected radio.";
+    } else if (operation == 6) {
+        self.instructions.stringValue = @"100-Channel Memory Manager. Read/write memory banks, edit individual channels, apply operating profiles, or import/export channel lists as CSV.";
+        self.statusLabel.stringValue = @"Ready. Memory channel editing, CSV import/export, and bank saving work without a connected radio.";
     } else if (isDriver) {
         self.instructions.stringValue = @"Mandatory FTDI D2XX runtime installation for macOS (Apple Silicon & Intel). Fixes serial callout instantiation and ensures non-blocking communication in WSJT-X.";
         self.statusLabel.stringValue = @"Ready to manage and verify FTDI D2XX serial driver.";
@@ -732,9 +851,9 @@
     } else {
         self.powerSafetyBox.borderColor = [NSColor separatorColor];
         self.powerSafetyBox.fillColor = [NSColor controlBackgroundColor];
-        self.powerSafetyTitleLabel.stringValue = @"⚡ Power Requirement: 9–15V DC (External Power Recommended)";
+        self.powerSafetyTitleLabel.stringValue = @"⚡ Radio Voltage Not Verified";
         self.powerSafetyTitleLabel.textColor = [NSColor labelColor];
-        self.powerSafetyDescLabel.stringValue = @"Note for BP-500/550 Battery Pack: In bootloader mode (\"The loader is waiting...\"), the transceiver does not detect the Battery Pack and powers off automatically after 10 seconds. Connect external power (13.8V DC) or keep the Battery Pack PWR button held continuously throughout the update.";
+        self.powerSafetyDescLabel.stringValue = @"Turn the radio on in normal mode, select CAT protocol LAB599 (Menu 35), and click Check Radio Voltage. For firmware updates, use stable 9–15V DC power; when using BP-500/550, hold its PWR button throughout the update.";
         self.powerSafetyDescLabel.textColor = [NSColor secondaryLabelColor];
     }
 }
@@ -749,38 +868,46 @@
     }
 
     [self appendLog:[NSString stringWithFormat:@"Probing radio power status via CAT on %@...", port]];
+    self.lastDetectedVoltage = 0.0;
+    [self updatePowerSafetyUI];
     self.powerCheckButton.enabled = NO;
+    self.powerCheckButton.title = @"Checking…";
 
     dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
         NSError *err = nil;
         Lab599SerialPort *sp = [Lab599SerialPort openPath:port speed:B9600 error:&err];
         double probedVolts = 0.0;
+        NSString *rawReply = nil;
         if (sp) {
-            [sp writeData:[@"RM5;\r" dataUsingEncoding:NSASCIIStringEncoding] timeout:0.5 cancellation:nil error:nil];
-            NSData *reply = [sp readMaximum:64 timeout:0.5 cancellation:nil error:nil];
-            [sp close];
-            if (reply.length > 0) {
-                NSString *str = [[NSString alloc] initWithData:reply encoding:NSASCIIStringEncoding];
-                if ([str containsString:@"RM5"]) {
-                    NSString *numStr = [[str componentsSeparatedByCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""];
-                    if (numStr.length > 1) {
-                        int val = [numStr substringFromIndex:1].intValue;
-                        if (val > 50 && val < 200) probedVolts = val / 10.0;
-                        else if (val <= 30) probedVolts = 9.0 + ((val / 30.0) * 6.0);
-                    }
+            // VL; is the documented LAB599 CAT command for supply voltage.
+            // Retry once because some USB-serial adapters need a brief settling
+            // interval immediately after the port is opened.
+            for (NSInteger attempt = 0; attempt < 2 && probedVolts == 0.0; attempt++) {
+                if (attempt > 0) Lab599Pause(0.12, nil);
+                rawReply = Lab599ReadCATFrame(sp, @"VL;", 0.9, &err);
+                TXTelemetryData *sample = [TXTelemetryData new];
+                if ([TX500TelemetryEngine parseVLReply:rawReply intoData:sample]) {
+                    probedVolts = sample.voltage;
                 }
             }
+            [sp close];
         }
 
         dispatch_async(dispatch_get_main_queue(), ^{
             self.powerCheckButton.enabled = YES;
+            self.powerCheckButton.title = @"Check Radio Voltage";
             if (probedVolts > 7.0) {
                 self.lastDetectedVoltage = probedVolts;
                 [self updatePowerSafetyUI];
                 [self appendLog:[NSString stringWithFormat:@"CAT power check successful: Voltage = %.1f V (%@)",
                     probedVolts, (probedVolts <= 12.8 ? @"BP-500/550 Battery Pack" : @"External DC Power Supply")]];
             } else {
-                [self appendLog:@"CAT power check: Radio did not respond to CAT query. The radio may already be in Loader mode, off, or at a different baud rate."];
+                self.lastDetectedVoltage = 0.0;
+                [self updatePowerSafetyUI];
+                NSString *detail = err.localizedDescription ?: @"No valid VL response was received.";
+                [self appendLog:[NSString stringWithFormat:
+                    @"CAT voltage check failed: %@%@ Turn the radio on normally and set Menu 35 (CAT PROTOCOL) to LAB599 at 9600 baud.",
+                    detail, rawReply.length ? [NSString stringWithFormat:@" Reply: %@.", rawReply] : @""]];
             }
         });
     });
@@ -1125,7 +1252,9 @@
         NSTextField *appName = [self label:@"Lab599 Utility"];
         appName.font = [NSFont systemFontOfSize:20 weight:NSFontWeightBold];
 
-        NSTextField *appVer = [self label:@"Version 2.7 (Build 13, Universal macOS)"];
+        NSString *infoVer = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] ?: @"2.8";
+        NSString *infoBuild = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] ?: @"14";
+        NSTextField *appVer = [self label:[NSString stringWithFormat:@"Version %@ (Build %@, Universal macOS)", infoVer, infoBuild]];
         appVer.textColor = NSColor.secondaryLabelColor;
         appVer.font = [NSFont systemFontOfSize:13 weight:NSFontWeightMedium];
 

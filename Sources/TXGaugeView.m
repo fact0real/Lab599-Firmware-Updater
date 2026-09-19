@@ -25,6 +25,8 @@
         _currentValue = min;
         _displayedValue = min;
         _peakValue = min;
+        _valueAvailable = NO;
+        _unavailableText = @"N/A";
         _selectedAvgWindow = -1;
         _hasAverages = NO;
         _greenStart = min;
@@ -47,10 +49,19 @@
     if (value < self.minValue) value = self.minValue;
     if (value > self.maxValue) value = self.maxValue;
     _currentValue = value;
+    _valueAvailable = YES;
     if (value > _peakValue) {
         _peakValue = value;
     }
     _displayedValue = value;
+    [self setNeedsDisplay:YES];
+}
+
+- (void)setUnavailable:(nullable NSString *)message {
+    _valueAvailable = NO;
+    _unavailableText = message.length ? [message copy] : @"N/A";
+    _isAlertActive = NO;
+    _alertText = nil;
     [self setNeedsDisplay:YES];
 }
 
@@ -122,7 +133,7 @@ static const double kDialSweepDegrees = 230.0;
 
     // Header Right Badge (Peak value or subBadge)
     NSString *badgeText = self.subBadge;
-    if (!badgeText && self.peakValue > self.minValue) {
+    if (!badgeText && self.valueAvailable && self.peakValue > self.minValue) {
         badgeText = [NSString stringWithFormat:@"PK: %@ %@", [NSString stringWithFormat:self.valueFormat, self.peakValue], self.unit];
     }
     if (badgeText.length > 0) {
@@ -187,9 +198,11 @@ static const double kDialSweepDegrees = 230.0;
         CGContextRestoreGState(ctx);
     };
 
-    drawSegment(self.greenStart, self.greenEnd, [NSColor colorWithCalibratedRed:0.18 green:0.80 blue:0.38 alpha:0.90]);
-    drawSegment(self.yellowStart, self.yellowEnd, [NSColor colorWithCalibratedRed:0.98 green:0.72 blue:0.15 alpha:0.90]);
-    drawSegment(self.redStart, self.redEnd, [NSColor colorWithCalibratedRed:0.95 green:0.26 blue:0.22 alpha:0.95]);
+    if (self.valueAvailable) {
+        drawSegment(self.greenStart, self.greenEnd, [NSColor colorWithCalibratedRed:0.18 green:0.80 blue:0.38 alpha:0.90]);
+        drawSegment(self.yellowStart, self.yellowEnd, [NSColor colorWithCalibratedRed:0.98 green:0.72 blue:0.15 alpha:0.90]);
+        drawSegment(self.redStart, self.redEnd, [NSColor colorWithCalibratedRed:0.95 green:0.26 blue:0.22 alpha:0.95]);
+    }
 
     // Min & Max scale labels at arc endpoints (placed cleanly outside arc feet)
     NSDictionary *limitAttrs = @{
@@ -236,7 +249,7 @@ static const double kDialSweepDegrees = 230.0;
     }
 
     // Peak Hold Marker (Orange outer notch)
-    if (self.peakValue > self.minValue) {
+    if (self.valueAvailable && self.peakValue > self.minValue) {
         double peakAngle = [self angleForValue:self.peakValue];
         CGFloat peakRad = [self degreesToRadians:peakAngle];
         CGFloat pr1 = radius + arcWidth / 2.0 + 1.0;
@@ -253,44 +266,42 @@ static const double kDialSweepDegrees = 230.0;
         CGContextRestoreGState(ctx);
     }
 
-    // Analog Needle
-    double needleAngle = [self angleForValue:self.displayedValue];
-    CGFloat needleRad = [self degreesToRadians:needleAngle];
-    CGFloat needleLen = radius - 3.0;
+    if (self.valueAvailable) {
+        // Analog Needle
+        double needleAngle = [self angleForValue:self.displayedValue];
+        CGFloat needleRad = [self degreesToRadians:needleAngle];
+        CGFloat needleLen = radius - 3.0;
 
-    CGPoint needleTip = CGPointMake(center.x + needleLen * cos(needleRad), center.y + needleLen * sin(needleRad));
-    CGFloat baseRadius = 3.0;
-    CGFloat perpRad = needleRad + M_PI_2;
-    CGPoint needleBase1 = CGPointMake(center.x + baseRadius * cos(perpRad), center.y + baseRadius * sin(perpRad));
-    CGPoint needleBase2 = CGPointMake(center.x - baseRadius * cos(perpRad), center.y - baseRadius * sin(perpRad));
-    // Subtle tail counterweight (extends 6pt opposite to needle)
-    CGPoint needleTail = CGPointMake(center.x - 6.0 * cos(needleRad), center.y - 6.0 * sin(needleRad));
+        CGPoint needleTip = CGPointMake(center.x + needleLen * cos(needleRad), center.y + needleLen * sin(needleRad));
+        CGFloat baseRadius = 3.0;
+        CGFloat perpRad = needleRad + M_PI_2;
+        CGPoint needleBase1 = CGPointMake(center.x + baseRadius * cos(perpRad), center.y + baseRadius * sin(perpRad));
+        CGPoint needleBase2 = CGPointMake(center.x - baseRadius * cos(perpRad), center.y - baseRadius * sin(perpRad));
+        CGPoint needleTail = CGPointMake(center.x - 6.0 * cos(needleRad), center.y - 6.0 * sin(needleRad));
 
-    CGContextSaveGState(ctx);
-    CGContextSetShadowWithColor(ctx, CGSizeMake(0, 1.5), 3.0, [NSColor colorWithCalibratedWhite:0 alpha:0.25].CGColor);
-
-    NSColor *needleColor = self.isAlertActive ? [NSColor systemRedColor] : [NSColor labelColor];
-    CGContextSetFillColorWithColor(ctx, needleColor.CGColor);
-    CGContextMoveToPoint(ctx, needleBase1.x, needleBase1.y);
-    CGContextAddLineToPoint(ctx, needleTip.x, needleTip.y);
-    CGContextAddLineToPoint(ctx, needleBase2.x, needleBase2.y);
-    CGContextAddLineToPoint(ctx, needleTail.x, needleTail.y);
-    CGContextClosePath(ctx);
-    CGContextFillPath(ctx);
-
-    // Center Metallic Pivot Hub
-    CGContextSetFillColorWithColor(ctx, isDark ? [NSColor colorWithCalibratedWhite:0.28 alpha:1.0].CGColor : [NSColor colorWithCalibratedWhite:0.75 alpha:1.0].CGColor);
-    CGContextFillEllipseInRect(ctx, CGRectMake(center.x - 5.5, center.y - 5.5, 11.0, 11.0));
-    CGContextSetFillColorWithColor(ctx, needleColor.CGColor);
-    CGContextFillEllipseInRect(ctx, CGRectMake(center.x - 2.5, center.y - 2.5, 5.0, 5.0));
-    CGContextRestoreGState(ctx);
+        CGContextSaveGState(ctx);
+        CGContextSetShadowWithColor(ctx, CGSizeMake(0, 1.5), 3.0, [NSColor colorWithCalibratedWhite:0 alpha:0.25].CGColor);
+        NSColor *needleColor = self.isAlertActive ? [NSColor systemRedColor] : [NSColor labelColor];
+        CGContextSetFillColorWithColor(ctx, needleColor.CGColor);
+        CGContextMoveToPoint(ctx, needleBase1.x, needleBase1.y);
+        CGContextAddLineToPoint(ctx, needleTip.x, needleTip.y);
+        CGContextAddLineToPoint(ctx, needleBase2.x, needleBase2.y);
+        CGContextAddLineToPoint(ctx, needleTail.x, needleTail.y);
+        CGContextClosePath(ctx);
+        CGContextFillPath(ctx);
+        CGContextSetFillColorWithColor(ctx, isDark ? [NSColor colorWithCalibratedWhite:0.28 alpha:1.0].CGColor : [NSColor colorWithCalibratedWhite:0.75 alpha:1.0].CGColor);
+        CGContextFillEllipseInRect(ctx, CGRectMake(center.x - 5.5, center.y - 5.5, 11.0, 11.0));
+        CGContextSetFillColorWithColor(ctx, needleColor.CGColor);
+        CGContextFillEllipseInRect(ctx, CGRectMake(center.x - 2.5, center.y - 2.5, 5.0, 5.0));
+        CGContextRestoreGState(ctx);
+    }
 
     // ==========================================
     // ZONE 3: DIGITAL VALUE READOUT (y = 114 .. 138)
     // ==========================================
-    NSString *valStr = [NSString stringWithFormat:self.valueFormat, self.currentValue];
+    NSString *valStr = self.valueAvailable ? [NSString stringWithFormat:self.valueFormat, self.currentValue] : self.unavailableText;
     NSString *fullValStr;
-    if (self.unit.length > 0) {
+    if (self.valueAvailable && self.unit.length > 0) {
         if ([self.unit hasPrefix:@":"]) {
             fullValStr = [NSString stringWithFormat:@"%@%@", valStr, self.unit];
         } else {
