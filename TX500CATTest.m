@@ -43,7 +43,7 @@ static NSString *Message(TXCATCode code) {
         case TXCATPortError: return @"ERROR 001 — Serial port or connection error.";
         case TXCATNoReply: return @"ERROR 002 — No reply. Check normal radio mode, CAT at 9600 baud and the cable.";
         case TXCATWrongLength: return @"ERROR 003 — Incomplete or extra data; expected exactly 6 response bytes. Close other CAT apps.";
-        case TXCATUnexpectedID: return @"ERROR 004 — Reply is not an ID accepted by TestCAT 1.1. Check the returned bytes and radio CAT configuration.";
+        case TXCATUnexpectedID: return @"ERROR 004 — Transceiver model ID not recognized. Check the returned bytes and radio CAT configuration.";
     }
     return @"Unknown CAT result.";
 }

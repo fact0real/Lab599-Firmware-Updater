@@ -62,14 +62,14 @@ static NSStackView *Stack(NSArray<NSView *> *views, BOOL vertical) {
     self.view.translatesAutoresizingMaskIntoConstraints = NO;
 
     // CAT Test Panel
-    self.catResult = Label(@"Ready. Tests the radio identification command used by Lab599 TestCAT 1.1.");
+    self.catResult = Label(@"Ready to test CAT communication.");
     self.catResult.font = [NSFont systemFontOfSize:17 weight:NSFontWeightMedium];
     self.catCounts = Label(@"Checks: 0    Passed: 0    Failed: 0");
     self.catCounts.font = [NSFont monospacedDigitSystemFontOfSize:13 weight:NSFontWeightRegular];
     self.catOnce = [self button:@"Test Once" action:@selector(startCAT:) tag:1];
     self.catStart = [self button:@"Start Continuous Test" action:@selector(startCAT:) tag:0];
     NSView *cat = Stack(@[self.catResult, self.catCounts, Stack(@[self.catOnce, self.catStart], NO),
-        Label(@"Shows the returned ID, response time and error count. This test does not change frequency or activate transmission.")], YES);
+        Label(@"Queries transceiver model ID (9600 baud, 8N1) to verify two-way serial communication.\nSafe to test: does not alter radio settings or activate transmission (PTT).")], YES);
 
     // Settings Panel
     self.settingsInfo = Label(@"No settings backup loaded. Read the radio or open an existing .set file.");
