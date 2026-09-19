@@ -22,7 +22,7 @@ if [ "${1:-}" = "--test" ]; then
     ./build/TimeSyncTests
     clang -O2 -Wall -Wextra -Wno-unused-parameter -Werror -fobjc-arc \
         -mmacosx-version-min=12.0 -framework Foundation \
-        tests/UtilityTests.m Lab599SerialPort.m TX500CATTest.m TX500Configuration.m -o build/UtilityTests
+        tests/UtilityTests.m Lab599SerialPort.m TX500CATTest.m TX500Configuration.m TX500ProfilesAndBackup.m -o build/UtilityTests
     ./build/UtilityTests
     clang -O2 -Wall -Wextra -Wno-unused-parameter -Werror -fobjc-arc \
         -mmacosx-version-min=12.0 -framework Cocoa \
@@ -34,7 +34,7 @@ echo "Compiling universal binary for $BIN_NAME (arm64 & x86_64)..."
 clang -O2 -Wall -Wextra -Wno-unused-parameter -Werror -fobjc-arc \
     -arch arm64 -arch x86_64 -mmacosx-version-min=12.0 \
     -framework Cocoa -framework UniformTypeIdentifiers \
-    Lab599Utility.m Lab599FirmwareCatalog.m TX500Transfer.m TX500TimeSync.m Lab599SerialPort.m TX500CATTest.m TX500Configuration.m Lab599ToolsController.m Lab599DriverController.m Lab599DocsController.m \
+    Lab599Utility.m Lab599FirmwareCatalog.m TX500Transfer.m TX500TimeSync.m Lab599SerialPort.m TX500CATTest.m TX500Configuration.m TX500ProfilesAndBackup.m Lab599ToolsController.m Lab599DriverController.m Lab599DocsController.m \
     -o "build/$BIN_NAME"
 
 /bin/cp "build/$BIN_NAME" "$APP_NAME/Contents/MacOS/$BIN_NAME"

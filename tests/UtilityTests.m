@@ -6,6 +6,7 @@
 #import <fcntl.h>
 #import "../TX500CATTest.h"
 #import "../TX500Configuration.h"
+#import "../TX500ProfilesAndBackup.h"
 
 static void Check(BOOL ok, NSString *label) { if(!ok) { fprintf(stderr,"FAIL: %s\n",label.UTF8String); exit(1); } }
 static NSData *ASCII(NSString *s) { return [s dataUsingEncoding:NSASCIIStringEncoding]; }
@@ -187,5 +188,86 @@ int main(void) { @autoreleasepool {
     Check(!TXMemoryTransfer(@"/does-not-exist",MemoryFixture(),Options(),nil,nil).success,@"Missing port");
     TXConfigurationOptions invalid=Options();invalid.replyTimeout=0;
     Check([TXSettingsTransfer(@"/does-not-exist",nil,invalid,nil,nil).message containsString:@"timing"],@"Invalid timeout rejected before I/O");
+    // Test CSV Export and Import
+    NSMutableArray *csvBank = [TXEmptyMemory() mutableCopy];
+    TXMemoryChannel *testCh1 = [TXMemoryChannel new];
+    testCh1.frequency = 7074000; testCh1.mode = '2'; testCh1.preAtt = '0';
+    csvBank[0] = testCh1;
+    TXMemoryChannel *testCh2 = [TXMemoryChannel new];
+    testCh2.frequency = 14060000; testCh2.mode = '3'; testCh2.preAtt = '1';
+    csvBank[1] = testCh2;
+
+    NSString *exportedCSV = TXExportMemoryToCSV(csvBank);
+    Check([exportedCSV containsString:@"Channel,Frequency_Hz,Frequency_MHz,Mode,PreAtt,Status"], @"CSV Header check");
+    Check([exportedCSV containsString:@"00,7074000,7.074000,USB,Off,Active"], @"CSV Row 0 check");
+    Check([exportedCSV containsString:@"01,14060000,14.060000,CW,PRE,Active"], @"CSV Row 1 check");
+
+    NSError *csvErr = nil;
+    NSArray<TXMemoryChannel *> *importedBank = TXImportMemoryFromCSV(exportedCSV, &csvErr);
+    Check(importedBank != nil && csvErr == nil, @"CSV Import success");
+    Check(importedBank[0].frequency == 7074000 && importedBank[0].mode == '2' && importedBank[0].preAtt == '0', @"CSV Imported row 0 matches");
+    Check(importedBank[1].frequency == 14060000 && importedBank[1].mode == '3' && importedBank[1].preAtt == '1', @"CSV Imported row 1 matches");
+
+    // Test MHz notation in CSV
+    NSString *mhzCSV = @"Channel,Frequency,Mode,PreAtt\n05,21.074,USB,Off\n06,28.060,CW,ATT\n";
+    NSArray<TXMemoryChannel *> *importedMHz = TXImportMemoryFromCSV(mhzCSV, &csvErr);
+    Check(importedMHz != nil && importedMHz[5].frequency == 21074000 && importedMHz[6].frequency == 28060000, @"CSV MHz parsing");
+
+    // Test Corrupt CSV rejection
+    Check(TXImportMemoryFromCSV(@"", &csvErr) == nil, @"Empty CSV rejected");
+    Check(TXImportMemoryFromCSV(@"garbage,not,a,frequency\n", &csvErr) == nil, @"Invalid CSV rejected");
+    printf("PASS: CSV export, import (Hz & MHz) and error handling\n");
+
+    // Test Settings Comparison
+    NSMutableData *setA = SettingsFixture();
+    NSMutableData *setB = [setA mutableCopy];
+    TXSettingsComparisonResult *diffIdentical = TXCompareSettings(setA, setB, @"A", @"B");
+    Check(diffIdentical.differencesCount == 0, @"Identical settings comparison has 0 diffs");
+
+    ((uint8_t *)setB.mutableBytes)[10] ^= 0x55; // Address 1010
+    ((uint8_t *)setB.mutableBytes)[20] ^= 0xAA; // Address 1020
+    TXSettingsComparisonResult *diff2 = TXCompareSettings(setA, setB, @"A", @"B");
+    Check(diff2.differencesCount == 2, @"Settings diff count matches");
+    Check(diff2.diffItems[0].address == 1010 && diff2.diffItems[1].address == 1020, @"Settings diff addresses match");
+    printf("PASS: Settings backup comparison engine\n");
+
+    // Test Memory Comparison
+    NSArray *memA = MemoryFixture();
+    NSMutableArray *memB = [[NSArray alloc] initWithArray:memA copyItems:YES].mutableCopy;
+    TXMemoryComparisonResult *memIdentical = TXCompareMemory(memA, memB, @"Bank A", @"Bank B");
+    Check(memIdentical.differencesCount == 0 && memIdentical.identicalCount == 100, @"Identical memory comparison");
+
+    // Modify channel 1
+    TXMemoryChannel *modCh = [memB[1] copy]; modCh.frequency = 14285000; memB[1] = modCh;
+    // Add channel 9 (was empty in fixture)
+    TXMemoryChannel *addCh = [TXMemoryChannel new]; addCh.frequency = 7030000; addCh.mode = '3'; memB[9] = addCh;
+    // Clear channel 2
+    memB[2] = [TXMemoryChannel new];
+
+    TXMemoryComparisonResult *memDiff = TXCompareMemory(memA, memB, @"Bank A", @"Bank B");
+    Check(memDiff.differencesCount == 3, @"Memory diff count matches (modified, added, cleared)");
+    printf("PASS: Memory backup comparison engine\n");
+
+    // Test Operating Profiles
+    NSArray<TXOperatingProfile *> *profiles = [TXProfileManager builtInProfiles];
+    Check(profiles.count == 5, @"5 built-in operating profiles available");
+    Check([profiles[0].name containsString:@"SOTA"], @"SOTA profile present");
+    Check([profiles[1].name containsString:@"FT8"], @"FT8 profile present");
+    Check([profiles[2].name containsString:@"CW"], @"CW profile present");
+    Check([profiles[3].name containsString:@"SSB"], @"SSB profile present");
+    Check([profiles[4].name containsString:@"60m"], @"60m profile present");
+
+    // Verify user profile saving
+    NSError *saveErr = nil;
+    Check([TXProfileManager saveUserProfileNamed:@"TestUnitProfile" channels:profiles[0].channels error:&saveErr], @"Save user profile");
+    NSArray<TXOperatingProfile *> *userList = [TXProfileManager userProfiles];
+    BOOL foundSaved = NO;
+    for (TXOperatingProfile *up in userList) {
+        if ([up.name isEqualToString:@"TestUnitProfile"]) { foundSaved = YES; break; }
+    }
+    Check(foundSaved, @"User profile was persisted and re-read");
+    [TXProfileManager deleteUserProfileNamed:@"TestUnitProfile" error:NULL];
+    printf("PASS: Operating profiles built-in and user persistence\n");
+
     printf("All Utility tests passed. Only pseudo-terminals were used; no physical radio was accessed.\n");
 }return 0;}

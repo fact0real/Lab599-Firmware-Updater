@@ -50,6 +50,13 @@
 
 // About Window
 @property(nonatomic, strong) NSWindow *aboutWindow;
+
+// Radio Hardware Preview
+@property(nonatomic, strong) NSBox *radioPreviewBox;
+@property(nonatomic, strong) NSImageView *radioImageView;
+@property(nonatomic, strong) NSTextField *radioModelLabel;
+@property(nonatomic, strong) NSTextField *radioSpecsLabel;
+@property(nonatomic, strong) NSTextField *radioCompatibilityBadge;
 @end
 
 @implementation AppDelegate
@@ -76,12 +83,12 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification {
     (void)notification;
-    self.window = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 920, 870)
+    self.window = [[NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 950, 920)
         styleMask:(NSWindowStyleMaskTitled | NSWindowStyleMaskClosable | NSWindowStyleMaskMiniaturizable | NSWindowStyleMaskResizable)
         backing:NSBackingStoreBuffered defer:NO];
-    self.window.title = @"Lab599 Utility 2.2";
+    self.window.title = @"Lab599 Utility 2.3";
     self.window.delegate = self;
-    self.window.minSize = NSMakeSize(900, 850);
+    self.window.minSize = NSMakeSize(920, 890);
     [self.window center];
 
     // Menus
@@ -131,7 +138,7 @@
     // Header & Info
     NSTextField *heading = [self label:@"Lab599 Utility"];
     heading.font = [NSFont systemFontOfSize:22 weight:NSFontWeightSemibold];
-    NSTextField *subtitle = [self label:@"Version 2.2  |  TX-500 Discovery, MP & PRO  |  Developed by EP2AES"];
+    NSTextField *subtitle = [self label:@"Version 2.3  |  TX-500 Discovery, MP & PRO  |  Developed by EP2AES"];
     subtitle.textColor = NSColor.secondaryLabelColor;
 
     NSTextField *instructions = [NSTextField wrappingLabelWithString:
@@ -142,6 +149,22 @@
         @"Firmware Update", @"Time Sync", @"CAT Test", @"Settings", @"Memory", @"Driver Install", @"Documentation"
     ] trackingMode:NSSegmentSwitchTrackingSelectOne target:self action:@selector(operationChanged:)];
     self.operationPicker.selectedSegment = 0;
+
+    NSArray<NSString *> *symbols = @[
+        @"cpu",
+        @"clock",
+        @"antenna.radiowaves.left.and.right",
+        @"slider.horizontal.3",
+        @"memorychip",
+        @"wrench.and.screwdriver",
+        @"doc.text"
+    ];
+    for (NSUInteger i = 0; i < symbols.count; i++) {
+        NSImage *img = [NSImage imageWithSystemSymbolName:symbols[i] accessibilityDescription:nil];
+        if (img) {
+            [self.operationPicker setImage:img forSegment:i];
+        }
+    }
 
     // Serial Port Selection Row
     self.portMenu = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
@@ -165,6 +188,7 @@
     fileRow.alignment = NSLayoutAttributeCenterY;
     fileRow.spacing = 8;
     self.firmwareRow = fileRow;
+    self.radioPreviewBox = [self buildRadioPreviewBox];
 
     // Time synchronization is a separate operation in normal radio mode.
     self.timeZoneMenu = [[NSPopUpButton alloc] initWithFrame:NSZeroRect pullsDown:NO];
@@ -253,7 +277,7 @@
     // Main Layout Stack
     NSStackView *stack = [NSStackView stackViewWithViews:@[
         heading, subtitle, self.operationPicker, instructions,
-        portRow, fileRow, timeRow, self.tools.view, self.driverController.view, self.docsController.view,
+        portRow, fileRow, self.radioPreviewBox, timeRow, self.tools.view, self.driverController.view, self.docsController.view,
         self.progressBar, self.statusLabel,
         buttonRow,
         [self label:@"Diagnostic log:"], scroll
@@ -271,6 +295,7 @@
         [stack.topAnchor constraintEqualToAnchor:self.window.contentView.topAnchor constant:24],
         [stack.bottomAnchor constraintLessThanOrEqualToAnchor:self.window.contentView.bottomAnchor constant:-24],
         [instructions.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
+        [self.radioPreviewBox.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.tools.view.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.driverController.view.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.docsController.view.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
@@ -279,7 +304,7 @@
         [scroll.widthAnchor constraintEqualToAnchor:stack.widthAnchor]
     ]];
 
-    [self appendLog:@"Lab599 Utility 2.2 initialized."];
+    [self appendLog:@"Lab599 Utility 2.3 initialized."];
     [self appendLog:@"BL20 protocol engine ready: 57600 baud, 8N1, two-ACK header+payload cycle."];
     [self appendLog:@"TimeSync ready: 9600 baud, TM set/query with clock read-back verification."];
     [self refreshPorts:nil];
@@ -360,6 +385,7 @@
 
     self.portRow.hidden = (isDriver || isDocs);
     self.firmwareRow.hidden = !isFW;
+    self.radioPreviewBox.hidden = !isFW;
     self.timeRow.hidden = !isSync;
 
     self.updateButton.hidden = !isFW;
@@ -449,6 +475,118 @@
     });
 }
 
+#pragma mark - Radio Hardware Preview (Firmware Update)
+
+- (NSImage *)loadRadioImage {
+    NSImage *image = [NSImage imageNamed:@"tx500_radio"];
+    if (image) return image;
+    NSString *resPath = [[NSBundle mainBundle] pathForResource:@"tx500_radio" ofType:@"png"];
+    if (resPath && [[NSFileManager defaultManager] fileExistsAtPath:resPath]) {
+        image = [[NSImage alloc] initWithContentsOfFile:resPath];
+        if (image) return image;
+    }
+    NSString *bundleDir = [[NSBundle mainBundle] bundlePath];
+    NSArray<NSString *> *candidates = @[
+        [bundleDir stringByAppendingPathComponent:@"Contents/Resources/tx500_radio.png"],
+        @"assets/tx500_radio.png",
+        @"../assets/tx500_radio.png",
+        @"Manual/tx500_radio_discovery.png",
+        @"../Manual/tx500_radio_discovery.png",
+        @"/Users/factoreal/Downloads/TX-500/Updater/assets/tx500_radio.png",
+        @"/Users/factoreal/Downloads/TX-500/Manual/tx500_radio_discovery.png"
+    ];
+    for (NSString *path in candidates) {
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            image = [[NSImage alloc] initWithContentsOfFile:path];
+            if (image) return image;
+        }
+    }
+    return nil;
+}
+
+- (NSBox *)buildRadioPreviewBox {
+    NSBox *box = [NSBox new];
+    box.titlePosition = NSNoTitle;
+    box.boxType = NSBoxCustom;
+    box.cornerRadius = 8.0;
+    box.borderWidth = 1.0;
+    box.borderColor = [NSColor separatorColor];
+    box.fillColor = [NSColor controlBackgroundColor];
+    box.translatesAutoresizingMaskIntoConstraints = NO;
+
+    NSImageView *imageView = [NSImageView new];
+    imageView.imageScaling = NSImageScaleProportionallyUpOrDown;
+    imageView.image = [self loadRadioImage];
+    imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.radioImageView = imageView;
+
+    self.radioModelLabel = [NSTextField labelWithString:@"Target Radio: Lab599 Discovery TX-500"];
+    self.radioModelLabel.font = [NSFont systemFontOfSize:14 weight:NSFontWeightBold];
+
+    self.radioSpecsLabel = [NSTextField wrappingLabelWithString:@"Target Specs: 256×128 Monochrome LCD • 32-bit Floating-Point DSP • All-Aluminum CNC Waterproof Chassis"];
+    self.radioSpecsLabel.textColor = NSColor.secondaryLabelColor;
+    self.radioSpecsLabel.font = [NSFont systemFontOfSize:11];
+
+    self.radioCompatibilityBadge = [NSTextField labelWithString:@"● Model Verification: Select or download a .fw file above to verify radio compatibility."];
+    self.radioCompatibilityBadge.font = [NSFont systemFontOfSize:12 weight:NSFontWeightMedium];
+    self.radioCompatibilityBadge.textColor = NSColor.secondaryLabelColor;
+
+    NSStackView *textStack = [NSStackView stackViewWithViews:@[self.radioModelLabel, self.radioSpecsLabel, self.radioCompatibilityBadge]];
+    textStack.orientation = NSUserInterfaceLayoutOrientationVertical;
+    textStack.alignment = NSLayoutAttributeLeading;
+    textStack.spacing = 3;
+    textStack.translatesAutoresizingMaskIntoConstraints = NO;
+
+    NSStackView *hStack = [NSStackView stackViewWithViews:@[imageView, textStack]];
+    hStack.orientation = NSUserInterfaceLayoutOrientationHorizontal;
+    hStack.alignment = NSLayoutAttributeCenterY;
+    hStack.spacing = 14;
+    hStack.translatesAutoresizingMaskIntoConstraints = NO;
+    [box.contentView addSubview:hStack];
+
+    [NSLayoutConstraint activateConstraints:@[
+        [imageView.widthAnchor constraintEqualToConstant:150],
+        [imageView.heightAnchor constraintEqualToConstant:84],
+        [box.heightAnchor constraintEqualToConstant:98],
+        [hStack.leadingAnchor constraintEqualToAnchor:box.contentView.leadingAnchor constant:12],
+        [hStack.trailingAnchor constraintEqualToAnchor:box.contentView.trailingAnchor constant:-12],
+        [hStack.topAnchor constraintEqualToAnchor:box.contentView.topAnchor constant:7],
+        [hStack.bottomAnchor constraintEqualToAnchor:box.contentView.bottomAnchor constant:-7],
+        [textStack.trailingAnchor constraintEqualToAnchor:hStack.trailingAnchor]
+    ]];
+
+    return box;
+}
+
+- (void)updateRadioPreviewForFirmwareData:(NSData *)data url:(NSURL *)url {
+    if (!data || data.length < 16) {
+        self.radioModelLabel.stringValue = @"Target Radio: Lab599 Discovery TX-500";
+        self.radioCompatibilityBadge.stringValue = @"● Model Verification: Select or download a .fw file above to verify radio compatibility.";
+        self.radioCompatibilityBadge.textColor = NSColor.secondaryLabelColor;
+        return;
+    }
+
+    const uint8_t *bytes = (const uint8_t *)data.bytes;
+    BOOL isDiscovery = (memcmp(bytes + 12, "\xaa\xb4\x1a\xc6", 4) == 0);
+    BOOL isMP = (memcmp(bytes + 12, "\x96\x3b\xcd\xf4", 4) == 0) || [url.lastPathComponent containsString:@"MP"];
+
+    if (isDiscovery) {
+        self.radioModelLabel.stringValue = @"Target Radio: Lab599 Discovery TX-500";
+        self.radioSpecsLabel.stringValue = @"256×128 Monochrome LCD • 32-bit Floating-Point DSP • All-Aluminum CNC Waterproof Chassis";
+        self.radioCompatibilityBadge.stringValue = @"✓ Hardware Match Confirmed: Lab599 TX-500 Discovery (BL20 Model ID: 0xc61ab4aa)";
+        self.radioCompatibilityBadge.textColor = [NSColor colorWithSRGBRed:0.1 green:0.65 blue:0.25 alpha:1.0];
+    } else if (isMP) {
+        self.radioModelLabel.stringValue = @"Target Radio: Lab599 TX-500MP (Manpack)";
+        self.radioSpecsLabel.stringValue = @"192×96 Monochrome LCD • 32-bit Floating-Point DSP • Manpack Form Factor";
+        self.radioCompatibilityBadge.stringValue = @"⚠️ Notice: Firmware is targeted for TX-500MP hardware (BL20 Model ID: 0x963bcdf4). Do not flash to Discovery.";
+        self.radioCompatibilityBadge.textColor = [NSColor colorWithSRGBRed:0.85 green:0.45 blue:0.0 alpha:1.0];
+    } else {
+        self.radioModelLabel.stringValue = @"Target Radio: Custom / Unknown Lab599 Hardware";
+        self.radioCompatibilityBadge.stringValue = @"⚠️ Unrecognized Hardware ID. Verify model before flashing.";
+        self.radioCompatibilityBadge.textColor = NSColor.systemOrangeColor;
+    }
+}
+
 #pragma mark - Local Firmware Loading
 
 - (void)chooseFirmware:(id)sender {
@@ -486,6 +624,7 @@
     }
     self.statusLabel.stringValue = [NSString stringWithFormat:@"Firmware ready: %@. Check that transceiver displays \"The loader is waiting...\".", url.lastPathComponent];
     self.updateButton.enabled = self.hasPorts;
+    [self updateRadioPreviewForFirmwareData:data url:url];
 }
 
 #pragma mark - Online Firmware Catalog Sheet
