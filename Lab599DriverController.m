@@ -145,8 +145,7 @@ static NSBox *CreateCardBox(void) {
         [card1HStack.leadingAnchor constraintEqualToAnchor:radioCard.contentView.leadingAnchor constant:12],
         [card1HStack.trailingAnchor constraintEqualToAnchor:radioCard.contentView.trailingAnchor constant:-12],
         [card1HStack.topAnchor constraintEqualToAnchor:radioCard.contentView.topAnchor constant:8],
-        [card1HStack.bottomAnchor constraintEqualToAnchor:radioCard.contentView.bottomAnchor constant:-8],
-        [radioCard.heightAnchor constraintEqualToConstant:128]
+        [card1HStack.bottomAnchor constraintEqualToAnchor:radioCard.contentView.bottomAnchor constant:-8]
     ]];
 
     // =========================================================================

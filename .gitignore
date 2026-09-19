@@ -42,3 +42,8 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# Build and packaging artifacts
+build/
+*.app
+.DS_Store

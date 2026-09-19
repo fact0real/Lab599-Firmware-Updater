@@ -96,7 +96,8 @@
     NSMenuItem *appItem = [NSMenuItem new];
     [menu addItem:appItem];
     NSMenu *appMenu = [NSMenu new];
-    [appMenu addItemWithTitle:@"About Lab599 Utility" action:@selector(showAboutWindow:) keyEquivalent:@"i"];
+    NSMenuItem *aboutItem = [appMenu addItemWithTitle:@"About Lab599 Utility" action:@selector(showAboutWindow:) keyEquivalent:@""];
+    aboutItem.target = self;
     [appMenu addItem:[NSMenuItem separatorItem]];
     [appMenu addItemWithTitle:@"Hide Lab599 Utility" action:@selector(hide:) keyEquivalent:@"h"];
     NSMenuItem *hideOthers = [appMenu addItemWithTitle:@"Hide Others" action:@selector(hideOtherApplications:) keyEquivalent:@"h"];
@@ -129,7 +130,8 @@
     NSMenuItem *helpItem = [[NSMenuItem alloc] initWithTitle:@"Help" action:NULL keyEquivalent:@""];
     [menu addItem:helpItem];
     NSMenu *helpMenu = [[NSMenu alloc] initWithTitle:@"Help"];
-    [helpMenu addItemWithTitle:@"About Lab599 Utility" action:@selector(showAboutWindow:) keyEquivalent:@""];
+    NSMenuItem *helpAbout = [helpMenu addItemWithTitle:@"About Lab599 Utility" action:@selector(showAboutWindow:) keyEquivalent:@""];
+    helpAbout.target = self;
     [helpMenu addItem:[NSMenuItem separatorItem]];
     [helpMenu addItemWithTitle:@"Official Lab599 Downloads Website" action:@selector(openLab599Website:) keyEquivalent:@""];
     [helpMenu addItemWithTitle:@"GitHub Project (EP2AES)" action:@selector(openGitHubRepo:) keyEquivalent:@""];
@@ -140,18 +142,6 @@
     // Header
     NSTextField *heading = [self label:@"Lab599 Utility"];
     heading.font = [NSFont systemFontOfSize:22 weight:NSFontWeightSemibold];
-    NSButton *aboutHeaderBtn = [NSButton buttonWithTitle:@"About Lab599 Utility…" target:self action:@selector(showAboutWindow:)];
-    aboutHeaderBtn.bezelStyle = NSBezelStyleInline;
-    aboutHeaderBtn.font = [NSFont systemFontOfSize:12];
-
-    NSView *headerSpacer = [NSView new];
-    headerSpacer.translatesAutoresizingMaskIntoConstraints = NO;
-    [headerSpacer setContentHuggingPriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
-
-    NSStackView *headerRow = [NSStackView stackViewWithViews:@[heading, headerSpacer, aboutHeaderBtn]];
-    headerRow.orientation = NSUserInterfaceLayoutOrientationHorizontal;
-    headerRow.alignment = NSLayoutAttributeCenterY;
-    headerRow.translatesAutoresizingMaskIntoConstraints = NO;
 
     NSTextField *instructions = [NSTextField wrappingLabelWithString:
         @"Connect the CAT-USB cable and stable external power. Close other radio applications. On your transceiver (TX-500 Discovery / TX-500MP), hold the third top function key while pressing POWER. Start only when the screen displays \"The loader is waiting...\". Keep power and cable connected until completion."];
@@ -288,7 +278,7 @@
 
     // Main Layout Stack
     NSStackView *stack = [NSStackView stackViewWithViews:@[
-        headerRow, self.operationPicker, instructions,
+        heading, self.operationPicker, instructions,
         portRow, fileRow, self.radioPreviewBox, timeRow, self.tools.view, self.driverController.view, self.docsController.view,
         self.progressBar, self.statusLabel,
         buttonRow,
@@ -306,7 +296,6 @@
         [stack.trailingAnchor constraintEqualToAnchor:self.window.contentView.trailingAnchor constant:-24],
         [stack.topAnchor constraintEqualToAnchor:self.window.contentView.topAnchor constant:24],
         [stack.bottomAnchor constraintLessThanOrEqualToAnchor:self.window.contentView.bottomAnchor constant:-24],
-        [headerRow.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [instructions.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.radioPreviewBox.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
         [self.tools.view.widthAnchor constraintEqualToAnchor:stack.widthAnchor],
@@ -317,7 +306,7 @@
         [scroll.widthAnchor constraintEqualToAnchor:stack.widthAnchor]
     ]];
 
-    [self appendLog:@"Lab599 Utility 2.4 initialized."];
+    [self appendLog:@"Lab599 Utility 2.5 initialized."];
     [self appendLog:@"BL20 protocol engine ready: 57600 baud, 8N1, two-ACK header+payload cycle."];
     [self appendLog:@"TimeSync ready: 9600 baud, TM set/query with clock read-back verification."];
     [self refreshPorts:nil];
@@ -559,8 +548,7 @@
 
     [NSLayoutConstraint activateConstraints:@[
         [imageView.widthAnchor constraintEqualToConstant:150],
-        [imageView.heightAnchor constraintEqualToConstant:84],
-        [box.heightAnchor constraintEqualToConstant:98],
+        [imageView.heightAnchor constraintEqualToConstant:80],
         [hStack.leadingAnchor constraintEqualToAnchor:box.contentView.leadingAnchor constant:12],
         [hStack.trailingAnchor constraintEqualToAnchor:box.contentView.trailingAnchor constant:-12],
         [hStack.topAnchor constraintEqualToAnchor:box.contentView.topAnchor constant:7],
@@ -866,6 +854,7 @@
             styleMask:(NSWindowStyleMaskTitled | NSWindowStyleMaskClosable)
             backing:NSBackingStoreBuffered defer:NO];
         self.aboutWindow.title = @"About Lab599 Utility";
+        self.aboutWindow.releasedWhenClosed = NO;
         [self.aboutWindow center];
 
         // Icon
@@ -886,7 +875,7 @@
         NSTextField *appName = [self label:@"Lab599 Utility"];
         appName.font = [NSFont systemFontOfSize:20 weight:NSFontWeightBold];
 
-        NSTextField *appVer = [self label:@"Version 2.4 (Build 10, Universal macOS)"];
+        NSTextField *appVer = [self label:@"Version 2.5 (Build 11, Universal macOS)"];
         appVer.textColor = NSColor.secondaryLabelColor;
         appVer.font = [NSFont systemFontOfSize:13 weight:NSFontWeightMedium];
 
@@ -978,12 +967,16 @@
             [disclaimer.widthAnchor constraintEqualToAnchor:aboutStack.widthAnchor]
         ]];
     }
+    [self.aboutWindow center];
     [self.aboutWindow makeKeyAndOrderFront:nil];
+    [NSApp activateIgnoringOtherApps:YES];
 }
 
 - (void)closeAboutWindow:(id)sender {
     (void)sender;
-    [self.aboutWindow orderOut:nil];
+    if (self.aboutWindow) {
+        [self.aboutWindow orderOut:nil];
+    }
 }
 
 - (void)openGitHubRepo:(id)sender {
