@@ -33,6 +33,7 @@
 		1000003B /* TX500ScreenModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2000003B /* TX500ScreenModel.m */; };
 		1000003C /* TX500ScreenRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2000003C /* TX500ScreenRenderer.m */; };
 		1000003D /* TX500ScreenCaptureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2000003D /* TX500ScreenCaptureController.m */; };
+		1000003E /* TX500SettingsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2000003E /* TX500SettingsModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +68,7 @@
 		2000003B /* TX500ScreenModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TX500ScreenModel.m; sourceTree = "<group>"; };
 		2000003C /* TX500ScreenRenderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TX500ScreenRenderer.m; sourceTree = "<group>"; };
 		2000003D /* TX500ScreenCaptureController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TX500ScreenCaptureController.m; sourceTree = "<group>"; };
+		2000003E /* TX500SettingsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TX500SettingsModel.m; sourceTree = "<group>"; };
 		20000040 /* Lab599SerialPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lab599SerialPort.h; sourceTree = "<group>"; };
 		20000041 /* TX500CATTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500CATTest.h; sourceTree = "<group>"; };
 		20000042 /* TX500Configuration.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500Configuration.h; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 		2000004B /* TX500ScreenModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500ScreenModel.h; sourceTree = "<group>"; };
 		2000004C /* TX500ScreenRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500ScreenRenderer.h; sourceTree = "<group>"; };
 		2000004D /* TX500ScreenCaptureController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500ScreenCaptureController.h; sourceTree = "<group>"; };
+		2000004E /* TX500SettingsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TX500SettingsModel.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +131,7 @@
 				2000003B /* TX500ScreenModel.m */,
 				2000003C /* TX500ScreenRenderer.m */,
 				2000003D /* TX500ScreenCaptureController.m */,
+				2000003E /* TX500SettingsModel.m */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -152,6 +156,7 @@
 				2000004B /* TX500ScreenModel.h */,
 				2000004C /* TX500ScreenRenderer.h */,
 				2000004D /* TX500ScreenCaptureController.h */,
+				2000004E /* TX500SettingsModel.h */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -278,6 +283,7 @@
 				1000003B /* TX500ScreenModel.m in Sources */,
 				1000003C /* TX500ScreenRenderer.m in Sources */,
 				1000003D /* TX500ScreenCaptureController.m in Sources */,
+				1000003E /* TX500SettingsModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
